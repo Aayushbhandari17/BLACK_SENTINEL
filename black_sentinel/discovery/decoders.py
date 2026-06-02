@@ -7,6 +7,7 @@ from typing import List
 
 BASE64_PATTERN = re.compile(r'[A-Za-z0-9+/]{20,}={0,2}')
 HEX_PATTERN = re.compile(r'(?:[0-9a-fA-F]{2}){10,}')
+ROT13_INDICATOR_PATTERN = re.compile(r'\b(rot13|rot-13|rot_13|caesar\s*13|caesar-13)\b', re.IGNORECASE)
 GZIP_MAGIC = b'\x1f\x8b'
 
 def is_printable(text: str) -> bool:
@@ -46,6 +47,8 @@ def url_decode(text: str) -> List[str]:
     return []
 
 def rot13_decode(text: str) -> List[str]:
+    if not ROT13_INDICATOR_PATTERN.search(text):
+        return []
     return [codecs.decode(text, 'rot_13')]
 
 def gzip_decode(text: str) -> List[str]:
