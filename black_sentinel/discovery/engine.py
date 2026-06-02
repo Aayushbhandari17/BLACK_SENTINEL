@@ -11,7 +11,7 @@ from black_sentinel.discovery.scan_policy import (
     should_scan_file,
 )
 from black_sentinel.discovery.parsers import text_parser, sqlite_parser
-from black_sentinel.detection import regex_engine, entropy_engine
+from black_sentinel.detection import entropy_engine, metrics, regex_engine
 from black_sentinel.discovery.finding_generator import create_finding
 from black_sentinel.core.event_system import bus
 from black_sentinel.honeycomb import deployer
@@ -24,8 +24,10 @@ def _increment(stats: dict, key: str, amount: int = 1):
 def _record_file_skip(stats: dict, decision: str):
     if decision == EXCLUDED:
         _increment(stats, "files_skipped_by_exclusion_policy")
+        metrics.increment("files_excluded")
     else:
         _increment(stats, "files_skipped_by_extension")
+        metrics.increment("files_skipped")
 
 def resolve_all_overlaps(findings: list) -> list:
     """
@@ -98,7 +100,7 @@ def scan_regex(text: str, file_path: str):
 def scan_entropy(text: str, file_path: str):
     if not should_scan_file(file_path):
         return []
-    return entropy_engine.scan(text)
+    return entropy_engine.scan(text, file_path)
 
 def decode_content(text: str, file_path: str):
     if not should_scan_file(file_path):
@@ -145,6 +147,7 @@ def start_tracking_engine():
         # Coexistence Rule: Exclude Honeytokens completely
         if norm_path in excluded_paths:
             _increment(stats, "files_skipped_by_exclusion_policy")
+            metrics.increment("files_excluded")
             continue
 
         # Shared file scan policy must pass before parsing or detection.
@@ -156,10 +159,12 @@ def start_tracking_engine():
         # File Size Limit Rule
         try:
             if os.path.getsize(file_path) > MAX_FILE_SIZE:
-                _increment(stats, "files_skipped_by_exclusion_policy")
+                _increment(stats, "files_skipped_by_extension")
+                metrics.increment("files_skipped")
                 continue
         except OSError:
-            _increment(stats, "files_skipped_by_exclusion_policy")
+            _increment(stats, "files_skipped_by_extension")
+            metrics.increment("files_skipped")
             continue
             
         # Classify Content Type
@@ -172,10 +177,12 @@ def start_tracking_engine():
         elif parser_type == 'sqlite_parser':
             text_chunks.append(sqlite_parser.parse(file_path))
         else:
-            _increment(stats, "files_skipped_by_exclusion_policy")
+            _increment(stats, "files_skipped_by_extension")
+            metrics.increment("files_skipped")
             continue
 
         _increment(stats, "files_scanned")
+        metrics.increment("files_scanned")
             
         # Detect
         for chunk in text_chunks:
@@ -204,6 +211,7 @@ def start_tracking_engine():
                 finding_obj = create_finding(r, chunk.file_path)
                 bus.publish("FINDING_DISCOVERED", finding_obj)
                 _increment(stats, "findings_generated")
+                metrics.increment("final_findings_published")
         
         if stats["files_scanned"] % 100 == 0:
             print(f"[*] Tracking Engine: Processed {stats['files_scanned']} files...")

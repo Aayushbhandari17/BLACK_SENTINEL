@@ -8,6 +8,7 @@ from black_sentinel.discovery.scan_policy import (
     get_file_scan_decision,
     should_scan_directory,
 )
+from black_sentinel.detection import metrics
 
 
 def _increment(stats: Optional[dict], key: str):
@@ -18,8 +19,10 @@ def _increment(stats: Optional[dict], key: str):
 def _record_file_decision(stats: Optional[dict], decision: str):
     if decision == EXCLUDED:
         _increment(stats, "files_skipped_by_exclusion_policy")
+        metrics.increment("files_excluded")
     else:
         _increment(stats, "files_skipped_by_extension")
+        metrics.increment("files_skipped")
 
 
 def walk(root_dir: str, file_queue: queue.Queue, stats: Optional[dict] = None):

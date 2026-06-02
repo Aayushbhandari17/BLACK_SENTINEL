@@ -1,5 +1,9 @@
+import base64
+import json
 import re
 from typing import List, Dict, Any
+
+from black_sentinel.detection import confidence_engine, metrics
 
 # Global stats for final summary
 STATS = {}
@@ -11,6 +15,7 @@ def print_summary():
             print(f"{entity}:")
             print(f"checked={counts['checked']}")
             print(f"validated={counts['validated']}\n")
+    metrics.print_summary()
 
 # Validators
 def validate_luhn(card_number: str) -> bool:
@@ -67,10 +72,75 @@ def validate_pan(pan: str) -> bool:
     valid_entities = {'P', 'C', 'H', 'A', 'B', 'G', 'J', 'L', 'E', 'F', 'T'}
     return entity_char in valid_entities
 
+UPI_PROVIDERS = {
+    "oksbi", "okhdfcbank", "okicici", "okaxis", "ybl", "ibl", "paytm", "axl"
+}
+
+NPM_SCOPE_PREFIXES = {
+    "@swc", "@babel", "@types", "@next", "@eslint", "@react", "@angular", "@vue", "@vite"
+}
+
+NPM_SCOPE_PATTERN = re.compile(r'@[a-z0-9][a-z0-9._-]*/[a-z0-9][a-z0-9._-]*', re.IGNORECASE)
+
+def validate_upi(upi: str) -> bool:
+    lower = upi.lower()
+    if any(lower.startswith(scope) for scope in NPM_SCOPE_PREFIXES):
+        return False
+    if NPM_SCOPE_PATTERN.search(lower):
+        return False
+    if lower.count("@") != 1:
+        return False
+    handle, provider = lower.rsplit("@", 1)
+    return bool(handle) and provider in UPI_PROVIDERS
+
+def validate_aws_access_key(key: str) -> bool:
+    return bool(re.fullmatch(r'AKIA[0-9A-Z]{16}', key))
+
+def _decode_base64url_json(part: str) -> bool:
+    try:
+        padded = part + "=" * (-len(part) % 4)
+        decoded = base64.urlsafe_b64decode(padded.encode("ascii"))
+        json.loads(decoded.decode("utf-8"))
+        return True
+    except Exception:
+        return False
+
+def validate_jwt(token: str) -> bool:
+    parts = token.split(".")
+    if len(parts) != 3 or not all(parts):
+        return False
+    return _decode_base64url_json(parts[0]) and _decode_base64url_json(parts[1])
+
+def validate_google_api_key(key: str) -> bool:
+    return bool(re.fullmatch(r'AIza[0-9A-Za-z_-]{35}', key))
+
+def validate_github_token(token: str) -> bool:
+    return bool(
+        re.fullmatch(r'ghp_[A-Za-z0-9]{36}', token)
+        or re.fullmatch(r'github_pat_[A-Za-z0-9_]{20,}', token)
+    )
+
+def validate_openai_key(key: str) -> bool:
+    return bool(re.fullmatch(r'sk-[A-Za-z0-9_-]{20,}', key))
+
+def validate_stripe_key(key: str) -> bool:
+    return bool(re.fullmatch(r'(?:sk_live|pk_live)_[A-Za-z0-9]{16,}', key))
+
+def validate_ssh_private_key_header(header: str) -> bool:
+    return bool(re.fullmatch(r'-----BEGIN .{0,10}PRIVATE KEY-----', header))
+
 VALIDATORS = {
     "CREDIT_CARD": validate_luhn,
     "AADHAAR": validate_verhoeff,
-    "PAN_CARD": validate_pan
+    "PAN_CARD": validate_pan,
+    "UPI_ID": validate_upi,
+    "AWS_ACCESS_KEY": validate_aws_access_key,
+    "JWT_TOKEN": validate_jwt,
+    "GOOGLE_API_KEY": validate_google_api_key,
+    "GITHUB_TOKEN": validate_github_token,
+    "OPENAI_API_KEY": validate_openai_key,
+    "STRIPE_KEY": validate_stripe_key,
+    "SSH_PRIVATE_KEY": validate_ssh_private_key_header
 }
 
 PATTERNS = [
@@ -112,10 +182,10 @@ PATTERNS = [
         "name": "upi_id",
         "entity_type": "UPI_ID",
         "category": "HIGH_SENSITIVE",
-        "pattern": re.compile(r'[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}'),
+        "pattern": re.compile(r'\b[a-zA-Z0-9.\-_]{2,256}@(oksbi|okhdfcbank|okicici|okaxis|ybl|ibl|paytm|axl)\b', re.IGNORECASE),
         "confidence": 0.85,
         "severity": "CRITICAL",
-        "requires_validation": False,
+        "requires_validation": True,
         "requires_context": False,
         "keywords": ["upi", "vpa", "pay", "bhim", "gpay", "phonepe"]
     },
@@ -143,25 +213,75 @@ PATTERNS = [
     },
     {
         "name": "aws_access_key",
-        "entity_type": "API_KEY",
+        "entity_type": "AWS_ACCESS_KEY",
         "category": "HIGH_SENSITIVE",
-        "pattern": re.compile(r'AKIA[0-9A-Z]{16}'),
+        "pattern": re.compile(r'\bAKIA[0-9A-Z]{16}\b'),
         "confidence": 0.95,
         "severity": "CRITICAL",
-        "requires_validation": False,
+        "requires_validation": True,
         "requires_context": False,
-        "keywords": ["aws", "amazon", "access", "key"]
+        "keywords": ["aws", "amazon", "access", "key"],
+        "strong_validator": True
+    },
+    {
+        "name": "google_api_key",
+        "entity_type": "GOOGLE_API_KEY",
+        "category": "HIGH_SENSITIVE",
+        "pattern": re.compile(r'\bAIza[0-9A-Za-z_-]{35}\b'),
+        "confidence": 0.95,
+        "severity": "CRITICAL",
+        "requires_validation": True,
+        "requires_context": False,
+        "keywords": ["google", "api", "key"],
+        "strong_validator": True
+    },
+    {
+        "name": "github_token",
+        "entity_type": "GITHUB_TOKEN",
+        "category": "HIGH_SENSITIVE",
+        "pattern": re.compile(r'\b(?:ghp_[A-Za-z0-9]{36}|github_pat_[A-Za-z0-9_]{20,})\b'),
+        "confidence": 0.95,
+        "severity": "CRITICAL",
+        "requires_validation": True,
+        "requires_context": False,
+        "keywords": ["github", "gh", "token", "pat"],
+        "strong_validator": True
+    },
+    {
+        "name": "openai_api_key",
+        "entity_type": "OPENAI_API_KEY",
+        "category": "HIGH_SENSITIVE",
+        "pattern": re.compile(r'\bsk-[A-Za-z0-9_-]{20,}\b'),
+        "confidence": 0.95,
+        "severity": "CRITICAL",
+        "requires_validation": True,
+        "requires_context": False,
+        "keywords": ["openai", "api", "key"],
+        "strong_validator": True
+    },
+    {
+        "name": "stripe_key",
+        "entity_type": "STRIPE_KEY",
+        "category": "HIGH_SENSITIVE",
+        "pattern": re.compile(r'\b(?:sk_live|pk_live)_[A-Za-z0-9]{16,}\b'),
+        "confidence": 0.95,
+        "severity": "CRITICAL",
+        "requires_validation": True,
+        "requires_context": False,
+        "keywords": ["stripe", "payment", "key"],
+        "strong_validator": True
     },
     {
         "name": "jwt_token",
         "entity_type": "JWT_TOKEN",
         "category": "HIGH_SENSITIVE",
-        "pattern": re.compile(r'eyJ[A-Za-z0-9]+\.eyJ[A-Za-z0-9]+\.[A-Za-z0-9\-_]+'),
+        "pattern": re.compile(r'\beyJ[A-Za-z0-9_-]*\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\b'),
         "confidence": 0.98,
         "severity": "CRITICAL",
-        "requires_validation": False,
+        "requires_validation": True,
         "requires_context": False,
-        "keywords": ["jwt", "token", "auth", "bearer"]
+        "keywords": ["jwt", "token", "auth", "bearer"],
+        "strong_validator": True
     },
     {
         "name": "ssh_private_key",
@@ -170,9 +290,10 @@ PATTERNS = [
         "pattern": re.compile(r'-----BEGIN .{0,10}PRIVATE KEY-----'),
         "confidence": 1.0,
         "severity": "CRITICAL",
-        "requires_validation": False,
+        "requires_validation": True,
         "requires_context": False,
-        "keywords": []
+        "keywords": [],
+        "strong_validator": True
     },
     {
         "name": "recovery_code",
@@ -292,6 +413,9 @@ def scan(text: str, file_path: str = "") -> List[Dict[str, Any]]:
         norm_path = file_path.replace('\\', '/')
         for pattern, entity_type in CREDENTIAL_STORES:
             if pattern.search(norm_path):
+                final_score = confidence_engine.score(file_path=file_path, regex_match=True)
+                if not confidence_engine.should_publish(final_score):
+                    break
                 findings.append({
                     "detector": "path",
                     "rule_name": "credential_store_path",
@@ -299,19 +423,21 @@ def scan(text: str, file_path: str = "") -> List[Dict[str, Any]]:
                     "category": "CREDENTIAL_STORE",
                     "raw_value": file_path,
                     "context": file_path,
-                    "confidence": 1.0,
+                    "confidence": confidence_engine.confidence_from_score(final_score),
+                    "confidence_score": final_score,
                     "severity": "CRITICAL",
                     "requires_validation": False
                 })
                 break
                 
     # 2. Content-based detection (Regex)
-    text_lower = text.lower()
     for rule in PATTERNS:
         for match in rule["pattern"].finditer(text):
+            metrics.increment("regex_candidates_checked")
             start = match.start()
             end = match.end()
             raw_value = match.group(0)
+            validator_passed = False
             
             # Enforce validation if required
             if rule["requires_validation"]:
@@ -324,8 +450,12 @@ def scan(text: str, file_path: str = "") -> List[Dict[str, Any]]:
                     
                     if validator(raw_value):
                         STATS[entity]["validated"] += 1
+                        metrics.increment("regex_validated")
+                        validator_passed = True
                     else:
                         continue
+                else:
+                    continue
             
             # Context window (60 chars)
             context_start = max(0, start - 60)
@@ -339,14 +469,19 @@ def scan(text: str, file_path: str = "") -> List[Dict[str, Any]]:
                 if kw in context_lower:
                     has_context = True
                     break
-            
-            if rule.get("requires_context", False) and not has_context:
-                # Discard if required context is missing
+
+            assignment_match = confidence_engine.has_assignment_pattern(context)
+            final_score = confidence_engine.score(
+                file_path=file_path,
+                regex_match=True,
+                format_validator_passed=validator_passed,
+                context_keyword_match=has_context,
+                assignment_pattern_match=assignment_match,
+                strong_validator_passed=bool(rule.get("strong_validator") and validator_passed)
+            )
+
+            if not confidence_engine.should_publish(final_score):
                 continue
-                
-            confidence = rule["confidence"]
-            if has_context:
-                confidence = min(1.0, confidence + 0.15)
                     
             findings.append({
                 "detector": "regex",
@@ -355,7 +490,8 @@ def scan(text: str, file_path: str = "") -> List[Dict[str, Any]]:
                 "category": rule["category"],
                 "raw_value": raw_value,
                 "context": context.replace('\n', ' ').strip(),
-                "confidence": confidence,
+                "confidence": confidence_engine.confidence_from_score(final_score),
+                "confidence_score": final_score,
                 "severity": rule["severity"],
                 "requires_validation": rule["requires_validation"],
                 "start": start,

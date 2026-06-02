@@ -14,16 +14,38 @@ SUPPORTED_EXTENSIONS = {
 }
 
 BLACKLISTED_BASENAMES = {
-    "node_modules", ".git", ".cache", ".venv", "venv", "pycache", "__pycache__"
+    "node_modules", ".git", ".cache", ".next", ".turbo", ".venv", "venv",
+    "pycache", "__pycache__", "dist", "build", "out", "coverage", "vendor",
+    ".black_sentinel"
 }
 
 EXCLUDED_FILE_BASENAMES = {
+    "build-manifest.json",
+    "desktop.ini",
     "events.db",
     "events.db-journal",
     "events.db-shm",
     "events.db-wal",
+    "findings.db",
+    "findings.db-journal",
+    "findings.db-shm",
+    "findings.db-wal",
+    "honeycomb_manifest.enc",
+    "honeycomb_manifest.json",
     "manifest.enc",
+    "next-font-manifest.json",
+    "nls.keys.json",
+    "nls.messages.json",
     "package-lock.json",
+    "pnpm-lock.yaml",
+    "scanner.db",
+    "scanner.db-journal",
+    "scanner.db-shm",
+    "scanner.db-wal",
+    "telemetry-core.json",
+    "thirdpartynotices.txt",
+    "thumbs.db",
+    "yarn.lock",
     "package.json",
 }
 
@@ -48,16 +70,23 @@ EXCLUDED_PATH_FRAGMENTS = (
     r"C:\Windows",
     r"C:\Program Files",
     r"C:\Program Files (x86)",
+    r"C:\ProgramData",
     r"C:\ProgramData\Microsoft",
     r"C:\$Recycle.Bin",
+    r"AppData\Local\Temp",
+    r"AppData\Roaming\Code",
+    r"AppData\Local\Google",
     ".local/share/opencode",
     ".config/opencode",
     "Library/Caches",
     "Library/Application Support",
     "Google/Chrome",
     "Chromium",
+    "Microsoft/Edge",
     "LevelDB",
     "Extension Storage",
+    "Code Cache",
+    "Cache_Data",
 )
 
 
@@ -112,11 +141,12 @@ def _is_black_sentinel_sqlite(path: str) -> bool:
 def _is_excluded_path(path: str) -> bool:
     norm = _normalize(path)
     basename = _basename(norm)
+    components = _path_components(path)
 
     if basename.startswith("$") or basename == "system volume information":
         return True
 
-    if basename in BLACKLISTED_BASENAMES:
+    if any(component in BLACKLISTED_BASENAMES for component in components):
         return True
 
     if basename in EXCLUDED_FILE_BASENAMES:
@@ -148,6 +178,9 @@ def get_file_scan_decision(path: str) -> str:
 
     basename = _basename(path)
     if basename.endswith(".log"):
+        return EXCLUDED
+
+    if basename.endswith(".evtx"):
         return EXCLUDED
 
     if _is_black_sentinel_sqlite(path):
