@@ -1,0 +1,228 @@
+# Black Sentinel Stage 1 Implementation Plan
+
+## User Review Required
+Please review the 10-section engineering blueprint below. The architecture strictly follows the provided specifications while explicitly excluding OCR, Presidio, Known PII, Dashboard UI, Black Vault, and Correlation Engine. 
+
+---
+
+## Section 1: Final System Architecture
+
+The Stage 1 architecture consists of four primary domains operating under a unified event-driven model:
+
+1. **Reactive Discovery & Tracking Engine**
+   - **Discovery Pipeline:** Filesystem Walker → Magic Bytes Triage → Format-Specific Parsers → Decoding Pipeline (base64, hex, rot13, gzip, url).
+   - **Detection Engine:** Orchestrator → Regex Engine & Entropy Engine → Validation Layer (Luhn, Verhoeff, etc.) → Deduplicator.
+2. **Honeycomb Protection Layer (Proactive Defense)**
+   - **Generator:** Cryptographically secure fake credential factory.
+   - **Deployer:** Strategic placement of honeytokens and creation of an encrypted manifest.
+   - **Watcher:** Dedicated daemon thread using `watchdog` to monitor tripwires.
+   - **Alerter:** `psutil` process identification and alert generation.
+3. **Common Event System**
+   - Centralised pub/sub event bus handling asynchronous communication between Discovery, Honeycomb, and Storage layers.
+4. **Local Event Storage**
+   - Local SQLite database serving as the persistent sink for all validated findings and honeytoken alerts.
+
+---
+
+## Section 2: Project Folder Structure
+
+```text
+black_sentinel/
+├── __init__.py
+├── main.py
+├── config.py
+├── core/
+│   ├── __init__.py
+│   ├── event_system.py
+│   ├── event_store.py
+├── discovery/
+│   ├── __init__.py
+│   ├── walker.py
+│   ├── triage.py
+│   ├── decoders.py
+│   └── parsers/
+│       ├── __init__.py
+│       ├── text_parser.py
+│       ├── archive_parser.py
+│       ├── pdf_parser.py
+│       ├── office_parser.py
+│       ├── sqlite_parser.py
+│       └── exif_parser.py
+├── detection/
+│   ├── __init__.py
+│   ├── engine.py
+│   ├── regex_engine.py
+│   ├── entropy_engine.py
+│   └── validators.py
+├── honeycomb/
+│   ├── __init__.py
+│   ├── generator.py
+│   ├── deployer.py
+│   ├── watcher.py
+│   └── alerter.py
+└── schemas/
+    ├── __init__.py
+    ├── events.py
+    └── models.py
+```
+
+---
+
+## Section 3: Module Responsibilities
+
+**Core Modules**
+- `core/event_system.py`: Implements a lightweight publisher-subscriber event bus.
+- `core/event_store.py`: Manages SQLite connections, schema migrations, and event persistence.
+
+**Discovery Modules**
+- `discovery/walker.py`: Recursively walks configured paths, enforces blacklists (e.g., `C:\Windows`), and populates a thread-safe queue.
+- `discovery/triage.py`: Reads the first 8 bytes (magic bytes) to accurately classify files independent of extensions and routes to parsers.
+- `discovery/parsers/*.py`: Specialized parsers extracting text and metadata (OCR is excluded; image parser only handles EXIF).
+- `discovery/decoders.py`: Unwraps encoded blobs (base64, hex, URL, ROT13, gzip) into printable text.
+
+**Detection Modules**
+- `detection/engine.py`: Orchestrates parallel execution of detectors per text chunk, performs deduplication, and scores severity.
+- `detection/regex_engine.py`: Matches against 30+ PII patterns with keyword context boosting.
+- `detection/entropy_engine.py`: Calculates Shannon entropy to catch unlabelled secrets (API keys, seeds).
+- `detection/validators.py`: Validates matched patterns (Luhn for cards, Verhoeff for Aadhaar, etc.).
+
+**Honeycomb Modules**
+- `honeycomb/generator.py`: Creates realistic but fake credentials (AWS, GitHub, .env, etc.).
+- `honeycomb/deployer.py`: Places honeytokens at target paths and maintains a Fernet-encrypted deployment manifest.
+- `honeycomb/watcher.py`: Runs a daemon thread using `watchdog` to monitor specific honeytoken paths.
+- `honeycomb/alerter.py`: Identifies triggering processes via `psutil` and dispatches alerts to the Event System.
+
+---
+
+## Section 4: Data Models
+
+Defined in `schemas/models.py` as Python `dataclass` or `pydantic` models:
+
+1. **TextChunk**
+   - `file_path` (str)
+   - `content` (str)
+   - `metadata` (dict)
+2. **Finding**
+   - `file_path` (str)
+   - `detector` (str) - e.g., 'regex', 'entropy'
+   - `entity_type` (str)
+   - `raw_value` (str) - kept in RAM only
+   - `masked_value` (str)
+   - `context` (str) - 60 chars around match
+   - `confidence` (float)
+   - `severity` (str)
+   - `line_number` (int)
+   - `validated` (bool)
+3. **HoneycombAlert**
+   - `honeytoken_path` (str)
+   - `event_type` (str) - opened, modified, deleted, moved
+   - `process_name` (str)
+   - `process_id` (int)
+   - `timestamp` (datetime)
+4. **DeployedToken**
+   - `path` (str)
+   - `token_id` (str)
+   - `deployed_at` (datetime)
+   - `content_hash` (str)
+
+---
+
+## Section 5: Database Schema
+
+**Local Event Storage (SQLite Database: `events.db`)**
+
+```sql
+CREATE TABLE findings (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    file_path TEXT NOT NULL,
+    detector TEXT NOT NULL,
+    entity_type TEXT NOT NULL,
+    masked_value TEXT NOT NULL,
+    context TEXT,
+    confidence REAL,
+    severity TEXT,
+    line_number INTEGER,
+    validated BOOLEAN,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE honeycomb_alerts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    honeytoken_path TEXT NOT NULL,
+    event_type TEXT NOT NULL,
+    process_name TEXT,
+    process_id INTEGER,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+**Honeycomb Registry Schema (Encrypted Manifest)**
+Saved to disk as a Fernet-encrypted JSON file, structured as:
+```json
+{
+  "deployed_tokens": [
+    {
+      "path": "C:\\Users\\...\\Desktop\\.env",
+      "token_id": "uuid-v4",
+      "deployed_at": "2026-06-02T10:00:00",
+      "content_hash": "sha256-hash-value"
+    }
+  ]
+}
+```
+
+---
+
+## Section 6: Event Flow
+
+1. Subsystems (Discovery, Detection, Honeycomb) instantiate and hold a reference to the `EventBus`.
+2. `core/event_store.py` subscribes to specific event topics: `FINDING_DISCOVERED` and `HONEYTOKEN_TRIGGERED`.
+3. When `detection/engine.py` finalizes a `Finding`, it publishes to `FINDING_DISCOVERED` with the masked object (raw values are zeroized/dropped).
+4. `core/event_store.py` receives the event asynchronously and executes SQL INSERT into the `findings` table.
+5. This decoupled design ensures seamless future integration for UI/Dashboards and the Correlation Engine.
+
+---
+
+## Section 7: Honeycomb Flow
+
+1. **Initialization:** On application startup, `deployer.py` invokes `generator.py` to create fake credentials.
+2. **Deployment:** Tokens are written to strategic disk locations (e.g., `Desktop\.env`, `.ssh\backup_key`).
+3. **Registration:** A JSON manifest is generated, encrypted via Fernet, and saved locally.
+4. **Monitoring:** `watcher.py` spawns a daemon thread running `watchdog.FileSystemEventHandler`, strictly scoped to the exact deployed token paths.
+5. **Trigger:** An OS filesystem event (on_opened, on_modified, etc.) occurs on a token path.
+6. **Alerting:** `watcher.py` triggers `alerter.py`, which uses `psutil` to identify the offending process.
+7. **Event Dispatch:** A `HoneycombAlert` object is published to the Common Event System and logged.
+
+---
+
+## Section 8: Tracking Engine Flow
+
+1. **Traversal:** `walker.py` traverses non-blacklisted directories and places valid absolute paths into a `Queue`.
+2. **ThreadPool Dispatch:** A `ThreadPoolExecutor` consumes paths from the queue.
+3. **Triage:** Worker threads pass files to `triage.py` for magic bytes analysis.
+4. **Extraction:** Files are routed to specific parsers based on triage results. Parsers return `TextChunk`s.
+5. **Decoding:** `decoders.py` processes chunks to unwrap encoded secrets, appending variants to the chunk pool.
+6. **Parallel Detection:** `engine.py` takes the chunks and fires the regex and entropy engines.
+7. **Validation:** Matches with `requires_validation=True` are sent to `validators.py`.
+8. **Deduplication:** Same raw value within the same file is collapsed into a single finding.
+9. **Dispatch:** Clean `Finding` objects are published to the Event System.
+
+---
+
+## Section 9: Implementation Order
+
+1. **Foundation:** Implement `core/event_system.py`, `core/event_store.py`, and `schemas/models.py`. Ensure SQLite schemas are properly initialized.
+2. **Honeycomb Protection Layer:** Implement `generator.py` and `deployer.py`, followed by `watcher.py` and `alerter.py`. This subsystem can run and be tested independently.
+3. **Discovery Pipeline:** Implement `walker.py` and `triage.py`. Add fundamental parsers (text, sqlite) and `decoders.py`. (Archive and advanced parsers can follow).
+4. **Detection Engine:** Implement `regex_engine.py` (with predefined patterns), `entropy_engine.py`, and `validators.py`. Build the orchestrator in `engine.py`.
+5. **Integration & Flow:** Connect the Discovery Pipeline to the Detection Engine, and wire the output to the Event System.
+
+---
+
+## Section 10: Potential Technical Risks
+
+1. **Concurrency Exhaustion:** High CPU/Memory utilization by `ThreadPoolExecutor` during scanning if worker count exceeds optimal core limits or if large files are loaded fully into RAM.
+2. **Zip Bombs (Decompression Data Bombs):** `archive_parser.py` must enforce strict depth and uncompressed size limits (e.g., 500 MB) to prevent out-of-memory crashes.
+3. **Lock Contention:** Multi-threaded SQLite writes to `events.db` could cause `database is locked` errors; the Event Store must manage write serialization or use WAL mode.
+4. **False Positives in Entropy:** High-entropy detection might flag benign hashes or base64 data. Threshold tuning and context-keyword boosting are critical.
+5. **Cross-Platform Watchdog Quirks:** While `watchdog` supports Windows natively via `ReadDirectoryChangesW`, edge cases like rapid file opens/closes could flood the alerter. Debouncing logic may be required in `watcher.py`.
