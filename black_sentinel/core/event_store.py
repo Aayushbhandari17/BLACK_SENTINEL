@@ -42,9 +42,29 @@ def init_db():
             incident_type TEXT NOT NULL,
             confidence REAL,
             process_name TEXT,
-            process_id INTEGER
+            process_id INTEGER,
+            username TEXT,
+            process_path TEXT,
+            attribution_source TEXT
         )
     """)
+    
+    # Schema Migration for existing DBs
+    try:
+        cursor.execute("ALTER TABLE honeycomb_alerts ADD COLUMN username TEXT")
+    except sqlite3.OperationalError:
+        pass
+        
+    try:
+        cursor.execute("ALTER TABLE honeycomb_alerts ADD COLUMN process_path TEXT")
+    except sqlite3.OperationalError:
+        pass
+        
+    try:
+        cursor.execute("ALTER TABLE honeycomb_alerts ADD COLUMN attribution_source TEXT")
+    except sqlite3.OperationalError:
+        pass
+        
     conn.commit()
     conn.close()
 
@@ -72,13 +92,14 @@ def save_honeycomb_alert(alert: HoneycombAlert):
     cursor.execute("""
         INSERT INTO honeycomb_alerts (
             event_id, timestamp, severity, event_type, source, raw_extract, vault_ref,
-            honeytoken_path, token_id, token_type, incident_type, confidence, process_name, process_id
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            honeytoken_path, token_id, token_type, incident_type, confidence, process_name, process_id,
+            username, process_path, attribution_source
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, (
         alert.event_id, alert.timestamp, alert.severity, alert.event_type,
         alert.source, alert.raw_extract, alert.vault_ref, alert.honeytoken_path,
         alert.token_id, alert.token_type, alert.incident_type, alert.confidence,
-        alert.process_name, alert.process_id
+        alert.process_name, alert.process_id, alert.username, alert.process_path, alert.attribution_source
     ))
     conn.commit()
     conn.close()

@@ -35,6 +35,9 @@ class HoneycombAlert(BaseEvent):
     confidence: float = 1.0
     process_name: Optional[str] = None
     process_id: Optional[int] = None
+    username: Optional[str] = None
+    process_path: Optional[str] = None
+    attribution_source: str = "UNKNOWN"
 
 @dataclass
 class TextChunk:
