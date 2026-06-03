@@ -8,13 +8,19 @@ from black_sentinel.detection import confidence_engine, metrics
 # Global stats for final summary
 STATS = {}
 
+def increment_published(entity_type: str):
+    if entity_type not in STATS:
+        STATS[entity_type] = {"checked": 0, "validated": 0, "published": 0}
+    STATS[entity_type]["published"] = STATS[entity_type].get("published", 0) + 1
+
 def print_summary():
     print("\n--- Regex Validation Summary ---")
     for entity, counts in STATS.items():
-        if counts["checked"] > 0:
+        if counts.get("checked", 0) > 0 or counts.get("published", 0) > 0:
             print(f"{entity}:")
-            print(f"checked={counts['checked']}")
-            print(f"validated={counts['validated']}\n")
+            print(f"checked={counts.get('checked', 0)}")
+            print(f"validated={counts.get('validated', 0)}")
+            print(f"published={counts.get('published', 0)}\n")
     metrics.print_summary()
 
 # Validators
@@ -439,15 +445,15 @@ def scan(text: str, file_path: str = "") -> List[Dict[str, Any]]:
             raw_value = match.group(0)
             validator_passed = False
             
+            entity = rule["entity_type"]
+            if entity not in STATS:
+                STATS[entity] = {"checked": 0, "validated": 0, "published": 0}
+            STATS[entity]["checked"] += 1
+            
             # Enforce validation if required
             if rule["requires_validation"]:
-                validator = VALIDATORS.get(rule["entity_type"])
+                validator = VALIDATORS.get(entity)
                 if validator:
-                    entity = rule["entity_type"]
-                    if entity not in STATS:
-                        STATS[entity] = {"checked": 0, "validated": 0}
-                    STATS[entity]["checked"] += 1
-                    
                     if validator(raw_value):
                         STATS[entity]["validated"] += 1
                         metrics.increment("regex_validated")
@@ -456,6 +462,8 @@ def scan(text: str, file_path: str = "") -> List[Dict[str, Any]]:
                         continue
                 else:
                     continue
+            else:
+                STATS[entity]["validated"] += 1
             
             # Context window (60 chars)
             context_start = max(0, start - 60)

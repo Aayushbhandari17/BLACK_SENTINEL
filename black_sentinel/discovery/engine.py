@@ -212,6 +212,8 @@ def start_tracking_engine():
                 bus.publish("FINDING_DISCOVERED", finding_obj)
                 _increment(stats, "findings_generated")
                 metrics.increment("final_findings_published")
+                if r.get("detector") in ("regex", "path"):
+                    regex_engine.increment_published(r.get("entity_type"))
         
         if stats["files_scanned"] % 100 == 0:
             print(f"[*] Tracking Engine: Processed {stats['files_scanned']} files...")
