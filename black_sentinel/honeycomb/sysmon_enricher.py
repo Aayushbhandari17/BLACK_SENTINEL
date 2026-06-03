@@ -22,30 +22,26 @@ def get_enrichment(file_path: str, event_type: str, event_timestamp: datetime) -
     if sys.platform != "win32":
         return res
         
+    debug_reason = "No Sysmon match found in window."
+    events_returned = 0
+    candidate_selected = False
+    
     try:
-        # Wevtutil query to find any event targeting the file
-        query = f"*[EventData[Data[@Name='TargetFilename']='{file_path}']]"
-        
-        cmd = [
-            "wevtutil", "qe", "Microsoft-Windows-Sysmon/Operational",
-            f"/q:{query}",
-            "/rd:true", # reverse direction (newest first)
-            "/f:text"   # actually, XML is easier to parse. /f:xml is default for qe
-        ]
-        
-        # wevtutil qe outputs a series of XML Event elements. We don't use /c:1 to allow window search.
-        # But to be safe on performance, limit to recent events.
+        # Fetch last 100 Sysmon events to manually filter in Python
+        query = "*"
         cmd_xml = [
             "wevtutil", "qe", "Microsoft-Windows-Sysmon/Operational",
             f"/q:{query}",
-            "/c:10", "/rd:true"
+            "/c:100", "/rd:true"
         ]
         
+        print(f"[DEBUG-SYSMON] Executing: {' '.join(cmd_xml)}")
         out = subprocess.check_output(cmd_xml, stderr=subprocess.STDOUT, text=True)
         if not out.strip():
+            debug_reason = "wevtutil returned empty output."
+            print(f"[DEBUG-SYSMON] {debug_reason}")
             return res
             
-        # wevtutil outputs multiple <Event> elements without a single root.
         xml_string = f"<Events>{out.strip()}</Events>"
         root = ET.fromstring(xml_string)
         
@@ -55,11 +51,26 @@ def get_enrichment(file_path: str, event_type: str, event_timestamp: datetime) -
         window_end = event_timestamp + timedelta(seconds=CORRELATION_WINDOW_SECONDS)
         
         best_event = None
+        best_match_type = None # 'target' or 'cmdline'
         
-        for event in root.findall("ns:Event", ns):
+        norm_search_path = file_path.lower().replace('/', '\\')
+        print(f"[DEBUG-SYSMON] Searching for normalized path: {norm_search_path}")
+        
+        events = root.findall("ns:Event", ns)
+        events_returned = len(events)
+        print(f"[DEBUG-SYSMON] Sysmon events returned: {events_returned}")
+        
+        examined_ids = []
+        path_match_occurred = False
+        
+        for event in events:
             system = event.find("ns:System", ns)
             if system is None:
                 continue
+                
+            event_id_elem = system.find("ns:EventID", ns)
+            if event_id_elem is not None:
+                examined_ids.append(event_id_elem.text)
                 
             time_created = system.find("ns:TimeCreated", ns)
             if time_created is None:
@@ -70,7 +81,6 @@ def get_enrichment(file_path: str, event_type: str, event_timestamp: datetime) -
                 continue
                 
             try:
-                # Format: 2026-06-03T11:21:43.123456Z
                 sys_time = datetime.strptime(sys_time_str[:26] + "Z", "%Y-%m-%dT%H:%M:%S.%fZ")
             except ValueError:
                 try:
@@ -79,10 +89,38 @@ def get_enrichment(file_path: str, event_type: str, event_timestamp: datetime) -
                     continue
                     
             if window_start <= sys_time <= window_end:
-                best_event = event
-                break # Since /rd:true gives newest first, we might want the closest one, but first in window is fine.
-                
+                event_data = event.find("ns:EventData", ns)
+                if event_data is not None:
+                    target_file = ""
+                    cmd_line = ""
+                    
+                    for data in event_data.findall("ns:Data", ns):
+                        name = data.get("Name")
+                        if name == "TargetFilename" and data.text:
+                            target_file = data.text.lower().replace('/', '\\')
+                        elif name == "CommandLine" and data.text:
+                            cmd_line = data.text.lower().replace('/', '\\')
+                            
+                    is_target_match = (norm_search_path == target_file or norm_search_path in target_file)
+                    is_cmd_match = (norm_search_path in cmd_line)
+                    
+                    if is_target_match or is_cmd_match:
+                        path_match_occurred = True
+                        if is_target_match:
+                            # TargetFilename is the strongest match, prefer it
+                            best_event = event
+                            best_match_type = 'target'
+                            break
+                        elif is_cmd_match and best_match_type != 'target':
+                            # Keep cmdline match but continue searching in case a Target match exists
+                            best_event = event
+                            best_match_type = 'cmdline'
+                            
+        print(f"[DEBUG-SYSMON] Event IDs examined in window: {list(set(examined_ids))}")
+        print(f"[DEBUG-SYSMON] Path match occurred: {path_match_occurred}")
+        
         if best_event is not None:
+            candidate_selected = True
             event_data = best_event.find("ns:EventData", ns)
             if event_data is not None:
                 for data in event_data.findall("ns:Data", ns):
@@ -97,8 +135,16 @@ def get_enrichment(file_path: str, event_type: str, event_timestamp: datetime) -
                         res["user"] = data.text
                         
                 res["attribution_source"] = "SYSMON"
+        else:
+            if not path_match_occurred:
+                debug_reason = "No events in time window contained the target path in TargetFilename or CommandLine."
+            else:
+                debug_reason = "Path matched, but event structure was invalid."
+            print(f"[DEBUG-SYSMON] Fallback to UNKNOWN reason: {debug_reason}")
                 
-    except Exception:
-        pass
+    except Exception as e:
+        debug_reason = f"Exception occurred: {str(e)}"
+        print(f"[DEBUG-SYSMON] Fallback to UNKNOWN reason: {debug_reason}")
         
+    print(f"[DEBUG-SYSMON] Candidate selected: {candidate_selected}")
     return res
