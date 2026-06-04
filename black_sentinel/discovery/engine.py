@@ -11,6 +11,9 @@ from black_sentinel.discovery.scan_policy import (
     should_scan_file,
 )
 from black_sentinel.discovery.parsers import text_parser, sqlite_parser
+from black_sentinel.discovery.parsers import pdf_parser, docx_parser
+from black_sentinel.discovery.parsers import ocr_parser
+from black_sentinel.discovery.parsers import config_parser
 from black_sentinel.detection import entropy_engine, metrics, regex_engine
 from black_sentinel.discovery.finding_generator import create_finding
 from black_sentinel.core.event_system import bus
@@ -170,45 +173,73 @@ def start_tracking_engine():
         # Classify Content Type
         parser_type = triage.classify_file(file_path)
         
-        # Parse
+       # Parse
         text_chunks = []
         if parser_type == 'text_parser':
             text_chunks.append(text_parser.parse(file_path))
         elif parser_type == 'sqlite_parser':
             text_chunks.append(sqlite_parser.parse(file_path))
+        
+        # === NEW DOCUMENT & OCR PARSERS ===
+        elif parser_type == 'pdf_parser':
+            print(f"[*] Extracting PDF text content: {file_path}")
+            text_chunks.append(pdf_parser.extract_text_from_pdf(file_path))
+            
+        elif parser_type == 'docx_parser':
+            print(f"[*] Extracting DOCX text content: {file_path}")
+            text_chunks.append(docx_parser.extract_text_from_docx(file_path))
+            
+        elif parser_type == 'ocr_parser':
+            print(f"[*] Analyzing image layout via OCR processing: {file_path}")
+            text_chunks.append(ocr_parser.extract_text_from_image(file_path))
+            
+        elif parser_type == 'config_parser':
+            print(f"[*] Parsing structured configuration secrets: {file_path}")
+            text_chunks.append(config_parser.extract_config_secrets(file_path))
+        # ==================================
+        
         else:
             _increment(stats, "files_skipped_by_extension")
             metrics.increment("files_skipped")
             continue
-
+        
         _increment(stats, "files_scanned")
         metrics.increment("files_scanned")
             
         # Detect
         for chunk in text_chunks:
-            if not chunk or not chunk.content:
+            if not chunk:
                 continue
-            if not should_scan_file(chunk.file_path):
+                
+            # Safely extract raw text depending on whether chunk is an object or string
+            if hasattr(chunk, 'content'):
+                current_content = chunk.content
+                current_file = chunk.file_path
+            else:
+                current_content = chunk
+                current_file = file_path
+
+            if not current_content or not should_scan_file(current_file):
                 continue
                 
             raw_findings = []
             
             # Step A: Scan raw plaintext content
-            raw_findings.extend(scan_regex(chunk.content, chunk.file_path))
-            raw_findings.extend(scan_entropy(chunk.content, chunk.file_path))
+            raw_findings.extend(scan_regex(current_content, current_file))
+            raw_findings.extend(scan_entropy(current_content, current_file))
             
             # Step B: Decode content (Base64, Hex, URL, Gzip, ROT13) and scan variants
-            decoded_variants = decode_content(chunk.content, chunk.file_path)
+            decoded_variants = decode_content(current_content, current_file)
             for variant in decoded_variants:
-                raw_findings.extend(scan_regex(variant, chunk.file_path))
-                raw_findings.extend(scan_entropy(variant, chunk.file_path))
+                raw_findings.extend(scan_regex(variant, current_file))
+                raw_findings.extend(scan_entropy(variant, current_file))
                 
             # Step C: Overlap suppression across all engines for this specific chunk
             final_raw = resolve_all_overlaps(raw_findings)
             
             # Step D: Generate structured Finding objects and Publish
             for r in final_raw:
-                finding_obj = create_finding(r, chunk.file_path)
+                finding_obj = create_finding(r, current_file)
                 bus.publish("FINDING_DISCOVERED", finding_obj)
                 _increment(stats, "findings_generated")
                 metrics.increment("final_findings_published")

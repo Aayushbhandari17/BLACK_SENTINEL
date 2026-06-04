@@ -5,8 +5,8 @@ MAGIC_BYTES = {
     b'\x25\x50\x44\x46': 'pdf_parser',
     b'\x50\x4B\x03\x04': 'zip_family',
     b'\x53\x51\x4C\x69': 'sqlite_parser',
-    b'\xFF\xD8\xFF': 'exif_parser',
-    b'\x89\x50\x4E\x47': 'exif_parser',
+    b'\xFF\xD8\xFF': 'ocr_parser',   # Changed from exif_parser to route JPEG to OCR
+    b'\x89\x50\x4E\x47': 'ocr_parser',   # Changed from exif_parser to route PNG to OCR
     b'\x52\x61\x72\x21': 'archive_parser',
     b'\x37\x7A\xBC\xAF': 'archive_parser',
     b'\x1F\x8B': 'archive_parser',
@@ -32,14 +32,20 @@ def classify_file(file_path: str) -> str:
             for magic, parser in MAGIC_BYTES.items():
                 if header.startswith(magic):
                     if parser == 'zip_family':
-                        # Distinguish between zip and docx/xlsx based on extension for simplicity
+                        # Distinguish between zip archive and office files based on extension
                         ext = os.path.splitext(file_path)[1].lower()
-                        if ext in ['.docx', '.xlsx', '.pptx']:
-                            return 'office_parser'
+                        if ext in ['.docx', '.doc']:
+                            return 'docx_parser'
+                        elif ext in ['.xlsx', '.pptx']:
+                            return 'office_parser' # Fallback placeholder for other office sheets
                         return 'archive_parser'
                     return parser
+            ext = os.path.splitext(file_path)[1].lower()
+            file_name = os.path.basename(file_path).lower()
+            if file_name == '.env' or ext in ['.json', '.ini', '.properties', '.yaml', '.yml']:
+                return 'config_parser'
             
-            # Fallback
+            # Fallback for plain text files without magic bytes (like .csv or .txt)
             f.seek(0)
             fallback_header = f.read(512)
             if is_text_like(fallback_header):
