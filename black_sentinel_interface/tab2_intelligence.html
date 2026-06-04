@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Black Sentinel — Privacy Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  :root {
+    --bg:#0B0C10;--surface:#111520;--surface2:#161B26;--surface3:#1A2030;
+    --green:#00FF66;--green2:#00CC52;--green-dim:rgba(0,255,102,0.08);
+    --green-glow:rgba(0,255,102,0.18);--green-border:rgba(0,255,102,0.22);
+    --red:#FF3B30;--red-dim:rgba(255,59,48,0.1);--red-border:rgba(255,59,48,0.25);
+    --amber:#FFB830;--amber-dim:rgba(255,184,48,0.1);--amber-border:rgba(255,184,48,0.2);
+    --text:#E8EDF5;--text2:#8A9BB0;--text3:#445566;
+    --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;height:100%;overflow:hidden;}
+  body{display:flex;flex-direction:column;}
+  .circuit-canvas{position:fixed;inset:0;pointer-events:none;z-index:0;}
+  .app{display:flex;height:100vh;position:relative;z-index:1;}
+
+  /* SIDEBAR */
+  .sidebar{width:220px;min-width:220px;background:var(--surface);border-right:1px solid var(--green-border);display:flex;flex-direction:column;}
+  .logo-wrap{padding:20px 18px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
+  .logo-name{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;color:var(--green);letter-spacing:1px;line-height:1.1;}
+  .logo-ver{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:2px;margin-top:3px;}
+  .nav{padding:12px 10px;flex:1;}
+  .nav-section{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--text3);letter-spacing:2px;padding:0 8px;margin:12px 0 4px;}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;font-size:14px;font-weight:500;color:var(--text2);cursor:pointer;border:1px solid transparent;transition:all 0.2s;margin-bottom:2px;text-decoration:none;}
+  .nav-item:hover{background:rgba(255,255,255,0.04);color:var(--text);}
+  .nav-item.active{background:var(--green-dim);color:var(--green);border-color:var(--green-border);}
+  .nav-item i{font-size:17px;}
+  .nav-badge{margin-left:auto;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;font-family:'JetBrains Mono',monospace;}
+  .nav-badge.amber{background:var(--amber);}
+  .sidebar-status{margin:0 10px 14px;background:var(--green-dim);border:1px solid var(--green-border);border-radius:8px;padding:10px 12px;}
+  .pulse{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;flex-shrink:0;}
+  @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,255,102,0.4);}50%{opacity:0.6;box-shadow:0 0 0 4px rgba(0,255,102,0);}}
+  .status-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);letter-spacing:1px;}
+  .status-detail{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);margin-top:5px;}
+
+  /* MAIN */
+  .main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+  .topbar{padding:14px 24px;border-bottom:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:space-between;}
+  .page-title{font-family:'Orbitron',monospace;font-size:16px;font-weight:700;color:var(--text);letter-spacing:1px;}
+  .page-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-top:3px;letter-spacing:1px;}
+  .topbar-right{display:flex;align-items:center;gap:10px;}
+
+  .content{flex:1;padding:20px 24px;overflow-y:auto;display:flex;flex-direction:column;gap:14px;}
+  .content::-webkit-scrollbar{width:4px;}
+  .content::-webkit-scrollbar-thumb{background:var(--green-border);border-radius:2px;}
+
+  /* SCORE BAR */
+  .score-bar{display:flex;align-items:center;gap:16px;padding:14px 20px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;position:relative;overflow:hidden;}
+  .score-bar::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--green-border),transparent);}
+  .score-big{font-family:'Orbitron',monospace;font-size:40px;font-weight:900;color:var(--green);line-height:1;}
+  .score-track{flex:1;background:rgba(255,255,255,0.05);border-radius:4px;height:8px;overflow:hidden;}
+  .score-progress{height:100%;width:80%;background:linear-gradient(90deg,var(--green2),var(--green));border-radius:4px;box-shadow:0 0 10px rgba(0,255,102,0.4);}
+
+  /* FILTERS */
+  .filter-row{display:flex;gap:8px;align-items:center;}
+  .filter-btn{padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'Rajdhani',sans-serif;transition:all 0.15s;}
+  .filter-btn:hover{border-color:var(--border2);color:var(--text);}
+  .filter-btn.active-all{border-color:var(--border2);color:var(--text);background:rgba(255,255,255,0.05);}
+  .filter-btn.active-crit{border-color:var(--red-border);color:var(--red);background:var(--red-dim);}
+  .filter-btn.active-med{border-color:var(--amber-border);color:var(--amber);background:var(--amber-dim);}
+  .filter-btn.active-low{border-color:var(--green-border);color:var(--green);background:var(--green-dim);}
+  .badge{font-size:9px;padding:2px 6px;border-radius:4px;font-weight:600;letter-spacing:0.5px;margin-left:5px;font-family:'JetBrains Mono',monospace;}
+  .bd-r{background:var(--red-dim);color:var(--red);border:1px solid var(--red-border);}
+  .bd-a{background:var(--amber-dim);color:var(--amber);border:1px solid var(--amber-border);}
+  .bd-g{background:var(--green-dim);color:var(--green);border:1px solid var(--green-border);}
+
+  /* GRID */
+  .grid2{display:grid;grid-template-columns:1fr 360px;gap:14px;}
+
+  /* EXPOSURE LIST */
+  .exp-list{display:flex;flex-direction:column;gap:6px;}
+  .exp-item{
+    display:flex;align-items:flex-start;gap:12px;
+    padding:12px 14px;border-radius:10px;border:1px solid transparent;
+    cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;
+  }
+  .exp-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px;}
+  .exp-item.crit{background:rgba(255,59,48,0.06);border-color:var(--red-border);}
+  .exp-item.crit::before{background:var(--red);}
+  .exp-item.crit:hover{background:rgba(255,59,48,0.1);}
+  .exp-item.med{background:rgba(255,184,48,0.05);border-color:var(--amber-border);}
+  .exp-item.med::before{background:var(--amber);}
+  .exp-item.med:hover{background:rgba(255,184,48,0.09);}
+  .exp-item.low{background:rgba(0,255,102,0.03);border-color:rgba(0,255,102,0.12);}
+  .exp-item.low::before{background:var(--green);}
+  .exp-item.low:hover{background:rgba(0,255,102,0.06);}
+  .exp-icon{font-size:20px;flex-shrink:0;margin-top:1px;}
+  .exp-icon.crit{color:var(--red);}
+  .exp-icon.med{color:var(--amber);}
+  .exp-icon.low{color:var(--green);}
+  .exp-body{flex:1;min-width:0;}
+  .exp-title{font-size:14px;font-weight:600;color:var(--text);}
+  .exp-path{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .exp-detail{font-size:11px;color:var(--text2);margin-top:3px;}
+  .exp-actions{display:flex;gap:6px;flex-shrink:0;align-items:flex-start;}
+  .action-btn{padding:5px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Rajdhani',sans-serif;border:1px solid;transition:all 0.15s;}
+  .action-btn:hover{transform:translateY(-1px);}
+  .action-btn.shred{color:var(--red);border-color:var(--red-border);background:var(--red-dim);}
+  .action-btn.vault{color:var(--text2);border-color:var(--border);background:transparent;}
+  .action-btn.redact{color:var(--amber);border-color:var(--amber-border);background:var(--amber-dim);}
+  .action-btn.wl{color:var(--text3);border-color:var(--border);background:transparent;}
+  .action-btn.clear{color:var(--green);border-color:var(--green-border);background:var(--green-dim);}
+
+  /* SIDE PANEL */
+  .side-panel{display:flex;flex-direction:column;gap:10px;}
+  .card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative;overflow:hidden;}
+  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--green-border),transparent);}
+  .card-title{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;}
+
+  /* DONUT */
+  .donut-wrap{display:flex;align-items:center;justify-content:center;gap:20px;padding:8px 0;}
+  .donut-legend{display:flex;flex-direction:column;gap:8px;}
+  .leg-item{display:flex;align-items:center;gap:8px;font-size:12px;}
+  .leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+  .leg-val{font-family:'JetBrains Mono',monospace;font-size:11px;margin-left:auto;padding-left:10px;}
+
+  /* TYPE BREAKDOWN */
+  .type-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .type-icon{font-size:16px;width:22px;text-align:center;}
+  .type-label{font-size:12px;color:var(--text2);flex:1;}
+  .type-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text);}
+  .type-bar{width:60px;background:rgba(255,255,255,0.06);border-radius:2px;height:3px;overflow:hidden;}
+  .type-fill{height:100%;border-radius:2px;}
+
+  @keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .exp-item{animation:fadein 0.3s ease both;}
+  .exp-item:nth-child(2){animation-delay:0.05s;}
+  .exp-item:nth-child(3){animation-delay:0.1s;}
+  .exp-item:nth-child(4){animation-delay:0.15s;}
+  .exp-item:nth-child(5){animation-delay:0.2s;}
+  .exp-item:nth-child(6){animation-delay:0.25s;}
+
+  /* DRAWER */
+  .drawer{position:fixed;right:-380px;top:0;bottom:0;width:360px;background:var(--surface);border-left:1px solid var(--green-border);z-index:100;padding:20px;transition:right 0.3s ease;overflow-y:auto;}
+  .drawer.open{right:0;}
+  .drawer-title{font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;}
+  .drawer-path{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-bottom:16px;word-break:break-all;}
+  .drawer-section{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:2px;margin-bottom:8px;}
+  .drawer-actions{display:flex;flex-direction:column;gap:8px;}
+  .drawer-btn{width:100%;padding:10px 14px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Rajdhani',sans-serif;border:1px solid;transition:all 0.15s;text-align:left;display:flex;align-items:center;gap:10px;}
+  .drawer-btn:hover{transform:translateX(2px);}
+  .drawer-btn.shred{color:var(--red);border-color:var(--red-border);background:var(--red-dim);}
+  .drawer-btn.vault-btn{color:var(--green);border-color:var(--green-border);background:var(--green-dim);}
+  .drawer-btn.wl-btn{color:var(--text2);border-color:var(--border);background:transparent;}
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+  .overlay.active{opacity:1;pointer-events:all;}
+</style>
+</head>
+<body>
+<canvas class="circuit-canvas" id="circuitCanvas"></canvas>
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+
+<!-- DRAWER -->
+<div class="drawer" id="drawer">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:2px;">EXPOSURE DETAIL</div>
+    <button onclick="closeDrawer()" style="background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--text2);cursor:pointer;padding:4px 8px;font-size:12px;">✕ CLOSE</button>
+  </div>
+  <div id="drawerSeverity" style="margin-bottom:12px;"></div>
+  <div class="drawer-title" id="drawerTitle"></div>
+  <div class="drawer-path" id="drawerPath"></div>
+  <div style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:14px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);margin-bottom:6px;">DETECTED CONTENT</div>
+    <div id="drawerContent" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);word-break:break-all;"></div>
+  </div>
+  <div class="drawer-section">ACTIONS</div>
+  <div class="drawer-actions" id="drawerActions"></div>
+</div>
+
+<div class="app">
+  <div class="sidebar">
+    <div class="logo-wrap">
+      <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
+        <path d="M19 2L4 9v10c0 9 6.5 17 15 19C28.5 36 35 28 35 19V9L19 2z" fill="rgba(0,255,102,0.12)" stroke="#00FF66" stroke-width="1.4"/>
+        <path d="M19 7L9 13v7c0 6 4.2 11.4 10 13 5.8-1.6 10-7 10-13v-7L19 7z" fill="rgba(0,255,102,0.06)" stroke="rgba(0,255,102,0.35)" stroke-width="1"/>
+        <path d="M13.5 19.5l4 4L25 14" stroke="#00FF66" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <div class="logo-name">BLACK<br>SENTINEL</div>
+        <div class="logo-ver">v2.4.1 · LOCAL</div>
+      </div>
+    </div>
+    <div class="nav">
+      <div class="nav-section">CORE</div>
+      <a class="nav-item" href="tab1_command.html"><i class="ti ti-shield-check"></i> Command</a>
+      <a class="nav-item active" href="tab2_intelligence.html"><i class="ti ti-radar"></i> Intelligence <span class="nav-badge">66</span></a>
+      <a class="nav-item" href="tab3_honeycomb.html"><i class="ti ti-bug"></i> Honeycomb <span class="nav-badge">!</span></a>
+      <a class="nav-item" href="tab4_vault.html"><i class="ti ti-lock"></i> Vault</a>
+    </div>
+    <div class="sidebar-status">
+      <div style="display:flex;align-items:center;gap:7px;">
+        <div class="pulse"></div><span class="status-label">SENTINEL ACTIVE</span>
+      </div>
+      <div class="status-detail">12 traps armed · 1 alert</div>
+      <div class="status-detail" style="margin-top:3px;">Last scan: 2h 14m ago</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="page-title">Privacy Intelligence</div>
+        <div class="page-sub">EXPOSURE ANALYSIS · 66 FINDINGS ACROSS 14,205 FILES</div>
+      </div>
+      <div class="topbar-right">
+        <span class="badge bd-r">4 EXTREME</span>
+        <span class="badge bd-a">18 MEDIUM</span>
+        <span class="badge bd-g">44 LOW</span>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- SCORE BAR -->
+      <div class="score-bar">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:2px;margin-bottom:4px;">LOCAL PRIVACY SCORE</div>
+          <div class="score-big">80<span style="font-size:20px;color:var(--text3)">/100</span></div>
+        </div>
+        <div style="flex:1;">
+          <div class="score-track"><div class="score-progress"></div></div>
+          <div style="display:flex;justify-content:space-between;margin-top:5px;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);">0 · CRITICAL</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--green);">LOW RISK · RECOMMENDED: RESOLVE 4 EXTREME FINDINGS</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);">100 · PERFECT</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FILTERS -->
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div class="filter-row">
+          <button class="filter-btn active-all" onclick="filterExp('all',this)">All <span style="font-family:'JetBrains Mono',monospace;font-size:10px;opacity:0.6;">66</span></button>
+          <button class="filter-btn" onclick="filterExp('crit',this)">Extreme <span style="font-family:'JetBrains Mono',monospace;font-size:10px;opacity:0.6;">4</span></button>
+          <button class="filter-btn" onclick="filterExp('med',this)">Medium <span style="font-family:'JetBrains Mono',monospace;font-size:10px;opacity:0.6;">18</span></button>
+          <button class="filter-btn" onclick="filterExp('low',this)">Low <span style="font-family:'JetBrains Mono',monospace;font-size:10px;opacity:0.6;">44</span></button>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);">Click any item to inspect →</div>
+      </div>
+
+      <div class="grid2">
+        <!-- EXPOSURE LIST -->
+        <div>
+          <div class="exp-list" id="expList">
+            <!-- populated by JS -->
+          </div>
+        </div>
+
+        <!-- SIDE STATS -->
+        <div class="side-panel">
+          <div class="card">
+            <div class="card-title">Exposure Distribution</div>
+            <div class="donut-wrap">
+              <svg width="100" height="100" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="38" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="14"/>
+                <!-- extreme: 4/66 = 6% = 14.4deg -->
+                <circle cx="50" cy="50" r="38" fill="none" stroke="#FF3B30" stroke-width="14" stroke-dasharray="238.6" stroke-dashoffset="209" stroke-linecap="butt" transform="rotate(-90 50 50)"/>
+                <!-- medium: 18/66 = 27% -->
+                <circle cx="50" cy="50" r="38" fill="none" stroke="#FFB830" stroke-width="14" stroke-dasharray="238.6" stroke-dashoffset="173" stroke-linecap="butt" transform="rotate(-57 50 50)"/>
+                <!-- low: 44/66 = 67% -->
+                <circle cx="50" cy="50" r="38" fill="none" stroke="#00FF66" stroke-width="14" stroke-dasharray="238.6" stroke-dashoffset="78" stroke-linecap="butt" transform="rotate(120 50 50)"/>
+                <text x="50" y="46" text-anchor="middle" fill="#E8EDF5" font-size="14" font-family="Orbitron" font-weight="700">66</text>
+                <text x="50" y="58" text-anchor="middle" fill="#445566" font-size="7" font-family="JetBrains Mono">TOTAL</text>
+              </svg>
+              <div class="donut-legend">
+                <div class="leg-item"><div class="leg-dot" style="background:var(--red);"></div><span style="color:var(--text2);">Extreme</span><span class="leg-val" style="color:var(--red);">4</span></div>
+                <div class="leg-item"><div class="leg-dot" style="background:var(--amber);"></div><span style="color:var(--text2);">Medium</span><span class="leg-val" style="color:var(--amber);">18</span></div>
+                <div class="leg-item"><div class="leg-dot" style="background:var(--green);"></div><span style="color:var(--text2);">Low</span><span class="leg-val" style="color:var(--green);">44</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">By Exposure Type</div>
+            <div class="type-row"><i class="ti ti-key type-icon" style="color:var(--red);"></i><span class="type-label">API Keys / Tokens</span><div class="type-bar"><div class="type-fill" style="width:85%;background:var(--red);"></div></div><span class="type-count" style="color:var(--red);">22</span></div>
+            <div class="type-row"><i class="ti ti-user type-icon" style="color:var(--amber);"></i><span class="type-label">PII / Identity</span><div class="type-bar"><div class="type-fill" style="width:60%;background:var(--amber);"></div></div><span class="type-count" style="color:var(--amber);">16</span></div>
+            <div class="type-row"><i class="ti ti-lock-open type-icon" style="color:var(--amber);"></i><span class="type-label">Passwords</span><div class="type-bar"><div class="type-fill" style="width:45%;background:var(--amber);"></div></div><span class="type-count" style="color:var(--amber);">12</span></div>
+            <div class="type-row"><i class="ti ti-camera type-icon" style="color:var(--green);"></i><span class="type-label">OCR Findings</span><div class="type-bar"><div class="type-fill" style="width:35%;background:var(--green);"></div></div><span class="type-count" style="color:var(--green);">9</span></div>
+            <div class="type-row"><i class="ti ti-certificate type-icon" style="color:var(--green);"></i><span class="type-label">SSH / Certs</span><div class="type-bar"><div class="type-fill" style="width:25%;background:var(--green);"></div></div><span class="type-count" style="color:var(--green);">7</span></div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Top Exposed Locations</div>
+            <div style="display:flex;flex-direction:column;gap:7px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);">AppData\Roaming</span>
+                <span class="badge bd-r">14 findings</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);">Documents\</span>
+                <span class="badge bd-a">11 findings</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);">dev\projects\</span>
+                <span class="badge bd-a">9 findings</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);">Screenshots\</span>
+                <span class="badge bd-g">7 findings</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const exposures = [
+  {sev:'crit',icon:'ti-key',title:'AWS Secret Access Key in plaintext',path:'C:\\Users\\user\\AppData\\Roaming\\.aws\\credentials',detail:'Matches AWS_SECRET_ACCESS_KEY pattern · Entropy: 5.4',content:'AKIAIOSFODNN7EXAMPLE / wJalrXUtn[REDACTED]',actions:['shred','vault','wl']},
+  {sev:'crit',icon:'ti-certificate',title:'SSH Private Key found unencrypted',path:'C:\\Users\\user\\Documents\\backups\\id_rsa.bak',detail:'-----BEGIN RSA PRIVATE KEY----- header detected',content:'-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQE[REDACTED]',actions:['shred','vault','wl']},
+  {sev:'crit',icon:'ti-lock-open',title:'GitHub Personal Access Token',path:'C:\\Users\\user\\dev\\scripts\\deploy.sh',detail:'ghp_ prefix pattern matched · high entropy (5.1)',content:'ghp_x1y2z3[REDACTED]abc',actions:['shred','vault','wl']},
+  {sev:'crit',icon:'ti-brand-stripe',title:'Stripe Secret Key in config',path:'C:\\Users\\user\\AppData\\Local\\stripe_cli\\config.toml',detail:'sk_live_ prefix detected · Production key',content:'sk_live_[REDACTED]',actions:['shred','vault','wl']},
+  {sev:'med',icon:'ti-camera',title:'PII detected via OCR in screenshot',path:'C:\\Users\\user\\Pictures\\Screenshots\\Screenshot_92.png',detail:'Found: email address, phone number, full name via Tesseract OCR',content:'john.doe@email.com · +91-9876543210',actions:['redact','vault','wl']},
+  {sev:'med',icon:'ti-database',title:'Database password in .env file',path:'C:\\Users\\user\\dev\\myproject\\.env',detail:'DB_PASSWORD variable with plaintext value',content:'DB_PASSWORD=Sup3rSecr3t[REDACTED]',actions:['shred','vault','wl']},
+  {sev:'med',icon:'ti-brand-google',title:'Google OAuth client secret',path:'C:\\Users\\user\\dev\\webapp\\credentials.json',detail:'client_secret field in Google API credentials file',content:'"client_secret": "GOCSPX-[REDACTED]"',actions:['shred','vault','wl']},
+  {sev:'med',icon:'ti-wifi',title:'Wi-Fi password in registry export',path:'C:\\Users\\user\\Documents\\backup\\registry_export.reg',detail:'WLAN profile key material in plaintext',content:'keyMaterial=ABC123[REDACTED]',actions:['shred','vault','wl']},
+  {sev:'low',icon:'ti-world',title:'JWT token in browser cache',path:'C:\\Users\\user\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Cache',detail:'Bearer token pattern matched, likely expired',content:'eyJhbGciOiJIUzI1NiJ9.[REDACTED]',actions:['clear','wl']},
+  {sev:'low',icon:'ti-mail',title:'Email credentials in Thunderbird profile',path:'C:\\Users\\user\\AppData\\Roaming\\Thunderbird\\Profiles\\logins.json',detail:'Stored email login credentials (Base64 encoded)',content:'{"username":"user@mail.com","password":"[ENCODED]"}',actions:['vault','wl']},
+];
+
+const actionLabels = {shred:'🗑 Shred File',vault:'🔒 Move to Vault',redact:'🖊 Redact Content',wl:'✓ Whitelist',clear:'🧹 Clear Cache'};
+const actionClass = {shred:'shred',vault:'vault-btn',redact:'redact',wl:'wl-btn',clear:'clear'};
+const btnClass = {shred:'shred',vault:'vault',redact:'redact',wl:'wl',clear:'clear'};
+
+let activeFilter = 'all';
+function renderList(filter) {
+  const list = document.getElementById('expList');
+  list.innerHTML = '';
+  exposures.filter(e => filter === 'all' || e.sev === filter).forEach((e,i) => {
+    const div = document.createElement('div');
+    div.className = `exp-item ${e.sev}`;
+    div.style.animationDelay = (i*0.05)+'s';
+    div.innerHTML = `
+      <i class="ti ${e.icon} exp-icon ${e.sev}"></i>
+      <div class="exp-body">
+        <div class="exp-title">${e.title}</div>
+        <div class="exp-path">${e.path}</div>
+        <div class="exp-detail">${e.detail}</div>
+      </div>
+      <div class="exp-actions">
+        ${e.actions.slice(0,2).map(a=>`<button class="action-btn ${btnClass[a]}" onclick="event.stopPropagation()">${a==='shred'?'Shred':a==='vault'?'Vault':a==='redact'?'Redact':a==='clear'?'Clear':'Whitelist'}</button>`).join('')}
+      </div>`;
+    div.onclick = () => openDrawer(e);
+    list.appendChild(div);
+  });
+}
+
+function filterExp(type, btn) {
+  activeFilter = type;
+  document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
+  const map = {all:'active-all',crit:'active-crit',med:'active-med',low:'active-low'};
+  btn.className = 'filter-btn ' + map[type];
+  renderList(type);
+}
+
+function openDrawer(e) {
+  const sevMap = {crit:{label:'EXTREME',color:'var(--red)',bg:'var(--red-dim)',border:'var(--red-border)'},med:{label:'MEDIUM',color:'var(--amber)',bg:'var(--amber-dim)',border:'var(--amber-border)'},low:{label:'LOW',color:'var(--green)',bg:'var(--green-dim)',border:'var(--green-border)'}};
+  const s = sevMap[e.sev];
+  document.getElementById('drawerSeverity').innerHTML = `<span style="background:${s.bg};color:${s.color};border:1px solid ${s.border};font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 8px;border-radius:4px;letter-spacing:1px;">${s.label} SEVERITY</span>`;
+  document.getElementById('drawerTitle').textContent = e.title;
+  document.getElementById('drawerPath').textContent = e.path;
+  document.getElementById('drawerContent').textContent = e.content;
+  const actions = document.getElementById('drawerActions');
+  actions.innerHTML = e.actions.map(a => `<button class="drawer-btn ${actionClass[a]}" onclick="handleAction('${a}')"><i class="ti ${a==='shred'?'ti-trash':a==='vault'?'ti-lock':a==='redact'?'ti-edit':a==='clear'?'ti-eraser':'ti-check'}"></i>${actionLabels[a]}</button>`).join('');
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('overlay').classList.add('active');
+}
+
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('overlay').classList.remove('active');
+}
+
+function handleAction(a) {
+  alert(`Action "${actionLabels[a]}" triggered.\n(Connect to backend to execute.)`);
+  closeDrawer();
+}
+
+renderList('all');
+
+// Circuit
+const canvas = document.getElementById('circuitCanvas');
+const ctx = canvas.getContext('2d');
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;draw();}
+function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);ctx.strokeStyle='rgba(0,255,102,0.04)';ctx.lineWidth=0.5;for(let x=0;x<canvas.width;x+=60){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,canvas.height);ctx.stroke();}for(let y=0;y<canvas.height;y+=60){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke();}ctx.fillStyle='rgba(0,255,102,0.15)';for(let x=0;x<canvas.width;x+=60)for(let y=0;y<canvas.height;y+=60)if(Math.random()<0.1){ctx.beginPath();ctx.arc(x,y,2,0,Math.PI*2);ctx.fill();}}
+resize(); window.addEventListener('resize',resize);
+</script>
+</body>
+</html>

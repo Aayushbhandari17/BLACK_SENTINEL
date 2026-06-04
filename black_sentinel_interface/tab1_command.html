@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Black Sentinel — Central Command</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  :root {
+    --bg: #0B0C10;
+    --surface: #111520;
+    --surface2: #161B26;
+    --surface3: #1A2030;
+    --green: #00FF66;
+    --green2: #00CC52;
+    --green-dim: rgba(0,255,102,0.08);
+    --green-glow: rgba(0,255,102,0.18);
+    --green-border: rgba(0,255,102,0.22);
+    --red: #FF3B30;
+    --red-dim: rgba(255,59,48,0.1);
+    --amber: #FFB830;
+    --amber-dim: rgba(255,184,48,0.1);
+    --text: #E8EDF5;
+    --text2: #8A9BB0;
+    --text3: #445566;
+    --border: rgba(255,255,255,0.06);
+    --border2: rgba(255,255,255,0.1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-serif; height: 100%; overflow: hidden; }
+  body { display: flex; flex-direction: column; }
+
+  /* CIRCUIT BG */
+  .circuit-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+
+  /* LAYOUT */
+  .app { display: flex; height: 100vh; position: relative; z-index: 1; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 220px; min-width: 220px;
+    background: var(--surface);
+    border-right: 1px solid var(--green-border);
+    display: flex; flex-direction: column;
+    padding: 0;
+    position: relative;
+  }
+  .sidebar::after {
+    content: '';
+    position: absolute; top: 0; right: -1px; bottom: 0; width: 1px;
+    background: linear-gradient(180deg, transparent, var(--green) 30%, var(--green) 70%, transparent);
+    opacity: 0.3;
+  }
+  .logo-wrap {
+    padding: 20px 18px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .logo-shield {
+    width: 38px; height: 38px; flex-shrink: 0; position: relative;
+  }
+  .logo-shield svg { width: 38px; height: 38px; }
+  .logo-text {}
+  .logo-name { font-family: 'Orbitron', monospace; font-size: 13px; font-weight: 700; color: var(--green); letter-spacing: 1px; line-height: 1.1; }
+  .logo-ver { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text3); letter-spacing: 2px; margin-top: 3px; }
+
+  .nav { padding: 12px 10px; flex: 1; }
+  .nav-section { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: var(--text3); letter-spacing: 2px; padding: 0 8px; margin: 12px 0 4px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 10px; border-radius: 8px;
+    font-size: 14px; font-weight: 500; color: var(--text2);
+    cursor: pointer; border: 1px solid transparent;
+    transition: all 0.2s; margin-bottom: 2px; text-decoration: none;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.04); color: var(--text); }
+  .nav-item.active {
+    background: var(--green-dim);
+    color: var(--green);
+    border-color: var(--green-border);
+  }
+  .nav-item i { font-size: 17px; }
+  .nav-badge {
+    margin-left: auto; background: var(--red);
+    color: #fff; font-size: 9px; font-weight: 700;
+    padding: 1px 5px; border-radius: 4px; font-family: 'JetBrains Mono', monospace;
+  }
+
+  .sidebar-status {
+    margin: 0 10px 14px;
+    background: var(--green-dim);
+    border: 1px solid var(--green-border);
+    border-radius: 8px; padding: 10px 12px;
+  }
+  .status-row { display: flex; align-items: center; gap: 7px; }
+  .pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; flex-shrink: 0; }
+  @keyframes pulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,255,102,0.4);} 50%{opacity:0.6;box-shadow:0 0 0 4px rgba(0,255,102,0);} }
+  .status-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--green); letter-spacing: 1px; }
+  .status-detail { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text3); margin-top: 5px; }
+
+  /* MAIN */
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  .topbar {
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .page-title { font-family: 'Orbitron', monospace; font-size: 16px; font-weight: 700; color: var(--text); letter-spacing: 1px; }
+  .page-sub { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text3); margin-top: 3px; letter-spacing: 1px; }
+  .topbar-right { display: flex; align-items: center; gap: 12px; }
+  .btn-scan {
+    background: var(--green); color: #000;
+    border: none; border-radius: 8px;
+    padding: 9px 18px; font-family: 'Rajdhani', sans-serif;
+    font-size: 13px; font-weight: 700; letter-spacing: 1px;
+    cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px;
+  }
+  .btn-scan:hover { background: var(--green2); transform: translateY(-1px); }
+  .btn-scan:active { transform: translateY(0) scale(0.98); }
+  .btn-scan.scanning { background: rgba(0,255,102,0.2); color: var(--green); border: 1px solid var(--green-border); animation: scanpulse 1s infinite; }
+  @keyframes scanpulse { 0%,100%{opacity:1;} 50%{opacity:0.6;} }
+
+  .content { flex: 1; padding: 20px 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
+  .content::-webkit-scrollbar { width: 4px; }
+  .content::-webkit-scrollbar-track { background: transparent; }
+  .content::-webkit-scrollbar-thumb { background: var(--green-border); border-radius: 2px; }
+
+  /* CARD */
+  .card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px;
+    position: relative; overflow: hidden;
+  }
+  .card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--green-border), transparent);
+  }
+  .card-title {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    color: var(--text3); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px;
+  }
+
+  /* SHIELD HERO */
+  .shield-hero {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; padding: 20px 0 16px; position: relative;
+  }
+  .shield-rings { position: relative; display: flex; align-items: center; justify-content: center; }
+  .ring {
+    position: absolute; border-radius: 50%;
+    border: 1px solid var(--green-border);
+  }
+  .ring1 { width: 100px; height: 100px; animation: ringpulse 3s infinite; }
+  .ring2 { width: 130px; height: 130px; animation: ringpulse 3s infinite 0.6s; opacity: 0.5; }
+  .ring3 { width: 160px; height: 160px; animation: ringpulse 3s infinite 1.2s; opacity: 0.25; }
+  @keyframes ringpulse { 0%,100%{opacity:var(--op, 0.5);transform:scale(1);} 50%{opacity:calc(var(--op,0.5)*1.6);transform:scale(1.03);} }
+  .ring1{--op:1;} .ring2{--op:0.5;} .ring3{--op:0.25;}
+  .shield-core { position: relative; z-index: 2; }
+  .shield-status { margin-top: 14px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--green); letter-spacing: 3px; text-align: center; }
+  .shield-sub { font-size: 10px; color: var(--text3); letter-spacing: 1px; margin-top: 4px; text-align: center; font-family: 'JetBrains Mono', monospace; }
+
+  /* STATS GRID */
+  .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .stat-card {
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px;
+    position: relative; overflow: hidden;
+  }
+  .stat-card::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+    border-radius: 0 0 10px 10px;
+  }
+  .stat-card.green::after { background: var(--green); }
+  .stat-card.amber::after { background: var(--amber); }
+  .stat-card.red::after { background: var(--red); }
+  .stat-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text3); letter-spacing: 1.5px; margin-bottom: 8px; }
+  .stat-val { font-family: 'Orbitron', monospace; font-size: 26px; font-weight: 700; line-height: 1; }
+  .stat-val.green { color: var(--green); }
+  .stat-val.amber { color: var(--amber); }
+  .stat-val.red { color: var(--red); }
+  .stat-detail { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text3); margin-top: 6px; }
+
+  /* GRID 2 */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  /* SCORE */
+  .score-wrap { display: flex; align-items: center; gap: 16px; }
+  .score-num { font-family: 'Orbitron', monospace; font-size: 38px; font-weight: 900; color: var(--green); line-height: 1; }
+  .score-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text3); letter-spacing: 1px; margin-top: 3px; }
+  .bar-track { background: rgba(255,255,255,0.06); border-radius: 3px; height: 4px; overflow: hidden; margin-top: 8px; }
+  .bar-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+  .bar-row { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+  .bar-row span { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text3); width: 44px; }
+  .bar-row .bar-num { width: 36px; text-align: right; color: var(--text2); }
+
+  /* CONSOLE */
+  .console {
+    background: #06080C;
+    border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; height: 180px; overflow-y: auto;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .console::-webkit-scrollbar { width: 3px; }
+  .console::-webkit-scrollbar-thumb { background: var(--border2); }
+  .log-line { display: flex; gap: 10px; align-items: baseline; }
+  .log-ts { color: var(--text3); flex-shrink: 0; font-size: 10px; }
+  .log-ok { color: var(--green); flex-shrink: 0; }
+  .log-warn { color: var(--amber); flex-shrink: 0; }
+  .log-alert { color: var(--red); flex-shrink: 0; font-weight: 700; }
+  .log-msg { color: var(--text3); }
+  .log-msg.critical { color: var(--red); }
+  .log-msg.warn { color: var(--amber); }
+
+  /* COVERAGE BARS */
+  .cov-item { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .cov-label { font-size: 12px; color: var(--text2); width: 100px; }
+  .cov-bar { flex: 1; background: rgba(255,255,255,0.05); border-radius: 3px; height: 5px; overflow: hidden; }
+  .cov-fill { height: 100%; border-radius: 3px; }
+  .cov-val { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text3); width: 36px; text-align: right; }
+
+  /* ANIMATIONS */
+  @keyframes fadein { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+  .card { animation: fadein 0.4s ease both; }
+  .card:nth-child(2){animation-delay:0.05s;}
+  .card:nth-child(3){animation-delay:0.1s;}
+  .card:nth-child(4){animation-delay:0.15s;}
+
+  /* SCAN LASER */
+  .laser { position: absolute; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--green), transparent); opacity: 0; pointer-events: none; border-radius: 1px; }
+  .laser.active { animation: laser 1.8s linear infinite; opacity: 1; }
+  @keyframes laser { 0%{top:0%;} 100%{top:100%;} }
+</style>
+</head>
+<body>
+<canvas class="circuit-canvas" id="circuitCanvas"></canvas>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="logo-wrap">
+      <div class="logo-shield">
+        <svg viewBox="0 0 38 38" fill="none">
+          <path d="M19 2L4 9v10c0 9 6.5 17 15 19C28.5 36 35 28 35 19V9L19 2z" fill="rgba(0,255,102,0.12)" stroke="#00FF66" stroke-width="1.4"/>
+          <path d="M19 7L9 13v7c0 6 4.2 11.4 10 13 5.8-1.6 10-7 10-13v-7L19 7z" fill="rgba(0,255,102,0.06)" stroke="rgba(0,255,102,0.35)" stroke-width="1"/>
+          <path d="M13.5 19.5l4 4L25 14" stroke="#00FF66" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <div class="logo-name">BLACK<br>SENTINEL</div>
+        <div class="logo-ver">v2.4.1 · LOCAL</div>
+      </div>
+    </div>
+    <div class="nav">
+      <div class="nav-section">CORE</div>
+      <a class="nav-item active" href="tab1_command.html"><i class="ti ti-shield-check"></i> Command</a>
+      <a class="nav-item" href="tab2_intelligence.html"><i class="ti ti-radar"></i> Intelligence <span class="nav-badge">66</span></a>
+      <a class="nav-item" href="tab3_honeycomb.html"><i class="ti ti-bug"></i> Honeycomb <span class="nav-badge" style="background:var(--red);">!</span></a>
+      <a class="nav-item" href="tab4_vault.html"><i class="ti ti-lock"></i> Vault</a>
+    </div>
+    <div class="sidebar-status">
+      <div class="status-row">
+        <div class="pulse"></div>
+        <span class="status-label">SENTINEL ACTIVE</span>
+      </div>
+      <div class="status-detail">12 traps armed · 1 alert</div>
+      <div class="status-detail" style="margin-top:3px;">Last scan: 2h 14m ago</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="page-title">Central Command</div>
+        <div class="page-sub">LOCAL PRIVACY AUDIT SYSTEM · ZERO CLOUD DEPENDENCY</div>
+      </div>
+      <div class="topbar-right">
+        <div id="clockDisplay" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3);"></div>
+        <button class="btn-scan" id="scanBtn" onclick="startScan()">
+          <i class="ti ti-player-play"></i> INITIATE AUDIT
+        </button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- SHIELD HERO + SCORE -->
+      <div class="grid2">
+        <div class="card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:220px;position:relative;">
+          <div class="laser" id="laser"></div>
+          <div class="shield-hero">
+            <div class="shield-rings">
+              <div class="ring ring3"></div>
+              <div class="ring ring2"></div>
+              <div class="ring ring1"></div>
+              <div class="shield-core">
+                <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
+                  <path d="M36 4L8 17v19c0 17 11.5 32 28 35.5C53.5 68 65 53 65 36V17L36 4z" fill="rgba(0,255,102,0.14)" stroke="#00FF66" stroke-width="1.8"/>
+                  <path d="M36 13L16 23v13c0 11.5 7.8 21.8 20 24.5C48.2 57.8 56 47.5 56 36V23L36 13z" fill="rgba(0,255,102,0.07)" stroke="rgba(0,255,102,0.4)" stroke-width="1.2"/>
+                  <path d="M25 36l9 9L48 27" stroke="#00FF66" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="shield-status" id="shieldStatus">SYSTEM LOCAL & SECURE</div>
+            <div class="shield-sub" id="shieldSub">NO ACTIVE THREATS DETECTED</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Privacy Score</div>
+          <div class="score-wrap">
+            <svg width="80" height="80" viewBox="0 0 80 80">
+              <circle cx="40" cy="40" r="32" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="7"/>
+              <circle cx="40" cy="40" r="32" fill="none" stroke="#00FF66" stroke-width="7" stroke-dasharray="201" stroke-dashoffset="40" stroke-linecap="round" transform="rotate(-90 40 40)" id="scoreArc"/>
+            </svg>
+            <div>
+              <div class="score-num" id="scoreNum">80</div>
+              <div class="score-label">/ 100 · LOW RISK</div>
+              <div style="margin-top:10px;display:flex;gap:8px;">
+                <span style="background:rgba(0,255,102,0.12);color:var(--green);font-size:10px;padding:3px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace;border:1px solid var(--green-border);">SECURE</span>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:16px;">
+            <div class="bar-row">
+              <span style="color:var(--green);">Clean</span>
+              <div class="bar-track" style="flex:1;"><div class="bar-fill" style="width:90%;background:var(--green);"></div></div>
+              <span class="bar-num" style="color:var(--green);">12,841</span>
+            </div>
+            <div class="bar-row">
+              <span style="color:var(--amber);">Warn</span>
+              <div class="bar-track" style="flex:1;"><div class="bar-fill" style="width:55%;background:var(--amber);"></div></div>
+              <span class="bar-num" style="color:var(--amber);">1,298</span>
+            </div>
+            <div class="bar-row">
+              <span style="color:var(--red);">Crit</span>
+              <div class="bar-track" style="flex:1;"><div class="bar-fill" style="width:5%;background:var(--red);"></div></div>
+              <span class="bar-num" style="color:var(--red);">66</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div class="stats-grid">
+        <div class="stat-card green">
+          <div class="stat-label">FILES MONITORED</div>
+          <div class="stat-val green" id="fileCount">14,205</div>
+          <div class="stat-detail">across 6 scan targets</div>
+        </div>
+        <div class="stat-card amber">
+          <div class="stat-label">ACTIVE TRAPS</div>
+          <div class="stat-val amber">12</div>
+          <div class="stat-detail">honeytokens armed</div>
+        </div>
+        <div class="stat-card red">
+          <div class="stat-label">EXPOSURES FOUND</div>
+          <div class="stat-val red">66</div>
+          <div class="stat-detail">4 extreme severity</div>
+        </div>
+      </div>
+
+      <!-- CONSOLE + COVERAGE -->
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">FILE WATCHER FEED · LIVE</div>
+          <div class="console" id="consoleLog">
+            <div class="log-line"><span class="log-ts">09:14:38</span><span class="log-ok">[OK]&nbsp;&nbsp;&nbsp;</span><span class="log-msg">Scan complete — Documents (3,412 files)</span></div>
+            <div class="log-line"><span class="log-ts">09:14:29</span><span class="log-warn">[WARN]&nbsp;</span><span class="log-msg warn">High entropy string in config.json (score: 4.8)</span></div>
+            <div class="log-line"><span class="log-ts">09:14:19</span><span class="log-ok">[OK]&nbsp;&nbsp;&nbsp;</span><span class="log-msg">OCR pass — Screenshots/ (88 images)</span></div>
+            <div class="log-line"><span class="log-ts">09:13:55</span><span class="log-alert">[ALERT]</span><span class="log-msg critical">AWS key — AppData\.aws\credentials</span></div>
+            <div class="log-line"><span class="log-ts">09:13:40</span><span class="log-ok">[OK]&nbsp;&nbsp;&nbsp;</span><span class="log-msg">Git history scan — 0 leaked secrets</span></div>
+            <div class="log-line"><span class="log-ts">09:13:22</span><span class="log-ok">[OK]&nbsp;&nbsp;&nbsp;</span><span class="log-msg">Argon2id match — 0 HIBP hits</span></div>
+            <div class="log-line"><span class="log-ts">09:12:50</span><span class="log-ok">[OK]&nbsp;&nbsp;&nbsp;</span><span class="log-msg">Browser cache parsed — Chrome (422 entries)</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">SCAN COVERAGE</div>
+          <div style="margin-top:4px;">
+            <div class="cov-item"><span class="cov-label">File Systems</span><div class="cov-bar"><div class="cov-fill" style="width:94%;background:var(--green);"></div></div><span class="cov-val" style="color:var(--green);">94%</span></div>
+            <div class="cov-item"><span class="cov-label">Git Repos</span><div class="cov-bar"><div class="cov-fill" style="width:100%;background:var(--green);"></div></div><span class="cov-val" style="color:var(--green);">100%</span></div>
+            <div class="cov-item"><span class="cov-label">Screenshots</span><div class="cov-bar"><div class="cov-fill" style="width:88%;background:var(--green);"></div></div><span class="cov-val" style="color:var(--green);">88%</span></div>
+            <div class="cov-item"><span class="cov-label">Browser Cache</span><div class="cov-bar"><div class="cov-fill" style="width:76%;background:var(--amber);"></div></div><span class="cov-val" style="color:var(--amber);">76%</span></div>
+            <div class="cov-item"><span class="cov-label">AppData</span><div class="cov-bar"><div class="cov-fill" style="width:45%;background:var(--amber);"></div></div><span class="cov-val" style="color:var(--amber);">45%</span></div>
+            <div class="cov-item"><span class="cov-label">Databases</span><div class="cov-bar"><div class="cov-fill" style="width:32%;background:var(--red);"></div></div><span class="cov-val" style="color:var(--red);">32%</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// Clock
+function updateClock() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  const s = String(now.getSeconds()).padStart(2,'0');
+  document.getElementById('clockDisplay').textContent = `${h}:${m}:${s} LOCAL`;
+}
+updateClock(); setInterval(updateClock, 1000);
+
+// Circuit canvas
+const canvas = document.getElementById('circuitCanvas');
+const ctx = canvas.getContext('2d');
+function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; drawCircuit(); }
+function drawCircuit() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.strokeStyle = 'rgba(0,255,102,0.045)';
+  ctx.lineWidth = 0.5;
+  const gw = 60;
+  for(let x = 0; x < canvas.width; x += gw) {
+    ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,canvas.height); ctx.stroke();
+  }
+  for(let y = 0; y < canvas.height; y += gw) {
+    ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(canvas.width,y); ctx.stroke();
+  }
+  ctx.fillStyle = 'rgba(0,255,102,0.18)';
+  for(let x = 0; x < canvas.width; x += gw) {
+    for(let y = 0; y < canvas.height; y += gw) {
+      if(Math.random() < 0.12) { ctx.beginPath(); ctx.arc(x,y,2,0,Math.PI*2); ctx.fill(); }
+    }
+  }
+}
+resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+
+// Scan simulation
+const scanLogs = [
+  ['ok','[OK]   ','Honeytoken integrity check — all 12 traps intact'],
+  ['warn','[WARN] ','Starting OCR pass on Screenshots/ directory...'],
+  ['ok','[OK]   ','Entropy analysis — 14,205 strings evaluated'],
+  ['warn','[WARN] ','Suspicious base64-encoded token in notes.txt'],
+  ['alert','[ALERT]','High-entropy AWS-format key detected in config.json'],
+  ['ok','[OK]   ','Argon2id hash matching — 0 HIBP breach matches'],
+  ['ok','[OK]   ','Microsoft Presidio NLP scan complete'],
+  ['ok','[OK]   ','Memory zeroization complete — RAM cleared'],
+];
+let scanning = false;
+function startScan() {
+  if(scanning) return;
+  scanning = true;
+  const btn = document.getElementById('scanBtn');
+  const laser = document.getElementById('laser');
+  const status = document.getElementById('shieldStatus');
+  const sub = document.getElementById('shieldSub');
+  btn.innerHTML = '<i class="ti ti-loader"></i> SCANNING...';
+  btn.classList.add('scanning');
+  laser.classList.add('active');
+  status.textContent = 'SCANNING LOCAL FILE SYSTEM...';
+  status.style.color = 'var(--amber)';
+  sub.textContent = 'DO NOT CLOSE APPLICATION';
+  const con = document.getElementById('consoleLog');
+  let i = 0;
+  const interval = setInterval(() => {
+    if(i >= scanLogs.length) {
+      clearInterval(interval);
+      scanning = false;
+      btn.innerHTML = '<i class="ti ti-player-play"></i> INITIATE AUDIT';
+      btn.classList.remove('scanning');
+      laser.classList.remove('active');
+      status.textContent = 'SYSTEM LOCAL & SECURE';
+      status.style.color = 'var(--green)';
+      sub.textContent = 'SCAN COMPLETE · NO NEW THREATS';
+      return;
+    }
+    const [type, tag, msg] = scanLogs[i];
+    const now = new Date();
+    const ts = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+    const line = document.createElement('div');
+    line.className = 'log-line';
+    const cls = type === 'ok' ? 'log-ok' : type === 'warn' ? 'log-warn' : 'log-alert';
+    const msgcls = type === 'alert' ? 'critical' : type === 'warn' ? 'warn' : '';
+    line.innerHTML = `<span class="log-ts">${ts}</span><span class="${cls}">${tag}</span><span class="log-msg ${msgcls}">${msg}</span>`;
+    con.prepend(line);
+    i++;
+  }, 700);
+}
+</script>
+</body>
+</html>

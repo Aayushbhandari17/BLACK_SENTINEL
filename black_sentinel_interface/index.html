@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Black Sentinel</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .tabs {
+            display: flex;
+            background: #111;
+        }
+
+        .tabs button {
+            padding: 15px 20px;
+            border: none;
+            background: #111;
+            color: white;
+            cursor: pointer;
+        }
+
+        .tabs button:hover {
+            background: #333;
+        }
+
+        iframe {
+            width: 100%;
+            height: calc(100vh - 50px);
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="tabs">
+    <button onclick="loadPage('tab1_command.html')">Command</button>
+    <button onclick="loadPage('tab2_intelligence.html')">Intelligence</button>
+    <button onclick="loadPage('tab3_honeycomb.html')">Honeycomb</button>
+    <button onclick="loadPage('tab4_vault.html')">Vault</button>
+</div>
+
+<iframe id="frame" src="tab1_command.html"></iframe>
+
+<script>
+function loadPage(page) {
+    document.getElementById('frame').src = page;
+}
+</script>
+
+</body>
+</html>

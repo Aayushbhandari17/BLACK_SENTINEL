@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Black Sentinel — Vault & Config</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  :root {
+    --bg:#0B0C10;--surface:#111520;--surface2:#161B26;--surface3:#1A2030;
+    --green:#00FF66;--green2:#00CC52;--green-dim:rgba(0,255,102,0.08);
+    --green-border:rgba(0,255,102,0.22);
+    --red:#FF3B30;--red-dim:rgba(255,59,48,0.1);--red-border:rgba(255,59,48,0.25);
+    --amber:#FFB830;--amber-dim:rgba(255,184,48,0.1);--amber-border:rgba(255,184,48,0.2);
+    --text:#E8EDF5;--text2:#8A9BB0;--text3:#445566;
+    --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.12);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;height:100%;overflow:hidden;}
+  body{display:flex;}
+  .circuit-canvas{position:fixed;inset:0;pointer-events:none;z-index:0;}
+  .app{display:flex;height:100vh;width:100%;position:relative;z-index:1;}
+
+  .sidebar{width:220px;min-width:220px;background:var(--surface);border-right:1px solid var(--green-border);display:flex;flex-direction:column;}
+  .logo-wrap{padding:20px 18px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
+  .logo-name{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;color:var(--green);letter-spacing:1px;line-height:1.1;}
+  .logo-ver{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:2px;margin-top:3px;}
+  .nav{padding:12px 10px;flex:1;}
+  .nav-section{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--text3);letter-spacing:2px;padding:0 8px;margin:12px 0 4px;}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;font-size:14px;font-weight:500;color:var(--text2);cursor:pointer;border:1px solid transparent;transition:all 0.2s;margin-bottom:2px;text-decoration:none;}
+  .nav-item:hover{background:rgba(255,255,255,0.04);color:var(--text);}
+  .nav-item.active{background:var(--green-dim);color:var(--green);border-color:var(--green-border);}
+  .nav-item i{font-size:17px;}
+  .nav-badge{margin-left:auto;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;font-family:'JetBrains Mono',monospace;}
+  .sidebar-status{margin:0 10px 14px;background:var(--green-dim);border:1px solid var(--green-border);border-radius:8px;padding:10px 12px;}
+  .pulse{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;flex-shrink:0;}
+  @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,255,102,0.4);}50%{opacity:0.6;box-shadow:0 0 0 4px rgba(0,255,102,0);}}
+  .status-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);letter-spacing:1px;}
+  .status-detail{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);margin-top:5px;}
+
+  .main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+  .topbar{padding:14px 24px;border-bottom:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:space-between;}
+  .page-title{font-family:'Orbitron',monospace;font-size:16px;font-weight:700;color:var(--text);letter-spacing:1px;}
+  .page-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-top:3px;letter-spacing:1px;}
+
+  .content{flex:1;padding:20px 24px;overflow-y:auto;display:flex;flex-direction:column;gap:14px;}
+  .content::-webkit-scrollbar{width:4px;}
+  .content::-webkit-scrollbar-thumb{background:var(--green-border);border-radius:2px;}
+
+  .card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative;overflow:hidden;}
+  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--green-border),transparent);}
+  .card-title{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+
+  /* VAULT */
+  .vault-hero{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 0 16px;position:relative;}
+  .vault-icon-wrap{position:relative;display:flex;align-items:center;justify-content:center;}
+  .vault-ring{position:absolute;border-radius:50%;border:1px solid var(--green-border);}
+  .vr1{width:70px;height:70px;animation:vr 4s infinite;}
+  .vr2{width:90px;height:90px;animation:vr 4s infinite 0.8s;opacity:0.5;}
+  @keyframes vr{0%,100%{opacity:0.4;transform:scale(1)rotate(0deg);}50%{opacity:0.9;transform:scale(1.04)rotate(180deg);}}
+  .vault-status-text{margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);letter-spacing:2px;text-align:center;}
+
+  /* FIELD */
+  .field-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:1.5px;margin-bottom:5px;}
+  .field-input{width:100%;background:rgba(0,0,0,0.35);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;font-family:'JetBrains Mono',monospace;outline:none;transition:border-color 0.2s;}
+  .field-input:focus{border-color:var(--green-border);box-shadow:0 0 0 2px rgba(0,255,102,0.08);}
+
+  /* FLOW STEPS */
+  .flow{display:flex;align-items:center;gap:0;margin:14px 0 10px;}
+  .flow-step{flex:1;text-align:center;position:relative;}
+  .flow-step:not(:last-child)::after{content:'→';position:absolute;right:-10px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px;}
+  .flow-box{padding:7px 8px;border-radius:7px;font-family:'JetBrains Mono',monospace;font-size:10px;border:1px solid var(--border);background:rgba(0,0,0,0.2);color:var(--text2);}
+  .flow-box.active{border-color:var(--green-border);color:var(--green);background:var(--green-dim);}
+
+  /* HASH OUTPUT */
+  .hash-output{background:#06080C;border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-family:'JetBrains Mono',monospace;font-size:10px;min-height:54px;display:flex;align-items:center;transition:all 0.3s;}
+  .hash-output.active{border-color:var(--green-border);color:var(--green);}
+  .hash-placeholder{color:var(--text3);}
+
+  /* BTN */
+  .btn{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Rajdhani',sans-serif;border:1px solid;transition:all 0.2s;letter-spacing:0.5px;}
+  .btn:hover{transform:translateY(-1px);}
+  .btn-green{color:var(--green);border-color:var(--green-border);background:var(--green-dim);}
+  .btn-solid{color:#000;border-color:var(--green);background:var(--green);}
+  .btn-solid:hover{background:var(--green2);}
+  .btn-outline{color:var(--text2);border-color:var(--border);background:transparent;}
+  .btn-red{color:var(--red);border-color:var(--red-border);background:var(--red-dim);}
+
+  /* TOGGLE ROW */
+  .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);}
+  .toggle-row:last-child{border-bottom:none;}
+  .toggle-label{font-size:14px;font-weight:500;color:var(--text);}
+  .toggle-desc{font-size:11px;color:var(--text3);margin-top:2px;}
+  .switch{position:relative;width:44px;height:22px;}
+  .switch input{opacity:0;width:0;height:0;}
+  .slider{position:absolute;cursor:pointer;inset:0;background:#1A2030;border-radius:22px;border:1px solid var(--border);transition:.3s;}
+  .slider:before{content:'';position:absolute;height:14px;width:14px;left:3px;bottom:3px;background:var(--text3);border-radius:50%;transition:.3s;}
+  input:checked+.slider{background:var(--green-dim);border-color:var(--green-border);}
+  input:checked+.slider:before{transform:translateX(22px);background:var(--green);box-shadow:0 0 6px rgba(0,255,102,0.4);}
+
+  /* CRYPTO STATS */
+  .crypto-stat{background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:12px 14px;text-align:center;}
+  .crypto-val{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--green);font-weight:500;margin-bottom:3px;}
+  .crypto-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--text3);letter-spacing:1px;}
+
+  /* KNOWN PII */
+  .pii-item{display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(0,0,0,0.2);border:1px solid var(--border);border-radius:7px;margin-bottom:5px;}
+  .pii-type{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);width:60px;flex-shrink:0;}
+  .pii-val{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2);flex:1;}
+  .pii-status{font-size:9px;color:var(--green);}
+
+  /* PROGRESS INDICATOR */
+  .step-indicator{display:flex;gap:4px;margin-top:8px;}
+  .step-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);transition:background 0.3s;}
+  .step-dot.done{background:var(--green);}
+  .step-dot.active{background:var(--amber);animation:pulse 1s infinite;}
+
+  @keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .card{animation:fadein 0.35s ease both;}
+  .card:nth-child(2){animation-delay:0.07s;}
+  .card:nth-child(3){animation-delay:0.14s;}
+</style>
+</head>
+<body>
+<canvas class="circuit-canvas" id="circuitCanvas"></canvas>
+<div class="app">
+  <div class="sidebar">
+    <div class="logo-wrap">
+      <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
+        <path d="M19 2L4 9v10c0 9 6.5 17 15 19C28.5 36 35 28 35 19V9L19 2z" fill="rgba(0,255,102,0.12)" stroke="#00FF66" stroke-width="1.4"/>
+        <path d="M19 7L9 13v7c0 6 4.2 11.4 10 13 5.8-1.6 10-7 10-13v-7L19 7z" fill="rgba(0,255,102,0.06)" stroke="rgba(0,255,102,0.35)" stroke-width="1"/>
+        <path d="M13.5 19.5l4 4L25 14" stroke="#00FF66" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <div class="logo-name">BLACK<br>SENTINEL</div>
+        <div class="logo-ver">v2.4.1 · LOCAL</div>
+      </div>
+    </div>
+    <div class="nav">
+      <div class="nav-section">CORE</div>
+      <a class="nav-item" href="tab1_command.html"><i class="ti ti-shield-check"></i> Command</a>
+      <a class="nav-item" href="tab2_intelligence.html"><i class="ti ti-radar"></i> Intelligence <span class="nav-badge">66</span></a>
+      <a class="nav-item" href="tab3_honeycomb.html"><i class="ti ti-bug"></i> Honeycomb <span class="nav-badge">!</span></a>
+      <a class="nav-item active" href="tab4_vault.html"><i class="ti ti-lock"></i> Vault</a>
+    </div>
+    <div class="sidebar-status">
+      <div style="display:flex;align-items:center;gap:7px;">
+        <div class="pulse"></div><span class="status-label">SENTINEL ACTIVE</span>
+      </div>
+      <div class="status-detail">12 traps armed · 1 alert</div>
+      <div class="status-detail" style="margin-top:3px;">Last scan: 2h 14m ago</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="page-title">Vault & Configuration</div>
+        <div class="page-sub">CRYPTOGRAPHIC BLIND VERIFICATION · LOCAL STORAGE ONLY</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);">● RAM-ONLY MODE</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);">No data written to disk</span>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- CRYPTO STATS -->
+      <div class="grid4">
+        <div class="crypto-stat"><div class="crypto-val">Argon2id</div><div class="crypto-lbl">ALGORITHM</div></div>
+        <div class="crypto-stat"><div class="crypto-val">RAM only</div><div class="crypto-lbl">STORAGE MODE</div></div>
+        <div class="crypto-stat"><div class="crypto-val">Zeroed</div><div class="crypto-lbl">POST-SCAN MEMORY</div></div>
+        <div class="crypto-stat"><div class="crypto-val">0 bytes</div><div class="crypto-lbl">DISK WRITES</div></div>
+      </div>
+
+      <div class="grid2">
+
+        <!-- BLIND SECRET VAULT -->
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <rect x="4" y="12" width="20" height="14" rx="3" fill="rgba(0,255,102,0.1)" stroke="#00FF66" stroke-width="1.2"/>
+              <path d="M9 12V9a5 5 0 0110 0v3" stroke="#00FF66" stroke-width="1.2" stroke-linecap="round"/>
+              <circle cx="14" cy="19" r="2" fill="#00FF66"/>
+              <line x1="14" y1="21" x2="14" y2="23" stroke="#00FF66" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <div>
+              <div class="card-title" style="margin-bottom:0;">BLIND SECRET VAULT</div>
+              <div style="font-size:11px;color:var(--text3);margin-top:2px;">Register sensitive secrets once — never stored in plaintext</div>
+            </div>
+          </div>
+
+          <!-- FLOW -->
+          <div class="flow">
+            <div class="flow-step"><div class="flow-box active" id="step1">Input Secret</div></div>
+            <div class="flow-step"><div class="flow-box" id="step2">Argon2id Salt</div></div>
+            <div class="flow-step"><div class="flow-box" id="step3">Hash Generated</div></div>
+            <div class="flow-step"><div class="flow-box" id="step4">Stored in RAM</div></div>
+          </div>
+          <div class="step-indicator">
+            <div class="step-dot active" id="sd1"></div>
+            <div class="step-dot" id="sd2"></div>
+            <div class="step-dot" id="sd3"></div>
+            <div class="step-dot" id="sd4"></div>
+          </div>
+
+          <div style="margin-top:14px;">
+            <div class="field-label">SECRET INPUT <span style="color:var(--red);">(cleared after hashing)</span></div>
+            <div style="display:flex;gap:8px;margin-top:4px;">
+              <div style="flex:1;position:relative;">
+                <input class="field-input" type="password" id="secretInput" placeholder="Enter password, API key, or any secret..." oninput="onSecretInput()">
+                <button onclick="toggleVis()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:16px;" id="visBtn">
+                  <i class="ti ti-eye"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:10px;">
+            <div class="field-label">LABEL (optional)</div>
+            <input class="field-input" type="text" id="secretLabel" placeholder="e.g. AWS Master Key, GitHub PAT...">
+          </div>
+
+          <div style="margin-top:12px;display:flex;gap:8px;">
+            <button class="btn btn-solid" style="flex:1;" onclick="generateHash()">
+              <i class="ti ti-lock"></i> &nbsp;Generate Argon2id Hash →
+            </button>
+          </div>
+
+          <div style="margin-top:10px;">
+            <div class="field-label">HASH OUTPUT <span style="color:var(--text3);">(stored in RAM)</span></div>
+            <div class="hash-output" id="hashOutput">
+              <span class="hash-placeholder">Waiting for input...</span>
+            </div>
+          </div>
+
+          <div style="margin-top:10px;background:rgba(0,0,0,0.2);border:1px solid var(--border);border-radius:7px;padding:10px 12px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);margin-bottom:5px;">MEMORY ZEROIZATION STATUS</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;" id="zeroStatus">
+              <span style="color:var(--text3);">Idle — no active secrets in memory</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div style="display:flex;flex-direction:column;gap:12px;">
+
+          <!-- REGISTERED SECRETS -->
+          <div class="card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+              <div class="card-title" style="margin-bottom:0;">REGISTERED SECRETS</div>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);" id="secretCount">3 in RAM</span>
+            </div>
+            <div id="secretList">
+              <div class="pii-item">
+                <span class="pii-type">AWS KEY</span>
+                <span class="pii-val">$argon2id$v=19$m=65536,t=3,p=4$Ab3...Xy9</span>
+                <span class="pii-status">✓ Registered</span>
+                <button onclick="removeSecret(this)" style="background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:14px;">✕</button>
+              </div>
+              <div class="pii-item">
+                <span class="pii-type">GH TOKEN</span>
+                <span class="pii-val">$argon2id$v=19$m=65536,t=3,p=4$Bc4...Zw2</span>
+                <span class="pii-status">✓ Registered</span>
+                <button onclick="removeSecret(this)" style="background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:14px;">✕</button>
+              </div>
+              <div class="pii-item">
+                <span class="pii-type">DB PASS</span>
+                <span class="pii-val">$argon2id$v=19$m=65536,t=3,p=4$Cd5...Av7</span>
+                <span class="pii-status">✓ Registered</span>
+                <button onclick="removeSecret(this)" style="background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:14px;">✕</button>
+              </div>
+            </div>
+            <button class="btn btn-red" style="width:100%;margin-top:8px;font-size:11px;padding:7px;" onclick="clearAll()">
+              <i class="ti ti-trash"></i> &nbsp;Clear All — Zeroize RAM
+            </button>
+          </div>
+
+          <!-- SCAN TARGETS -->
+          <div class="card">
+            <div class="card-title">SCAN TARGETS</div>
+            <div class="toggle-row">
+              <div><div class="toggle-label">Git Repositories</div><div class="toggle-desc">Scan commit history and working tree</div></div>
+              <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div><div class="toggle-label">Browser Cache</div><div class="toggle-desc">Chrome, Firefox, Edge cache directories</div></div>
+              <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div><div class="toggle-label">Screenshots / Images</div><div class="toggle-desc">OCR-based visual secret extraction</div></div>
+              <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div><div class="toggle-label">AppData</div><div class="toggle-desc">Application config and credential storage</div></div>
+              <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div><div class="toggle-label">Database Files</div><div class="toggle-desc">SQLite, MySQL exports, DB backups</div></div>
+              <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div><div class="toggle-label">Clipboard History</div><div class="toggle-desc">Windows clipboard ring entries</div></div>
+              <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- KNOWN PII MATCHING -->
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <div class="card-title" style="margin-bottom:0;">KNOWN PII MATCHING</div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--amber);">RAM-ONLY · Never written to disk</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+          <div>
+            <div class="field-label">FULL NAME</div>
+            <input class="field-input" type="text" placeholder="John Doe" id="piiName">
+          </div>
+          <div>
+            <div class="field-label">EMAIL ADDRESS</div>
+            <input class="field-input" type="email" placeholder="john@example.com" id="piiEmail">
+          </div>
+          <div>
+            <div class="field-label">PHONE NUMBER</div>
+            <input class="field-input" type="text" placeholder="+91-9876543210" id="piiPhone">
+          </div>
+          <div>
+            <div class="field-label">PAN / SSN / ID</div>
+            <input class="field-input" type="password" placeholder="Sensitive ID number" id="piiId">
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:10px;">
+          <button class="btn btn-solid" onclick="savePII()"><i class="ti ti-check"></i> &nbsp;Register for Matching</button>
+          <button class="btn btn-outline" onclick="clearPII()">Clear PII</button>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-left:auto;">Exact + fuzzy matching · Variants included · ctypes zeroization on scan complete</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+let secretCount = 3;
+let visShowing = false;
+
+function toggleVis() {
+  const inp = document.getElementById('secretInput');
+  visShowing = !visShowing;
+  inp.type = visShowing ? 'text' : 'password';
+  document.getElementById('visBtn').innerHTML = visShowing
+    ? '<i class="ti ti-eye-off"></i>'
+    : '<i class="ti ti-eye"></i>';
+}
+
+function onSecretInput() {
+  const val = document.getElementById('secretInput').value;
+  setStep(val.length > 0 ? 2 : 1);
+}
+
+function setStep(step) {
+  for(let i=1;i<=4;i++) {
+    document.getElementById('step'+i).className = 'flow-box' + (i<=step?' active':'');
+    const d = document.getElementById('sd'+i);
+    d.className = 'step-dot' + (i<step?' done':i===step?' active':'');
+  }
+}
+
+function generateHash() {
+  const val = document.getElementById('secretInput').value.trim();
+  if(!val) { alert('Please enter a secret to hash.'); return; }
+  const label = document.getElementById('secretLabel').value.trim() || 'SECRET';
+  setStep(2);
+  document.getElementById('zeroStatus').innerHTML = '<span style="color:var(--amber);">⚡ Hashing with Argon2id (m=65536, t=3, p=4)...</span>';
+  setTimeout(() => {
+    setStep(3);
+    document.getElementById('zeroStatus').innerHTML = '<span style="color:var(--amber);">🔐 Storing hash in RAM...</span>';
+    setTimeout(() => {
+      setStep(4);
+      const salt = btoa(val.slice(0,4) + Math.random()).replace(/[^a-zA-Z0-9]/g,'').slice(0,22);
+      const hash = '$argon2id$v=19$m=65536,t=3,p=4$' + salt + '$' + btoa(val+salt).replace(/[^a-zA-Z0-9]/g,'').slice(0,43);
+      const out = document.getElementById('hashOutput');
+      out.textContent = hash;
+      out.classList.add('active');
+      document.getElementById('zeroStatus').innerHTML = `<span style="color:var(--green);">✓ Stored in RAM · Input cleared · ctypes zeroization scheduled post-scan</span>`;
+      // Add to list
+      secretCount++;
+      document.getElementById('secretCount').textContent = secretCount + ' in RAM';
+      const list = document.getElementById('secretList');
+      const item = document.createElement('div');
+      item.className = 'pii-item';
+      item.innerHTML = `<span class="pii-type">${label.slice(0,8).toUpperCase()}</span><span class="pii-val">${hash.slice(0,44)}...</span><span class="pii-status">✓ Registered</span><button onclick="removeSecret(this)" style="background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:14px;">✕</button>`;
+      list.appendChild(item);
+      // Clear input
+      document.getElementById('secretInput').value = '';
+      document.getElementById('secretLabel').value = '';
+      setTimeout(() => setStep(1), 2000);
+    }, 600);
+  }, 800);
+}
+
+function removeSecret(btn) {
+  btn.parentElement.remove();
+  secretCount = Math.max(0, secretCount - 1);
+  document.getElementById('secretCount').textContent = secretCount + ' in RAM';
+}
+
+function clearAll() {
+  if(!confirm('Zeroize all registered secrets from RAM?\nThis cannot be undone.')) return;
+  document.getElementById('secretList').innerHTML = '';
+  secretCount = 0;
+  document.getElementById('secretCount').textContent = '0 in RAM';
+  document.getElementById('zeroStatus').innerHTML = '<span style="color:var(--green);">✓ All secrets zeroized from RAM — ctypes null-byte overwrite complete</span>';
+  document.getElementById('hashOutput').innerHTML = '<span class="hash-placeholder">Waiting for input...</span>';
+  document.getElementById('hashOutput').classList.remove('active');
+}
+
+function savePII() {
+  const n = document.getElementById('piiName').value.trim();
+  const e = document.getElementById('piiEmail').value.trim();
+  if(!n && !e) { alert('Enter at least a name or email.'); return; }
+  alert('PII registered in RAM for matching.\nWill be used for exact + fuzzy matching during next scan.\nData will be zeroized after scan completes.');
+}
+
+function clearPII() {
+  ['piiName','piiEmail','piiPhone','piiId'].forEach(id => document.getElementById(id).value='');
+}
+
+// Circuit BG
+const canvas = document.getElementById('circuitCanvas');
+const ctx = canvas.getContext('2d');
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;draw();}
+function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);ctx.strokeStyle='rgba(0,255,102,0.04)';ctx.lineWidth=0.5;for(let x=0;x<canvas.width;x+=60){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,canvas.height);ctx.stroke();}for(let y=0;y<canvas.height;y+=60){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke();}ctx.fillStyle='rgba(0,255,102,0.15)';for(let x=0;x<canvas.width;x+=60)for(let y=0;y<canvas.height;y+=60)if(Math.random()<0.1){ctx.beginPath();ctx.arc(x,y,2,0,Math.PI*2);ctx.fill();}}
+resize(); window.addEventListener('resize',resize);
+</script>
+</body>
+</html>

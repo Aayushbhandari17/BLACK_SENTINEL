@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Black Sentinel — Honeycomb Defense</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  :root {
+    --bg:#0B0C10;--surface:#111520;--surface2:#161B26;--surface3:#1A2030;
+    --green:#00FF66;--green2:#00CC52;--green-dim:rgba(0,255,102,0.08);
+    --green-border:rgba(0,255,102,0.22);
+    --red:#FF3B30;--red-dim:rgba(255,59,48,0.1);--red-border:rgba(255,59,48,0.3);
+    --amber:#FFB830;--amber-dim:rgba(255,184,48,0.1);--amber-border:rgba(255,184,48,0.25);
+    --text:#E8EDF5;--text2:#8A9BB0;--text3:#445566;
+    --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;height:100%;overflow:hidden;}
+  body{display:flex;}
+  .circuit-canvas{position:fixed;inset:0;pointer-events:none;z-index:0;}
+  .app{display:flex;height:100vh;width:100%;position:relative;z-index:1;}
+
+  .sidebar{width:220px;min-width:220px;background:var(--surface);border-right:1px solid var(--green-border);display:flex;flex-direction:column;}
+  .logo-wrap{padding:20px 18px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
+  .logo-name{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;color:var(--green);letter-spacing:1px;line-height:1.1;}
+  .logo-ver{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:2px;margin-top:3px;}
+  .nav{padding:12px 10px;flex:1;}
+  .nav-section{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--text3);letter-spacing:2px;padding:0 8px;margin:12px 0 4px;}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;font-size:14px;font-weight:500;color:var(--text2);cursor:pointer;border:1px solid transparent;transition:all 0.2s;margin-bottom:2px;text-decoration:none;}
+  .nav-item:hover{background:rgba(255,255,255,0.04);color:var(--text);}
+  .nav-item.active{background:var(--green-dim);color:var(--green);border-color:var(--green-border);}
+  .nav-item i{font-size:17px;}
+  .nav-badge{margin-left:auto;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;font-family:'JetBrains Mono',monospace;}
+  .sidebar-status{margin:0 10px 14px;background:var(--green-dim);border:1px solid var(--green-border);border-radius:8px;padding:10px 12px;}
+  .pulse{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;flex-shrink:0;}
+  @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,255,102,0.4);}50%{opacity:0.6;box-shadow:0 0 0 4px rgba(0,255,102,0);}}
+  .pulse-red{animation:pulse-r 1s infinite;}
+  @keyframes pulse-r{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,59,48,0.5);}50%{opacity:0.7;box-shadow:0 0 0 5px rgba(255,59,48,0);}}
+  .status-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);letter-spacing:1px;}
+  .status-detail{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);margin-top:5px;}
+
+  .main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+  .topbar{padding:14px 24px;border-bottom:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:space-between;}
+  .page-title{font-family:'Orbitron',monospace;font-size:16px;font-weight:700;color:var(--text);letter-spacing:1px;}
+  .page-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-top:3px;letter-spacing:1px;}
+  .topbar-right{display:flex;align-items:center;gap:10px;}
+
+  .content{flex:1;padding:20px 24px;overflow-y:auto;display:flex;flex-direction:column;gap:14px;}
+  .content::-webkit-scrollbar{width:4px;}
+  .content::-webkit-scrollbar-thumb{background:var(--green-border);border-radius:2px;}
+
+  .card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative;overflow:hidden;}
+  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--green-border),transparent);}
+  .card.alert-card{border-color:var(--red-border);background:rgba(255,59,48,0.04);}
+  .card.alert-card::before{background:linear-gradient(90deg,transparent,var(--red-border),transparent);}
+  .card-title{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+
+  /* TOGGLE */
+  .master-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:var(--surface2);border:1px solid var(--green-border);border-radius:12px;position:relative;overflow:hidden;}
+  .master-toggle-row::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--green),transparent);opacity:0.3;}
+  .toggle-info{}
+  .toggle-name{font-size:16px;font-weight:600;color:var(--text);}
+  .toggle-status{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);margin-top:3px;}
+  .switch{position:relative;width:52px;height:26px;}
+  .switch input{opacity:0;width:0;height:0;}
+  .slider{position:absolute;cursor:pointer;inset:0;background:#1A2030;border-radius:26px;border:1px solid var(--green-border);transition:.3s;}
+  .slider:before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:var(--green);border-radius:50%;transition:.3s;box-shadow:0 0 8px rgba(0,255,102,0.5);}
+  input:checked+.slider{background:var(--green-dim);}
+  input:checked+.slider:before{transform:translateX(26px);}
+
+  /* ALERT BANNER */
+  .alert-banner{background:rgba(255,59,48,0.08);border:1px solid var(--red-border);border-radius:10px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px;animation:alertflash 2s ease 0s 3;}
+  @keyframes alertflash{0%,100%{background:rgba(255,59,48,0.08);}50%{background:rgba(255,59,48,0.18);}}
+  .alert-icon{font-size:22px;color:var(--red);flex-shrink:0;margin-top:1px;}
+  .alert-title{font-size:15px;font-weight:700;color:var(--red);}
+  .alert-detail{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2);margin-top:4px;}
+  .alert-path{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--red);margin-top:2px;}
+  .alert-actions{margin-left:auto;display:flex;flex-direction:column;gap:6px;}
+  .btn{padding:7px 14px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Rajdhani',sans-serif;border:1px solid;transition:all 0.15s;letter-spacing:0.5px;}
+  .btn:hover{transform:translateY(-1px);}
+  .btn-red{color:var(--red);border-color:var(--red-border);background:var(--red-dim);}
+  .btn-outline{color:var(--text2);border-color:var(--border);background:transparent;}
+  .btn-green{color:var(--green);border-color:var(--green-border);background:var(--green-dim);}
+
+  /* STAT MINI */
+  .stat-mini{background:var(--surface3);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;}
+  .stat-val{font-family:'Orbitron',monospace;font-size:28px;font-weight:700;line-height:1;}
+  .stat-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:1.5px;margin-top:5px;}
+
+  /* HONEYTOKEN GRID */
+  .honey-grid{display:flex;flex-direction:column;gap:6px;}
+  .honey-item{
+    display:flex;align-items:center;gap:10px;
+    padding:10px 12px;background:rgba(0,0,0,0.2);
+    border:1px solid var(--border);border-radius:8px;
+    transition:all 0.2s;cursor:pointer;
+  }
+  .honey-item:hover{background:rgba(255,255,255,0.03);border-color:var(--border2);}
+  .honey-item.triggered{border-color:var(--red-border);background:rgba(255,59,48,0.06);animation:alertflash 1.5s infinite;}
+  .honey-item.triggered:hover{background:rgba(255,59,48,0.1);}
+  .honey-icon{font-size:16px;flex-shrink:0;}
+  .honey-icon.armed{color:var(--green);}
+  .honey-icon.triggered{color:var(--red);}
+  .honey-path{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .honey-type{font-size:10px;color:var(--text3);flex-shrink:0;width:80px;text-align:right;}
+  .badge{font-size:9px;padding:2px 7px;border-radius:4px;font-weight:600;letter-spacing:0.5px;flex-shrink:0;font-family:'JetBrains Mono',monospace;}
+  .bd-g{background:var(--green-dim);color:var(--green);border:1px solid var(--green-border);}
+  .bd-r{background:var(--red-dim);color:var(--red);border:1px solid var(--red-border);}
+  .bd-a{background:var(--amber-dim);color:var(--amber);border:1px solid var(--amber-border);}
+  .bd-outline{background:transparent;color:var(--text3);border:1px solid var(--border);}
+
+  /* CONSOLE */
+  .console{background:#06080C;border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-family:'JetBrains Mono',monospace;font-size:11px;height:200px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;}
+  .console::-webkit-scrollbar{width:3px;}
+  .console::-webkit-scrollbar-thumb{background:var(--border2);}
+  .log-line{display:flex;gap:10px;align-items:baseline;}
+  .log-ts{color:var(--text3);flex-shrink:0;font-size:10px;}
+  .log-ok{color:var(--green);flex-shrink:0;}
+  .log-warn{color:var(--amber);flex-shrink:0;}
+  .log-alert{color:var(--red);flex-shrink:0;font-weight:700;}
+  .log-msg{color:var(--text3);}
+  .log-crit{color:var(--red);}
+  .log-warn-msg{color:var(--amber);}
+
+  /* DEPLOY FORM */
+  .deploy-form{display:flex;flex-direction:column;gap:10px;}
+  .field-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:1.5px;margin-bottom:4px;}
+  .field-input{width:100%;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:7px;padding:9px 12px;color:var(--text);font-size:13px;font-family:'JetBrains Mono',monospace;outline:none;transition:border-color 0.2s;}
+  .field-input:focus{border-color:var(--green-border);}
+  .type-select{display:flex;gap:6px;flex-wrap:wrap;}
+  .type-opt{padding:5px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--border);color:var(--text2);background:transparent;font-family:'Rajdhani',sans-serif;transition:all 0.15s;}
+  .type-opt.selected{border-color:var(--green-border);color:var(--green);background:var(--green-dim);}
+
+  @keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .honey-item{animation:fadein 0.3s ease both;}
+</style>
+</head>
+<body>
+<canvas class="circuit-canvas" id="circuitCanvas"></canvas>
+<div class="app">
+  <div class="sidebar">
+    <div class="logo-wrap">
+      <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
+        <path d="M19 2L4 9v10c0 9 6.5 17 15 19C28.5 36 35 28 35 19V9L19 2z" fill="rgba(0,255,102,0.12)" stroke="#00FF66" stroke-width="1.4"/>
+        <path d="M19 7L9 13v7c0 6 4.2 11.4 10 13 5.8-1.6 10-7 10-13v-7L19 7z" fill="rgba(0,255,102,0.06)" stroke="rgba(0,255,102,0.35)" stroke-width="1"/>
+        <path d="M13.5 19.5l4 4L25 14" stroke="#00FF66" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <div class="logo-name">BLACK<br>SENTINEL</div>
+        <div class="logo-ver">v2.4.1 · LOCAL</div>
+      </div>
+    </div>
+    <div class="nav">
+      <div class="nav-section">CORE</div>
+      <a class="nav-item" href="tab1_command.html"><i class="ti ti-shield-check"></i> Command</a>
+      <a class="nav-item" href="tab2_intelligence.html"><i class="ti ti-radar"></i> Intelligence <span class="nav-badge">66</span></a>
+      <a class="nav-item active" href="tab3_honeycomb.html"><i class="ti ti-bug"></i> Honeycomb <span class="nav-badge">!</span></a>
+      <a class="nav-item" href="tab4_vault.html"><i class="ti ti-lock"></i> Vault</a>
+    </div>
+    <div class="sidebar-status">
+      <div style="display:flex;align-items:center;gap:7px;">
+        <div class="pulse"></div><span class="status-label">SENTINEL ACTIVE</span>
+      </div>
+      <div class="status-detail">12 traps armed · 1 alert</div>
+      <div class="status-detail" style="margin-top:3px;">Last scan: 2h 14m ago</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="page-title">Honeycomb Defense Hub</div>
+        <div class="page-sub">PROACTIVE TRAP MANAGEMENT · WATCHDOG MONITORING ACTIVE</div>
+      </div>
+      <div class="topbar-right">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div class="pulse" style="background:var(--red);animation-duration:1s;" id="alertPulse"></div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--red);">1 ACTIVE ALERT</span>
+        </div>
+        <button class="btn btn-green" onclick="deployTrap()">+ Deploy New Trap</button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- MASTER TOGGLE -->
+      <div class="master-toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-name">Proactive File-Watcher Monitoring</div>
+          <div class="toggle-status" id="watchStatus">ACTIVE — watchdog running on ReadDirectoryChangesW</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" checked id="watchToggle" onchange="toggleWatcher()">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <!-- ALERT BANNER -->
+      <div class="alert-banner" id="alertBanner">
+        <i class="ti ti-alert-triangle alert-icon"></i>
+        <div>
+          <div class="alert-title">🚨 HONEYTOKEN TRIGGERED</div>
+          <div class="alert-detail">Suspicious READ request detected on honeytoken file</div>
+          <div class="alert-path">File: Desktop\private_key.pem · Process: unknown_crawler.exe (PID: 4012) · 09:13:55</div>
+          <div style="margin-top:6px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);">Recommendation: Investigate unknown_crawler.exe immediately. Possible credential-harvesting malware.</div>
+        </div>
+        <div class="alert-actions">
+          <button class="btn btn-red" onclick="investigateProcess()">Investigate PID</button>
+          <button class="btn btn-outline" onclick="dismissAlert()">Dismiss</button>
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div class="grid3">
+        <div class="stat-mini"><div class="stat-val" style="color:var(--green);">12</div><div class="stat-lbl">TRAPS ARMED</div></div>
+        <div class="stat-mini"><div class="stat-val" style="color:var(--red);">1</div><div class="stat-lbl">TRIGGERED TODAY</div></div>
+        <div class="stat-mini"><div class="stat-val" style="color:var(--amber);">47</div><div class="stat-lbl">TOTAL TRIGGERS (30d)</div></div>
+      </div>
+
+      <div class="grid2">
+        <!-- TRAP LIST -->
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <div class="card-title" style="margin-bottom:0;">DEPLOYED HONEYTOKENS</div>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);">12 active</span>
+          </div>
+          <div class="honey-grid" id="honeyGrid">
+            <!-- rendered by JS -->
+          </div>
+        </div>
+
+        <!-- CONSOLE + DEPLOY -->
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="card">
+            <div class="card-title">REAL-TIME ATTACK LOGGER</div>
+            <div class="console" id="attackLog">
+              <div class="log-line"><span class="log-ts">09:13:55</span><span class="log-alert">[ALERT]</span><span class="log-crit"> READ on honeytoken by unknown_crawler.exe (PID:4012)</span></div>
+              <div class="log-line"><span class="log-ts">09:13:55</span><span class="log-warn">[INFO]&nbsp;</span><span class="log-warn-msg"> Path: Desktop\private_key.pem — process flagged</span></div>
+              <div class="log-line"><span class="log-ts">08:42:10</span><span class="log-ok">[OK]&nbsp;&nbsp;</span><span class="log-msg"> All honeytokens intact — no suspicious activity</span></div>
+              <div class="log-line"><span class="log-ts">08:01:03</span><span class="log-ok">[OK]&nbsp;&nbsp;</span><span class="log-msg"> Watcher heartbeat — 12 traps verified</span></div>
+              <div class="log-line"><span class="log-ts">07:30:00</span><span class="log-ok">[OK]&nbsp;&nbsp;</span><span class="log-msg"> Watcher heartbeat — 12 traps verified</span></div>
+              <div class="log-line"><span class="log-ts">07:00:00</span><span class="log-ok">[OK]&nbsp;&nbsp;</span><span class="log-msg"> System boot — honeytokens deployed</span></div>
+            </div>
+          </div>
+
+          <div class="card" id="deployCard">
+            <div class="card-title">DEPLOY NEW HONEYTOKEN</div>
+            <div class="deploy-form">
+              <div>
+                <div class="field-label">TRAP TYPE</div>
+                <div class="type-select" id="trapTypeSelect">
+                  <button class="type-opt selected" onclick="selectType(this,'AWS Key')">AWS Key</button>
+                  <button class="type-opt" onclick="selectType(this,'DB Password')">DB Password</button>
+                  <button class="type-opt" onclick="selectType(this,'SSH Key')">SSH Key</button>
+                  <button class="type-opt" onclick="selectType(this,'API Token')">API Token</button>
+                  <button class="type-opt" onclick="selectType(this,'GitHub Token')">GitHub Token</button>
+                </div>
+              </div>
+              <div>
+                <div class="field-label">TARGET DIRECTORY</div>
+                <input class="field-input" id="trapPath" type="text" placeholder="C:\Users\user\Documents\backups\" value="C:\Users\user\AppData\Roaming\custom\">
+              </div>
+              <div>
+                <div class="field-label">FILENAME</div>
+                <input class="field-input" id="trapFile" type="text" placeholder="e.g. aws_config.cfg" value="credentials_backup.cfg">
+              </div>
+              <button class="btn btn-green" style="width:100%;padding:10px;" onclick="addTrap()">
+                <i class="ti ti-plus"></i> &nbsp;Deploy Honeytoken
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const traps = [
+  {icon:'ti-folder',path:'AppData\\Roaming\\.aws\\aws_credentials',type:'AWS Key',status:'armed'},
+  {icon:'ti-file-text',path:'Documents\\backups\\db_pass.txt',type:'DB Creds',status:'armed'},
+  {icon:'ti-key',path:'AppData\\Local\\github\\token.cfg',type:'GitHub Token',status:'armed'},
+  {icon:'ti-database',path:'dev\\secrets\\api_keys.json',type:'API Token',status:'armed'},
+  {icon:'ti-brand-stripe',path:'AppData\\Roaming\\stripe\\config.json',type:'API Token',status:'armed'},
+  {icon:'ti-certificate',path:'Documents\\certs\\server_key.pem',type:'SSL Key',status:'armed'},
+  {icon:'ti-brand-google',path:'AppData\\Local\\google\\credentials.json',type:'OAuth',status:'armed'},
+  {icon:'ti-cloud',path:'Documents\\aws\\terraform.tfvars',type:'Terraform',status:'armed'},
+  {icon:'ti-brand-docker',path:'AppData\\Local\\docker\\config.json',type:'Registry',status:'armed'},
+  {icon:'ti-wifi',path:'AppData\\Roaming\\wifi\\profiles.xml',type:'Wi-Fi',status:'armed'},
+  {icon:'ti-database',path:'Documents\\db\\mysql_root_pass.txt',type:'DB Creds',status:'armed'},
+  {icon:'ti-file-code',path:'Desktop\\private_key.pem',type:'SSH Key',status:'triggered'},
+];
+
+function renderTraps() {
+  const g = document.getElementById('honeyGrid');
+  g.innerHTML = '';
+  traps.forEach((t,i) => {
+    const div = document.createElement('div');
+    const isTrig = t.status === 'triggered';
+    div.className = 'honey-item' + (isTrig ? ' triggered' : '');
+    div.style.animationDelay = (i*0.04)+'s';
+    div.innerHTML = `
+      <i class="ti ${t.icon} honey-icon ${isTrig?'triggered':'armed'}"></i>
+      <span class="honey-path">${t.path}</span>
+      <span class="honey-type">${t.type}</span>
+      <span class="badge ${isTrig?'bd-r':'bd-g'}">${isTrig?'TRIGGERED':'ARMED'}</span>
+      <button onclick="removeTrap(${i},event)" style="background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:2px 4px;transition:color 0.15s;" title="Remove trap">✕</button>
+    `;
+    g.appendChild(div);
+  });
+}
+
+function removeTrap(i, e) {
+  e.stopPropagation();
+  traps.splice(i,1);
+  renderTraps();
+  addLog('ok','[OK]   ',`Honeytoken removed: ${traps[i]?.path || 'trap'}`);
+}
+
+let selectedType = 'AWS Key';
+function selectType(el, type) {
+  document.querySelectorAll('.type-opt').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedType = type;
+}
+
+function addTrap() {
+  const path = document.getElementById('trapPath').value.trim();
+  const file = document.getElementById('trapFile').value.trim();
+  if(!path || !file) { alert('Please fill in directory and filename.'); return; }
+  const fullPath = (path + file).replace(/\\/g,'\\');
+  traps.push({icon:'ti-file-code',path:fullPath.replace(/^C:\\Users\\user\\/,''),type:selectedType,status:'armed'});
+  renderTraps();
+  addLog('ok','[OK]   ',`New honeytoken deployed: ${fullPath} (${selectedType})`);
+  document.getElementById('trapFile').value = '';
+}
+
+function addLog(type, tag, msg) {
+  const now = new Date();
+  const ts = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+  const con = document.getElementById('attackLog');
+  const line = document.createElement('div');
+  line.className = 'log-line';
+  const cls = type==='ok'?'log-ok':type==='warn'?'log-warn':'log-alert';
+  const mcls = type==='alert'?'log-crit':type==='warn'?'log-warn-msg':'log-msg';
+  line.innerHTML = `<span class="log-ts">${ts}</span><span class="${cls}">${tag}</span><span class="${mcls}"> ${msg}</span>`;
+  con.prepend(line);
+}
+
+function toggleWatcher() {
+  const on = document.getElementById('watchToggle').checked;
+  document.getElementById('watchStatus').textContent = on
+    ? 'ACTIVE — watchdog running on ReadDirectoryChangesW'
+    : 'DISABLED — file monitoring paused';
+  document.getElementById('watchStatus').style.color = on ? 'var(--green)' : 'var(--red)';
+  addLog(on?'ok':'warn', on?'[OK]   ':'[WARN] ', on?'File watcher resumed':'File watcher paused — honeytokens unmonitored');
+}
+
+function dismissAlert() {
+  document.getElementById('alertBanner').style.display = 'none';
+  document.getElementById('alertPulse').style.display = 'none';
+  addLog('ok','[OK]   ','Alert dismissed by user');
+}
+
+function investigateProcess() {
+  alert('Process Investigation:\nPID: 4012 | unknown_crawler.exe\nPath: C:\\Windows\\Temp\\unknown_crawler.exe\nParent: explorer.exe (PID: 1234)\nStatus: FLAGGED\n\nRecommendation: Terminate and quarantine.');
+}
+
+function deployTrap() {
+  document.getElementById('deployCard').scrollIntoView({behavior:'smooth'});
+  document.getElementById('trapFile').focus();
+}
+
+renderTraps();
+
+// Circuit BG
+const canvas = document.getElementById('circuitCanvas');
+const ctx = canvas.getContext('2d');
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;draw();}
+function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);ctx.strokeStyle='rgba(0,255,102,0.04)';ctx.lineWidth=0.5;for(let x=0;x<canvas.width;x+=60){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,canvas.height);ctx.stroke();}for(let y=0;y<canvas.height;y+=60){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke();}ctx.fillStyle='rgba(0,255,102,0.15)';for(let x=0;x<canvas.width;x+=60)for(let y=0;y<canvas.height;y+=60)if(Math.random()<0.1){ctx.beginPath();ctx.arc(x,y,2,0,Math.PI*2);ctx.fill();}}
+resize(); window.addEventListener('resize',resize);
+</script>
+</body>
+</html>
