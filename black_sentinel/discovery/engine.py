@@ -15,6 +15,7 @@ from black_sentinel.detection import entropy_engine, metrics, regex_engine
 from black_sentinel.discovery.finding_generator import create_finding
 from black_sentinel.core.event_system import bus
 from black_sentinel.honeycomb import deployer
+from black_sentinel.vault import registry as vault_registry
 
 MAX_FILE_SIZE = 50 * 1024 * 1024  # 50 MB
 
@@ -209,6 +210,15 @@ def start_tracking_engine():
             # Step D: Generate structured Finding objects and Publish
             for r in final_raw:
                 finding_obj = create_finding(r, chunk.file_path)
+                
+                # Vault Verification
+                vault_id = vault_registry.verify_detection(r.get("entity_type"), r.get("raw_value"))
+                if vault_id:
+                    finding_obj.vault_match = True
+                    finding_obj.raw_extract = "[PROTECTED_BY_VAULT]"
+                    finding_obj.context = "[PROTECTED_BY_VAULT]"
+                    vault_registry.increment_detection_counter(vault_id)
+                    
                 bus.publish("FINDING_DISCOVERED", finding_obj)
                 _increment(stats, "findings_generated")
                 metrics.increment("final_findings_published")

@@ -25,6 +25,7 @@ class Finding(BaseEvent):
     confidence: float = 0.0
     line_number: Optional[int] = None
     validated: bool = False
+    vault_match: bool = False
 
 @dataclass
 class HoneycombAlert(BaseEvent):

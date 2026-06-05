@@ -20,9 +20,14 @@ def main():
     
     # Link CLI visual loggers
     def log_finding(f):
-        print(f"    [!] EXPOSURE DETECTED: {f.severity} | {f.entity_type}")
-        print(f"        Path: {f.file_path}")
-        print(f"        Masked Value: {f.masked_value}")
+        if getattr(f, "vault_match", False):
+            print("    [!] PROTECTED SECRET EXPOSURE DETECTED: CRITICAL")
+            print("        Details Hidden")
+            print("        Review via Dashboard")
+        else:
+            print(f"    [!] EXPOSURE DETECTED: {f.severity} | {f.entity_type}")
+            print(f"        Path: {f.file_path}")
+            print(f"        Masked Value: {f.masked_value}")
         
     def log_alert(a):
         print(f"    [!] HONEYCOMB ALERT: {a.incident_type} on {a.honeytoken_path}")
