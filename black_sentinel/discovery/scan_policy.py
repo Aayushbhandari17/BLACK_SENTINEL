@@ -9,8 +9,16 @@ UNSUPPORTED_EXTENSION = "unsupported_extension"
 
 
 SUPPORTED_EXTENSIONS = {
-    ".txt", ".env", ".json", ".yaml", ".yml",
-    ".config", ".sqlite", ".db", ".sqlite3"
+    # Text-based
+    ".txt", ".env", ".json", ".yaml", ".yml", ".config", ".csv", ".tsv", ".xml", ".html", ".htm", ".reg", ".ini", ".cfg", ".log",
+    # Scripts/Code
+    ".py", ".js", ".ts", ".java", ".go", ".rb", ".php", ".cs", ".cpp", ".c", ".h", ".sh", ".bash", ".zsh", ".ps1", ".bat",
+    # Rich documents
+    ".pdf", ".docx", ".doc", ".xlsx", ".xls", ".xlsm", ".xlsb", ".pptx", ".ppt", ".rtf",
+    # Database
+    ".sqlite", ".db", ".sqlite3", ".db3",
+    # Archives
+    ".zip", ".tar", ".gz", ".7z", ".rar",
 }
 
 BLACKLISTED_BASENAMES = {
@@ -177,12 +185,6 @@ def get_file_scan_decision(path: str) -> str:
         return EXCLUDED
 
     basename = _basename(path)
-    if basename.endswith(".log"):
-        return EXCLUDED
-
-    if basename.endswith(".evtx"):
-        return EXCLUDED
-
     if _is_black_sentinel_sqlite(path):
         return EXCLUDED
 
@@ -190,7 +192,7 @@ def get_file_scan_decision(path: str) -> str:
     if not ext and basename.startswith("."):
         ext = basename
 
-    if ext in SUPPORTED_EXTENSIONS or basename == "config":
+    if ext in SUPPORTED_EXTENSIONS or basename == "config" or not ext:
         return SCAN
 
     return UNSUPPORTED_EXTENSION
@@ -198,3 +200,14 @@ def get_file_scan_decision(path: str) -> str:
 
 def should_scan_file(path: str) -> bool:
     return get_file_scan_decision(path) == SCAN
+
+class ScanPolicy:
+
+    def should_scan_file(self, path):
+        return should_scan_file(str(path))
+
+    def should_scan_directory(self, path):
+        return should_scan_directory(str(path))
+
+    def should_scan(self, path):
+        return should_scan_file(str(path))

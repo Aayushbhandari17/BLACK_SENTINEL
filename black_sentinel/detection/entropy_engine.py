@@ -236,3 +236,12 @@ def scan(text: str, file_path: str = "") -> List[Dict[str, Any]]:
                 })
                 
     return findings
+
+class EntropyEngine:
+    def score(self, findings, content):
+        entropy_findings = scan(content)
+
+        if not entropy_findings:
+            return findings
+
+        return findings + entropy_findings

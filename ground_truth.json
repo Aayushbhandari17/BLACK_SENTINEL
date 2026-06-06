@@ -1,0 +1,4759 @@
+{
+  "metadata": {
+    "generated_at": "2026-06-03T00:27:51.748252",
+    "generator": "generate_test_filesystem.py",
+    "description": "Ground truth manifest for PII detection accuracy testing",
+    "total_files": 93,
+    "pii_files_count": 68,
+    "clean_files_count": 21,
+    "bait_files_count": 4,
+    "total_pii_instances": 808,
+    "pii_type_counts": {
+      "aadhaar": 31,
+      "address": 104,
+      "bank_account": 34,
+      "credit_card": 22,
+      "dl": 1,
+      "dob": 50,
+      "email": 153,
+      "ifsc": 24,
+      "ip_address": 13,
+      "name": 179,
+      "pan": 39,
+      "passport": 4,
+      "phone": 145,
+      "ssn": 4,
+      "upi": 5
+    }
+  },
+  "pii_files": [
+    {
+      "path": "C_Drive/Users/RahulSharma/Desktop/quick_notes.txt",
+      "file_type": "txt",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "Rahul's phone in text"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 77889 90011",
+          "context": "Amit's phone in text"
+        },
+        {
+          "pii_type": "upi",
+          "value": "rahul@okicici",
+          "context": "UPI ID in payment mention"
+        },
+        {
+          "pii_type": "email",
+          "value": "rahul.sharma@gmail.com",
+          "context": "Personal email in text"
+        },
+        {
+          "pii_type": "email",
+          "value": "rahul.s@techcorp.in",
+          "context": "Work email in text"
+        },
+        {
+          "pii_type": "address",
+          "value": "42 MG Road, Bengaluru",
+          "context": "Short address in text"
+        },
+        {
+          "pii_type": "email",
+          "value": "priya.gupta@outlook.com",
+          "context": "Priya's email in text"
+        },
+        {
+          "pii_type": "ip_address",
+          "value": "192.168.1.105",
+          "context": "Home router IP"
+        },
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Implicit — file owner"
+        },
+        {
+          "pii_type": "name",
+          "value": "Amit Patel",
+          "context": "Amit mentioned by first name"
+        },
+        {
+          "pii_type": "name",
+          "value": "Sneha Reddy",
+          "context": "Sneha mentioned by full name"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 99001 12233",
+          "context": "Sneha's phone"
+        },
+        {
+          "pii_type": "email",
+          "value": "sneha.reddy@hotmail.com",
+          "context": "Sneha's email"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Desktop/family_contacts.csv",
+      "file_type": "csv",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Contact name — Self"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "Phone — Self"
+        },
+        {
+          "pii_type": "email",
+          "value": "rahul.sharma@gmail.com",
+          "context": "Email — Self"
+        },
+        {
+          "pii_type": "address",
+          "value": "42, MG Road, Koramangala, Bengaluru, Karnataka 560034",
+          "context": "Address — Self"
+        },
+        {
+          "pii_type": "name",
+          "value": "Rajesh Kumar Sharma",
+          "context": "Contact name — Father"
+        },
+        {
+          "pii_type": "phone",
+          "value": "011-2345-6789",
+          "context": "Phone — Father"
+        },
+        {
+          "pii_type": "email",
+          "value": "rajesh.sharma55@gmail.com",
+          "context": "Email — Father"
+        },
+        {
+          "pii_type": "address",
+          "value": "12, Sector 15, Noida, UP 201301",
+          "context": "Address — Father"
+        },
+        {
+          "pii_type": "name",
+          "value": "Amit Patel",
+          "context": "Contact name — Cousin"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 77889 90011",
+          "context": "Phone — Cousin"
+        },
+        {
+          "pii_type": "email",
+          "value": "amit.patel@gmail.com",
+          "context": "Email — Cousin"
+        },
+        {
+          "pii_type": "address",
+          "value": "78, Park Street, Kolkata, West Bengal 700016",
+          "context": "Address — Cousin"
+        },
+        {
+          "pii_type": "name",
+          "value": "Meera Krishnan",
+          "context": "Contact name — Sister"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 66554 43322",
+          "context": "Phone — Sister"
+        },
+        {
+          "pii_type": "email",
+          "value": "meera.k@gmail.com",
+          "context": "Email — Sister"
+        },
+        {
+          "pii_type": "address",
+          "value": "12, MG Road, Ernakulam, Kochi, Kerala 682011",
+          "context": "Address — Sister"
+        },
+        {
+          "pii_type": "name",
+          "value": "Anjali Sharma",
+          "context": "Contact name — Mother"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 98123 45678",
+          "context": "Phone — Mother"
+        },
+        {
+          "pii_type": "email",
+          "value": "anjali.sharma@gmail.com",
+          "context": "Email — Mother"
+        },
+        {
+          "pii_type": "address",
+          "value": "12, Sector 15, Noida, UP 201301",
+          "context": "Address — Mother"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Financial/investment_portfolio.csv",
+      "file_type": "csv",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Investor name in all rows"
+        },
+        {
+          "pii_type": "pan",
+          "value": "ABCPS1234E",
+          "context": "PAN in all rows"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "50100123456789",
+          "context": "Bank account in all rows"
+        },
+        {
+          "pii_type": "ifsc",
+          "value": "SBIN0001234",
+          "context": "IFSC in all rows"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Medical/lab_results.csv",
+      "file_type": "csv",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Patient name"
+        },
+        {
+          "pii_type": "dob",
+          "value": "15/08/1990",
+          "context": "Date of birth"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "Contact phone"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Legal/court_notice.rtf",
+      "file_type": "rtf",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Recipient name"
+        },
+        {
+          "pii_type": "address",
+          "value": "42, MG Road, Koramangala, Bengaluru, Karnataka 560034",
+          "context": "Recipient address"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "Recipient phone"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Work/client_database.csv",
+      "file_type": "csv",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Anita Desai",
+          "context": "Contact at RetailMax India"
+        },
+        {
+          "pii_type": "email",
+          "value": "anita.desai@retailmax.in",
+          "context": "Email for RetailMax India"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 96789 01234",
+          "context": "Phone for RetailMax India"
+        },
+        {
+          "pii_type": "name",
+          "value": "Dr. Siddharth Rao",
+          "context": "Contact at HealthFirst Hospitals"
+        },
+        {
+          "pii_type": "email",
+          "value": "siddharth@healthfirst.org",
+          "context": "Email for HealthFirst Hospitals"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 85678 90123",
+          "context": "Phone for HealthFirst Hospitals"
+        },
+        {
+          "pii_type": "name",
+          "value": "Lakshmi Narayan",
+          "context": "Contact at EduBright Academy"
+        },
+        {
+          "pii_type": "email",
+          "value": "lakshmi@edubright.edu.in",
+          "context": "Email for EduBright Academy"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 74567 89012",
+          "context": "Phone for EduBright Academy"
+        },
+        {
+          "pii_type": "name",
+          "value": "Farhan Sheikh",
+          "context": "Contact at AutoDrive Motors"
+        },
+        {
+          "pii_type": "email",
+          "value": "farhan@autodrive.com",
+          "context": "Email for AutoDrive Motors"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 63456 78901",
+          "context": "Phone for AutoDrive Motors"
+        },
+        {
+          "pii_type": "name",
+          "value": "Pooja Mehta",
+          "context": "Contact at CloudNine Tech"
+        },
+        {
+          "pii_type": "email",
+          "value": "pooja.m@cloudnine.io",
+          "context": "Email for CloudNine Tech"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 52345 67890",
+          "context": "Phone for CloudNine Tech"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Work/meeting_notes.txt",
+      "file_type": "txt",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Project lead"
+        },
+        {
+          "pii_type": "email",
+          "value": "rahul.s@techcorp.in",
+          "context": "Rahul's work email"
+        },
+        {
+          "pii_type": "name",
+          "value": "Amit Patel",
+          "context": "Attendee"
+        },
+        {
+          "pii_type": "email",
+          "value": "amit.patel@gmail.com",
+          "context": "Amit's email"
+        },
+        {
+          "pii_type": "name",
+          "value": "Sneha Reddy",
+          "context": "Attendee"
+        },
+        {
+          "pii_type": "email",
+          "value": "sneha.reddy@hotmail.com",
+          "context": "Sneha's email"
+        },
+        {
+          "pii_type": "name",
+          "value": "Arjun Nair",
+          "context": "Attendee"
+        },
+        {
+          "pii_type": "email",
+          "value": "arjun.nair@proton.me",
+          "context": "Arjun's email"
+        },
+        {
+          "pii_type": "name",
+          "value": "Anita Desai",
+          "context": "Client contact"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 96789 01234",
+          "context": "Client phone"
+        },
+        {
+          "pii_type": "email",
+          "value": "anita.desai@retailmax.in",
+          "context": "Client email"
+        },
+        {
+          "pii_type": "ip_address",
+          "value": "192.168.1.105",
+          "context": "Server IP"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 99001 12233",
+          "context": "Sneha's phone in action items"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Personal/address_book.csv",
+      "file_type": "csv",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Amit Patel",
+          "context": "Contact name"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 77889 90011",
+          "context": "Phone for Amit Patel"
+        },
+        {
+          "pii_type": "email",
+          "value": "amit.patel@gmail.com",
+          "context": "Email for Amit Patel"
+        },
+        {
+          "pii_type": "address",
+          "value": "78, Park Street, Kolkata, West Bengal 700016",
+          "context": "Address for Amit Patel"
+        },
+        {
+          "pii_type": "name",
+          "value": "Sneha Reddy",
+          "context": "Contact name"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 99001 12233",
+          "context": "Phone for Sneha Reddy"
+        },
+        {
+          "pii_type": "email",
+          "value": "sneha.reddy@hotmail.com",
+          "context": "Email for Sneha Reddy"
+        },
+        {
+          "pii_type": "address",
+          "value": "23, Jubilee Hills, Hyderabad, Telangana 500033",
+          "context": "Address for Sneha Reddy"
+        },
+        {
+          "pii_type": "name",
+          "value": "Vikram Singh",
+          "context": "Contact name"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 88776 65544",
+          "context": "Phone for Vikram Singh"
+        },
+        {
+          "pii_type": "email",
+          "value": "vikram.singh@yahoo.com",
+          "context": "Email for Vikram Singh"
+        },
+        {
+          "pii_type": "address",
+          "value": "56, Civil Lines, Jaipur, Rajasthan 302006",
+          "context": "Address for Vikram Singh"
+        },
+        {
+          "pii_type": "name",
+          "value": "Meera Krishnan",
+          "context": "Contact name"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 66554 43322",
+          "context": "Phone for Meera Krishnan"
+        },
+        {
+          "pii_type": "email",
+          "value": "meera.k@gmail.com",
+          "context": "Email for Meera Krishnan"
+        },
+        {
+          "pii_type": "address",
+          "value": "12, MG Road, Ernakulam, Kochi, Kerala 682011",
+          "context": "Address for Meera Krishnan"
+        },
+        {
+          "pii_type": "name",
+          "value": "Arjun Nair",
+          "context": "Contact name"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 55443 32211",
+          "context": "Phone for Arjun Nair"
+        },
+        {
+          "pii_type": "email",
+          "value": "arjun.nair@proton.me",
+          "context": "Email for Arjun Nair"
+        },
+        {
+          "pii_type": "address",
+          "value": "89, Brigade Road, Mysuru, Karnataka 570001",
+          "context": "Address for Arjun Nair"
+        },
+        {
+          "pii_type": "name",
+          "value": "Deepa Iyer",
+          "context": "Contact name"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 44332 21100",
+          "context": "Phone for Deepa Iyer"
+        },
+        {
+          "pii_type": "email",
+          "value": "deepa.iyer@gmail.com",
+          "context": "Email for Deepa Iyer"
+        },
+        {
+          "pii_type": "address",
+          "value": "34, Linking Road, Bandra, Mumbai, Maharashtra 400050",
+          "context": "Address for Deepa Iyer"
+        },
+        {
+          "pii_type": "name",
+          "value": "Ravi Kumar",
+          "context": "Contact name"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 33221 10099",
+          "context": "Phone for Ravi Kumar"
+        },
+        {
+          "pii_type": "email",
+          "value": "ravi.kumar@rediffmail.com",
+          "context": "Email for Ravi Kumar"
+        },
+        {
+          "pii_type": "address",
+          "value": "67, Ashoka Marg, Lucknow, Uttar Pradesh 226001",
+          "context": "Address for Ravi Kumar"
+        },
+        {
+          "pii_type": "name",
+          "value": "Neha Joshi",
+          "context": "Contact name"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 22110 09988",
+          "context": "Phone for Neha Joshi"
+        },
+        {
+          "pii_type": "email",
+          "value": "neha.joshi@outlook.com",
+          "context": "Email for Neha Joshi"
+        },
+        {
+          "pii_type": "address",
+          "value": "45, FC Road, Pune, Maharashtra 411004",
+          "context": "Address for Neha Joshi"
+        },
+        {
+          "pii_type": "name",
+          "value": "John Miller",
+          "context": "Contact name"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+1 (555) 123-4567",
+          "context": "Phone for John Miller"
+        },
+        {
+          "pii_type": "email",
+          "value": "john.miller@gmail.com",
+          "context": "Email for John Miller"
+        },
+        {
+          "pii_type": "address",
+          "value": "123 Oak Street, San Francisco, CA 94102",
+          "context": "Address for John Miller"
+        },
+        {
+          "pii_type": "name",
+          "value": "Sarah Johnson",
+          "context": "Contact name"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+1 (555) 987-6543",
+          "context": "Phone for Sarah Johnson"
+        },
+        {
+          "pii_type": "email",
+          "value": "sarah.j@outlook.com",
+          "context": "Email for Sarah Johnson"
+        },
+        {
+          "pii_type": "address",
+          "value": "456 Maple Ave, New York, NY 10001",
+          "context": "Address for Sarah Johnson"
+        },
+        {
+          "pii_type": "name",
+          "value": "Michael Chen",
+          "context": "Contact name"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+1 (555) 456-7890",
+          "context": "Phone for Michael Chen"
+        },
+        {
+          "pii_type": "email",
+          "value": "m.chen@techmail.com",
+          "context": "Email for Michael Chen"
+        },
+        {
+          "pii_type": "address",
+          "value": "789 Pine Road, Austin, TX 78701",
+          "context": "Address for Michael Chen"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Personal/diary_entries.txt",
+      "file_type": "txt",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Vikram Singh",
+          "context": "Vikram mentioned in diary"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 88776 65544",
+          "context": "Vikram's phone"
+        },
+        {
+          "pii_type": "upi",
+          "value": "rahul@okicici",
+          "context": "UPI for electricity bill"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "50100123456789",
+          "context": "Bank account mentioned"
+        },
+        {
+          "pii_type": "phone",
+          "value": "011-2345-6789",
+          "context": "Mom's landline call"
+        },
+        {
+          "pii_type": "email",
+          "value": "rahul.sharma@gmail.com",
+          "context": "Confirmation email"
+        },
+        {
+          "pii_type": "email",
+          "value": "priya.gupta@outlook.com",
+          "context": "Priya's booking email"
+        },
+        {
+          "pii_type": "name",
+          "value": "Deepa Iyer",
+          "context": "HR person mentioned"
+        },
+        {
+          "pii_type": "email",
+          "value": "deepa.iyer@gmail.com",
+          "context": "HR email"
+        },
+        {
+          "pii_type": "address",
+          "value": "42, MG Road, Koramangala, Bengaluru, Karnataka 560034",
+          "context": "Delivery address"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/AppData/Local/BrowserData/saved_passwords.csv",
+      "file_type": "csv",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "email",
+          "value": "rahul.sharma@gmail.com",
+          "context": "Username for multiple sites"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "50100123456789",
+          "context": "Bank account as SBI username"
+        },
+        {
+          "pii_type": "email",
+          "value": "rahul.s@techcorp.in",
+          "context": "Work email as Outlook username"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/AppData/Local/AppCache/cached_form_data.json",
+      "file_type": "json",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Full name in multiple forms"
+        },
+        {
+          "pii_type": "email",
+          "value": "rahul.sharma@gmail.com",
+          "context": "Email in multiple forms"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "Phone in multiple forms"
+        },
+        {
+          "pii_type": "address",
+          "value": "42, MG Road, Koramangala, Bengaluru, Karnataka 560034",
+          "context": "Address split across fields"
+        },
+        {
+          "pii_type": "credit_card",
+          "value": "4111 1111 1111 1111",
+          "context": "Credit card in checkout form"
+        },
+        {
+          "pii_type": "dob",
+          "value": "15/08/1990",
+          "context": "DOB in travel/tax forms"
+        },
+        {
+          "pii_type": "passport",
+          "value": "J1234567",
+          "context": "Passport in travel form"
+        },
+        {
+          "pii_type": "pan",
+          "value": "ABCPS1234E",
+          "context": "PAN in tax form"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "2345 6789 0123",
+          "context": "Aadhaar in tax form"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/PriyaGupta/Documents/personal_budget.csv",
+      "file_type": "csv",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "upi",
+          "value": "priya@upi",
+          "context": "UPI ID in payment methods"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "00401234567890",
+          "context": "Bank account in payment methods"
+        },
+        {
+          "pii_type": "credit_card",
+          "value": "2220",
+          "context": "Last 4 digits of Visa card"
+        },
+        {
+          "pii_type": "credit_card",
+          "value": "0008",
+          "context": "Last 4 digits of MC card"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Windows/Temp/tmp_export_contacts.csv",
+      "file_type": "csv",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Amit Patel",
+          "context": "Exported contact"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 77889 90011",
+          "context": "Phone for Amit Patel"
+        },
+        {
+          "pii_type": "email",
+          "value": "amit.patel@gmail.com",
+          "context": "Email for Amit Patel"
+        },
+        {
+          "pii_type": "name",
+          "value": "Sneha Reddy",
+          "context": "Exported contact"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 99001 12233",
+          "context": "Phone for Sneha Reddy"
+        },
+        {
+          "pii_type": "email",
+          "value": "sneha.reddy@hotmail.com",
+          "context": "Email for Sneha Reddy"
+        },
+        {
+          "pii_type": "name",
+          "value": "Vikram Singh",
+          "context": "Exported contact"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 88776 65544",
+          "context": "Phone for Vikram Singh"
+        },
+        {
+          "pii_type": "email",
+          "value": "vikram.singh@yahoo.com",
+          "context": "Email for Vikram Singh"
+        },
+        {
+          "pii_type": "name",
+          "value": "Meera Krishnan",
+          "context": "Exported contact"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 66554 43322",
+          "context": "Phone for Meera Krishnan"
+        },
+        {
+          "pii_type": "email",
+          "value": "meera.k@gmail.com",
+          "context": "Email for Meera Krishnan"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Windows/Temp/crash_dump.log",
+      "file_type": "log",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "email",
+          "value": "rahul.sharma@gmail.com",
+          "context": "User email in crash context"
+        },
+        {
+          "pii_type": "ip_address",
+          "value": "192.168.1.105",
+          "context": "Server IP in crash log"
+        },
+        {
+          "pii_type": "ip_address",
+          "value": "10.0.0.42",
+          "context": "Secondary connection IP"
+        },
+        {
+          "pii_type": "email",
+          "value": "priya.gupta@outlook.com",
+          "context": "Auth failure email"
+        },
+        {
+          "pii_type": "ip_address",
+          "value": "10.10.10.100",
+          "context": "SMTP server IP"
+        },
+        {
+          "pii_type": "ip_address",
+          "value": "172.16.0.55",
+          "context": "DNS resolution IP"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/ProgramData/AccountingSoftware/vendor_contacts.csv",
+      "file_type": "csv",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Suresh Menon",
+          "context": "Vendor contact at GlobalTech Solutions Pvt Ltd"
+        },
+        {
+          "pii_type": "email",
+          "value": "suresh@globaltech.in",
+          "context": "Email for GlobalTech Solutions Pvt Ltd"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 94567 89012",
+          "context": "Phone for GlobalTech Solutions Pvt Ltd"
+        },
+        {
+          "pii_type": "address",
+          "value": "12, IT Park, Hinjewadi, Pune, Maharashtra 411057",
+          "context": "Address for GlobalTech Solutions Pvt Ltd"
+        },
+        {
+          "pii_type": "name",
+          "value": "Kavitha Rao",
+          "context": "Vendor contact at Pinnacle Services Ltd"
+        },
+        {
+          "pii_type": "email",
+          "value": "kavitha@pinnacle.co.in",
+          "context": "Email for Pinnacle Services Ltd"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 83456 78901",
+          "context": "Phone for Pinnacle Services Ltd"
+        },
+        {
+          "pii_type": "address",
+          "value": "88, Electronic City, Bengaluru, Karnataka 560100",
+          "context": "Address for Pinnacle Services Ltd"
+        },
+        {
+          "pii_type": "name",
+          "value": "Ramesh Gupta",
+          "context": "Vendor contact at NorthStar Logistics"
+        },
+        {
+          "pii_type": "email",
+          "value": "ramesh@northstar.com",
+          "context": "Email for NorthStar Logistics"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 72345 67890",
+          "context": "Phone for NorthStar Logistics"
+        },
+        {
+          "pii_type": "address",
+          "value": "5, Connaught Place, New Delhi 110001",
+          "context": "Address for NorthStar Logistics"
+        }
+      ]
+    },
+    {
+      "path": "D_Drive/Backups/outlook_backup_2024.csv",
+      "file_type": "csv",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "email",
+          "value": "rahul.sharma@gmail.com",
+          "context": "From/To field"
+        },
+        {
+          "pii_type": "email",
+          "value": "rahul.s@techcorp.in",
+          "context": "From field"
+        },
+        {
+          "pii_type": "email",
+          "value": "amit.patel@gmail.com",
+          "context": "To field"
+        },
+        {
+          "pii_type": "email",
+          "value": "sneha.reddy@hotmail.com",
+          "context": "From field"
+        },
+        {
+          "pii_type": "email",
+          "value": "deepa.iyer@gmail.com",
+          "context": "To field"
+        },
+        {
+          "pii_type": "email",
+          "value": "meera.k@gmail.com",
+          "context": "From field"
+        },
+        {
+          "pii_type": "email",
+          "value": "priya.gupta@outlook.com",
+          "context": "From field"
+        },
+        {
+          "pii_type": "name",
+          "value": "Amit Patel",
+          "context": "In email body"
+        },
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "In email body"
+        },
+        {
+          "pii_type": "name",
+          "value": "Anita Desai",
+          "context": "Client mentioned in body"
+        },
+        {
+          "pii_type": "name",
+          "value": "Deepa Iyer",
+          "context": "In email body"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "Phone in email body"
+        },
+        {
+          "pii_type": "pan",
+          "value": "ABCPS1234E",
+          "context": "PAN in email body"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "2345 6789 0123",
+          "context": "Aadhaar in email body"
+        },
+        {
+          "pii_type": "address",
+          "value": "42 MG Road, Bengaluru",
+          "context": "Address in email body"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "00401234567890",
+          "context": "Bank account in email body"
+        },
+        {
+          "pii_type": "ifsc",
+          "value": "HDFC0002345",
+          "context": "IFSC in email body"
+        }
+      ]
+    },
+    {
+      "path": "D_Drive/Backups/phone_contacts_backup.csv",
+      "file_type": "csv",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Amit Patel",
+          "context": "Contact backup"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 77889 90011",
+          "context": "Phone for Amit Patel"
+        },
+        {
+          "pii_type": "email",
+          "value": "amit.patel@gmail.com",
+          "context": "Email for Amit Patel"
+        },
+        {
+          "pii_type": "address",
+          "value": "78, Park Street, Kolkata, West Bengal 700016",
+          "context": "Address for Amit Patel"
+        },
+        {
+          "pii_type": "name",
+          "value": "Sneha Reddy",
+          "context": "Contact backup"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 99001 12233",
+          "context": "Phone for Sneha Reddy"
+        },
+        {
+          "pii_type": "email",
+          "value": "sneha.reddy@hotmail.com",
+          "context": "Email for Sneha Reddy"
+        },
+        {
+          "pii_type": "address",
+          "value": "23, Jubilee Hills, Hyderabad, Telangana 500033",
+          "context": "Address for Sneha Reddy"
+        },
+        {
+          "pii_type": "name",
+          "value": "Vikram Singh",
+          "context": "Contact backup"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 88776 65544",
+          "context": "Phone for Vikram Singh"
+        },
+        {
+          "pii_type": "email",
+          "value": "vikram.singh@yahoo.com",
+          "context": "Email for Vikram Singh"
+        },
+        {
+          "pii_type": "address",
+          "value": "56, Civil Lines, Jaipur, Rajasthan 302006",
+          "context": "Address for Vikram Singh"
+        },
+        {
+          "pii_type": "name",
+          "value": "Meera Krishnan",
+          "context": "Contact backup"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 66554 43322",
+          "context": "Phone for Meera Krishnan"
+        },
+        {
+          "pii_type": "email",
+          "value": "meera.k@gmail.com",
+          "context": "Email for Meera Krishnan"
+        },
+        {
+          "pii_type": "address",
+          "value": "12, MG Road, Ernakulam, Kochi, Kerala 682011",
+          "context": "Address for Meera Krishnan"
+        },
+        {
+          "pii_type": "name",
+          "value": "Arjun Nair",
+          "context": "Contact backup"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 55443 32211",
+          "context": "Phone for Arjun Nair"
+        },
+        {
+          "pii_type": "email",
+          "value": "arjun.nair@proton.me",
+          "context": "Email for Arjun Nair"
+        },
+        {
+          "pii_type": "address",
+          "value": "89, Brigade Road, Mysuru, Karnataka 570001",
+          "context": "Address for Arjun Nair"
+        },
+        {
+          "pii_type": "name",
+          "value": "Deepa Iyer",
+          "context": "Contact backup"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 44332 21100",
+          "context": "Phone for Deepa Iyer"
+        },
+        {
+          "pii_type": "email",
+          "value": "deepa.iyer@gmail.com",
+          "context": "Email for Deepa Iyer"
+        },
+        {
+          "pii_type": "address",
+          "value": "34, Linking Road, Bandra, Mumbai, Maharashtra 400050",
+          "context": "Address for Deepa Iyer"
+        },
+        {
+          "pii_type": "name",
+          "value": "Ravi Kumar",
+          "context": "Contact backup"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 33221 10099",
+          "context": "Phone for Ravi Kumar"
+        },
+        {
+          "pii_type": "email",
+          "value": "ravi.kumar@rediffmail.com",
+          "context": "Email for Ravi Kumar"
+        },
+        {
+          "pii_type": "address",
+          "value": "67, Ashoka Marg, Lucknow, Uttar Pradesh 226001",
+          "context": "Address for Ravi Kumar"
+        },
+        {
+          "pii_type": "name",
+          "value": "Neha Joshi",
+          "context": "Contact backup"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 22110 09988",
+          "context": "Phone for Neha Joshi"
+        },
+        {
+          "pii_type": "email",
+          "value": "neha.joshi@outlook.com",
+          "context": "Email for Neha Joshi"
+        },
+        {
+          "pii_type": "address",
+          "value": "45, FC Road, Pune, Maharashtra 411004",
+          "context": "Address for Neha Joshi"
+        }
+      ]
+    },
+    {
+      "path": "D_Drive/Projects/ClientA_Data/shipping_addresses.csv",
+      "file_type": "csv",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Amit Patel",
+          "context": "Shipping customer"
+        },
+        {
+          "pii_type": "address",
+          "value": "78, Park Street, Kolkata, West Bengal 700016",
+          "context": "Shipping address for Amit Patel"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 77889 90011",
+          "context": "Phone for Amit Patel"
+        },
+        {
+          "pii_type": "name",
+          "value": "Sneha Reddy",
+          "context": "Shipping customer"
+        },
+        {
+          "pii_type": "address",
+          "value": "23, Jubilee Hills, Hyderabad, Telangana 500033",
+          "context": "Shipping address for Sneha Reddy"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 99001 12233",
+          "context": "Phone for Sneha Reddy"
+        },
+        {
+          "pii_type": "name",
+          "value": "Vikram Singh",
+          "context": "Shipping customer"
+        },
+        {
+          "pii_type": "address",
+          "value": "56, Civil Lines, Jaipur, Rajasthan 302006",
+          "context": "Shipping address for Vikram Singh"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 88776 65544",
+          "context": "Phone for Vikram Singh"
+        },
+        {
+          "pii_type": "name",
+          "value": "Meera Krishnan",
+          "context": "Shipping customer"
+        },
+        {
+          "pii_type": "address",
+          "value": "12, MG Road, Ernakulam, Kochi, Kerala 682011",
+          "context": "Shipping address for Meera Krishnan"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 66554 43322",
+          "context": "Phone for Meera Krishnan"
+        },
+        {
+          "pii_type": "name",
+          "value": "Arjun Nair",
+          "context": "Shipping customer"
+        },
+        {
+          "pii_type": "address",
+          "value": "89, Brigade Road, Mysuru, Karnataka 570001",
+          "context": "Shipping address for Arjun Nair"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 55443 32211",
+          "context": "Phone for Arjun Nair"
+        },
+        {
+          "pii_type": "name",
+          "value": "John Miller",
+          "context": "Shipping customer"
+        },
+        {
+          "pii_type": "address",
+          "value": "123 Oak Street, San Francisco, CA 94102",
+          "context": "Shipping address for John Miller"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+1 (555) 123-4567",
+          "context": "Phone for John Miller"
+        },
+        {
+          "pii_type": "name",
+          "value": "Sarah Johnson",
+          "context": "Shipping customer"
+        },
+        {
+          "pii_type": "address",
+          "value": "456 Maple Ave, New York, NY 10001",
+          "context": "Shipping address for Sarah Johnson"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+1 (555) 987-6543",
+          "context": "Phone for Sarah Johnson"
+        },
+        {
+          "pii_type": "name",
+          "value": "Michael Chen",
+          "context": "Shipping customer"
+        },
+        {
+          "pii_type": "address",
+          "value": "789 Pine Road, Austin, TX 78701",
+          "context": "Shipping address for Michael Chen"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+1 (555) 456-7890",
+          "context": "Phone for Michael Chen"
+        }
+      ]
+    },
+    {
+      "path": "D_Drive/Projects/ClientB_Data/user_registrations.csv",
+      "file_type": "csv",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Amit Patel",
+          "context": "Registered user"
+        },
+        {
+          "pii_type": "email",
+          "value": "amit.patel@gmail.com",
+          "context": "Email for Amit Patel"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 77889 90011",
+          "context": "Phone for Amit Patel"
+        },
+        {
+          "pii_type": "dob",
+          "value": "10/05/1988",
+          "context": "DOB for Amit Patel"
+        },
+        {
+          "pii_type": "ip_address",
+          "value": "103.45.67.89",
+          "context": "IP for Amit Patel"
+        },
+        {
+          "pii_type": "name",
+          "value": "Sneha Reddy",
+          "context": "Registered user"
+        },
+        {
+          "pii_type": "email",
+          "value": "sneha.reddy@hotmail.com",
+          "context": "Email for Sneha Reddy"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 99001 12233",
+          "context": "Phone for Sneha Reddy"
+        },
+        {
+          "pii_type": "dob",
+          "value": "05/12/1995",
+          "context": "DOB for Sneha Reddy"
+        },
+        {
+          "pii_type": "ip_address",
+          "value": "182.73.45.123",
+          "context": "IP for Sneha Reddy"
+        },
+        {
+          "pii_type": "name",
+          "value": "John Miller",
+          "context": "Registered user"
+        },
+        {
+          "pii_type": "email",
+          "value": "john.miller@gmail.com",
+          "context": "Email for John Miller"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+1 (555) 123-4567",
+          "context": "Phone for John Miller"
+        },
+        {
+          "pii_type": "dob",
+          "value": "07/04/1987",
+          "context": "DOB for John Miller"
+        },
+        {
+          "pii_type": "ip_address",
+          "value": "172.16.0.55",
+          "context": "IP for John Miller"
+        },
+        {
+          "pii_type": "name",
+          "value": "Sarah Johnson",
+          "context": "Registered user"
+        },
+        {
+          "pii_type": "email",
+          "value": "sarah.j@outlook.com",
+          "context": "Email for Sarah Johnson"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+1 (555) 987-6543",
+          "context": "Phone for Sarah Johnson"
+        },
+        {
+          "pii_type": "dob",
+          "value": "11/23/1990",
+          "context": "DOB for Sarah Johnson"
+        },
+        {
+          "pii_type": "ip_address",
+          "value": "10.10.10.100",
+          "context": "IP for Sarah Johnson"
+        },
+        {
+          "pii_type": "name",
+          "value": "Neha Joshi",
+          "context": "Registered user"
+        },
+        {
+          "pii_type": "email",
+          "value": "neha.joshi@outlook.com",
+          "context": "Email for Neha Joshi"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 22110 09988",
+          "context": "Phone for Neha Joshi"
+        },
+        {
+          "pii_type": "dob",
+          "value": "08/04/1996",
+          "context": "DOB for Neha Joshi"
+        },
+        {
+          "pii_type": "ip_address",
+          "value": "59.92.101.45",
+          "context": "IP for Neha Joshi"
+        }
+      ]
+    },
+    {
+      "path": "D_Drive/Projects/ClientB_Data/support_tickets.txt",
+      "file_type": "txt",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Vikram Singh",
+          "context": "Ticket #10234 customer"
+        },
+        {
+          "pii_type": "email",
+          "value": "vikram.singh@yahoo.com",
+          "context": "Ticket #10234 email"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 88776 65544",
+          "context": "Ticket #10234 phone"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "3344556677889900",
+          "context": "Account number in ticket body"
+        },
+        {
+          "pii_type": "name",
+          "value": "John Miller",
+          "context": "Ticket #10235 customer"
+        },
+        {
+          "pii_type": "email",
+          "value": "john.miller@gmail.com",
+          "context": "Ticket #10235 email"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+1 (555) 123-4567",
+          "context": "Ticket #10235 phone"
+        },
+        {
+          "pii_type": "credit_card",
+          "value": "9012",
+          "context": "Last 4 digits of CC"
+        },
+        {
+          "pii_type": "address",
+          "value": "123 Oak Street, San Francisco, CA 94102",
+          "context": "Billing address"
+        },
+        {
+          "pii_type": "ssn",
+          "value": "234-56-7890",
+          "context": "SSN for identity verification"
+        },
+        {
+          "pii_type": "name",
+          "value": "Ravi Kumar",
+          "context": "Ticket #10236 customer"
+        },
+        {
+          "pii_type": "email",
+          "value": "ravi.kumar@rediffmail.com",
+          "context": "Ticket #10236 email"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 33221 10099",
+          "context": "Ticket #10236 phone"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "7788990011223344",
+          "context": "Account in feature request"
+        }
+      ]
+    },
+    {
+      "path": "D_Drive/SharedFolder/event_rsvp_list.csv",
+      "file_type": "csv",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "RSVP guest"
+        },
+        {
+          "pii_type": "email",
+          "value": "rahul.sharma@gmail.com",
+          "context": "Email for Rahul Sharma"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "Phone for Rahul Sharma"
+        },
+        {
+          "pii_type": "name",
+          "value": "Priya Gupta",
+          "context": "RSVP guest"
+        },
+        {
+          "pii_type": "email",
+          "value": "priya.gupta@outlook.com",
+          "context": "Email for Priya Gupta"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 87654 32109",
+          "context": "Phone for Priya Gupta"
+        },
+        {
+          "pii_type": "name",
+          "value": "Amit Patel",
+          "context": "RSVP guest"
+        },
+        {
+          "pii_type": "email",
+          "value": "amit.patel@gmail.com",
+          "context": "Email for Amit Patel"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 77889 90011",
+          "context": "Phone for Amit Patel"
+        },
+        {
+          "pii_type": "name",
+          "value": "Sneha Reddy",
+          "context": "RSVP guest"
+        },
+        {
+          "pii_type": "email",
+          "value": "sneha.reddy@hotmail.com",
+          "context": "Email for Sneha Reddy"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 99001 12233",
+          "context": "Phone for Sneha Reddy"
+        },
+        {
+          "pii_type": "name",
+          "value": "Meera Krishnan",
+          "context": "RSVP guest"
+        },
+        {
+          "pii_type": "email",
+          "value": "meera.k@gmail.com",
+          "context": "Email for Meera Krishnan"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 66554 43322",
+          "context": "Phone for Meera Krishnan"
+        },
+        {
+          "pii_type": "name",
+          "value": "Deepa Iyer",
+          "context": "RSVP guest"
+        },
+        {
+          "pii_type": "email",
+          "value": "deepa.iyer@gmail.com",
+          "context": "Email for Deepa Iyer"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 44332 21100",
+          "context": "Phone for Deepa Iyer"
+        }
+      ]
+    },
+    {
+      "path": "E_Drive/old_laptop_migration/exported_emails.csv",
+      "file_type": "csv",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "email",
+          "value": "rahul.sharma@gmail.com",
+          "context": "From/To in emails"
+        },
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Name in email bodies"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "Phone in IRCTC booking"
+        },
+        {
+          "pii_type": "address",
+          "value": "42, MG Road, Koramangala, Bengaluru, Karnataka 560034",
+          "context": "Delivery address in Flipkart email"
+        },
+        {
+          "pii_type": "email",
+          "value": "arjun.nair@proton.me",
+          "context": "To field"
+        },
+        {
+          "pii_type": "name",
+          "value": "Arjun Nair",
+          "context": "Name in birthday email"
+        },
+        {
+          "pii_type": "address",
+          "value": "89, Brigade Road, Mysuru, Karnataka 570001",
+          "context": "Address in birthday email"
+        }
+      ]
+    },
+    {
+      "path": "E_Drive/old_laptop_migration/browser_passwords.txt",
+      "file_type": "txt",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "email",
+          "value": "rahul.sharma@gmail.com",
+          "context": "Username for multiple sites"
+        },
+        {
+          "pii_type": "email",
+          "value": "rahul.s@techcorp.in",
+          "context": "Twitter username"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "50100123456789",
+          "context": "SBI net banking username"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "Phone as Zomato/Paytm username"
+        }
+      ]
+    },
+    {
+      "path": "E_Drive/old_laptop_migration/notes_app_export.json",
+      "file_type": "json",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "passport",
+          "value": "J1234567",
+          "context": "Passport in travel note"
+        },
+        {
+          "pii_type": "name",
+          "value": "John Miller",
+          "context": "John's name"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+1 (555) 123-4567",
+          "context": "John's phone"
+        },
+        {
+          "pii_type": "address",
+          "value": "123 Oak Street, San Francisco, CA 94102",
+          "context": "John's address"
+        },
+        {
+          "pii_type": "ssn",
+          "value": "234-56-7890",
+          "context": "John's SSN"
+        },
+        {
+          "pii_type": "credit_card",
+          "value": "4532 1234 5678 9012",
+          "context": "John's credit card"
+        },
+        {
+          "pii_type": "email",
+          "value": "john.miller@gmail.com",
+          "context": "John's email"
+        },
+        {
+          "pii_type": "name",
+          "value": "Sarah Johnson",
+          "context": "Sarah's name"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+1 (555) 987-6543",
+          "context": "Sarah's phone"
+        },
+        {
+          "pii_type": "ssn",
+          "value": "345-67-8901",
+          "context": "Sarah's SSN"
+        },
+        {
+          "pii_type": "passport",
+          "value": "678901234",
+          "context": "Sarah's passport"
+        },
+        {
+          "pii_type": "email",
+          "value": "sarah.j@outlook.com",
+          "context": "Sarah's email"
+        },
+        {
+          "pii_type": "name",
+          "value": "Michael Chen",
+          "context": "Michael's name"
+        },
+        {
+          "pii_type": "ip_address",
+          "value": "192.168.10.22",
+          "context": "Michael's VPN IP"
+        },
+        {
+          "pii_type": "ssn",
+          "value": "456-78-9012",
+          "context": "Michael's SSN"
+        },
+        {
+          "pii_type": "email",
+          "value": "m.chen@techmail.com",
+          "context": "Michael's email"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/AppData/Local/BrowserData/autofill_data.sqlite",
+      "file_type": "sqlite",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Autofill name entries"
+        },
+        {
+          "pii_type": "email",
+          "value": "rahul.sharma@gmail.com",
+          "context": "Autofill email"
+        },
+        {
+          "pii_type": "email",
+          "value": "rahul.s@techcorp.in",
+          "context": "Autofill work email"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "Autofill phone"
+        },
+        {
+          "pii_type": "address",
+          "value": "42, MG Road, Koramangala, Bengaluru, Karnataka 560034",
+          "context": "Autofill address (split across fields)"
+        },
+        {
+          "pii_type": "credit_card",
+          "value": "4111 1111 1111 1111",
+          "context": "Autofill Visa card"
+        },
+        {
+          "pii_type": "credit_card",
+          "value": "5500 0000 0000 0004",
+          "context": "Autofill MC card"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/AppData/Local/BrowserData/browsing_history.sqlite",
+      "file_type": "sqlite",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "email",
+          "value": "rahul.sharma@gmail.com",
+          "context": "Email in URL query params (Gmail, MakeMyTrip)"
+        },
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Name in LinkedIn URL and MakeMyTrip param"
+        },
+        {
+          "pii_type": "pan",
+          "value": "ABCPS1234E",
+          "context": "PAN in income tax portal URL"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/ProgramData/AccountingSoftware/company_employees.db",
+      "file_type": "db",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Amit Patel",
+          "context": "Employee #1"
+        },
+        {
+          "pii_type": "email",
+          "value": "amit.patel@gmail.com",
+          "context": "Email for Amit Patel"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 77889 90011",
+          "context": "Phone for Amit Patel"
+        },
+        {
+          "pii_type": "pan",
+          "value": "BCDPA4567R",
+          "context": "PAN for Amit Patel"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "5678 1234 9012",
+          "context": "Aadhaar for Amit Patel"
+        },
+        {
+          "pii_type": "dob",
+          "value": "10/05/1988",
+          "context": "DOB for Amit Patel"
+        },
+        {
+          "pii_type": "address",
+          "value": "78, Park Street, Kolkata, West Bengal 700016",
+          "context": "Address for Amit Patel"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "5566778899001122",
+          "context": "Bank account for Amit Patel"
+        },
+        {
+          "pii_type": "ifsc",
+          "value": "ICIC0003456",
+          "context": "IFSC for Amit Patel"
+        },
+        {
+          "pii_type": "name",
+          "value": "Sneha Reddy",
+          "context": "Employee #2"
+        },
+        {
+          "pii_type": "email",
+          "value": "sneha.reddy@hotmail.com",
+          "context": "Email for Sneha Reddy"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 99001 12233",
+          "context": "Phone for Sneha Reddy"
+        },
+        {
+          "pii_type": "pan",
+          "value": "DEFSR7890T",
+          "context": "PAN for Sneha Reddy"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "3456 7890 1234",
+          "context": "Aadhaar for Sneha Reddy"
+        },
+        {
+          "pii_type": "dob",
+          "value": "05/12/1995",
+          "context": "DOB for Sneha Reddy"
+        },
+        {
+          "pii_type": "address",
+          "value": "23, Jubilee Hills, Hyderabad, Telangana 500033",
+          "context": "Address for Sneha Reddy"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "2233445566778899",
+          "context": "Bank account for Sneha Reddy"
+        },
+        {
+          "pii_type": "ifsc",
+          "value": "UTIB0004567",
+          "context": "IFSC for Sneha Reddy"
+        },
+        {
+          "pii_type": "name",
+          "value": "Vikram Singh",
+          "context": "Employee #3"
+        },
+        {
+          "pii_type": "email",
+          "value": "vikram.singh@yahoo.com",
+          "context": "Email for Vikram Singh"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 88776 65544",
+          "context": "Phone for Vikram Singh"
+        },
+        {
+          "pii_type": "pan",
+          "value": "GHIVS2345U",
+          "context": "PAN for Vikram Singh"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "6789 0123 4567",
+          "context": "Aadhaar for Vikram Singh"
+        },
+        {
+          "pii_type": "dob",
+          "value": "28/07/1985",
+          "context": "DOB for Vikram Singh"
+        },
+        {
+          "pii_type": "address",
+          "value": "56, Civil Lines, Jaipur, Rajasthan 302006",
+          "context": "Address for Vikram Singh"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "3344556677889900",
+          "context": "Bank account for Vikram Singh"
+        },
+        {
+          "pii_type": "ifsc",
+          "value": "PUNB0005678",
+          "context": "IFSC for Vikram Singh"
+        },
+        {
+          "pii_type": "name",
+          "value": "Meera Krishnan",
+          "context": "Employee #4"
+        },
+        {
+          "pii_type": "email",
+          "value": "meera.k@gmail.com",
+          "context": "Email for Meera Krishnan"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 66554 43322",
+          "context": "Phone for Meera Krishnan"
+        },
+        {
+          "pii_type": "pan",
+          "value": "JKLMK6789V",
+          "context": "PAN for Meera Krishnan"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "8901 2345 6789",
+          "context": "Aadhaar for Meera Krishnan"
+        },
+        {
+          "pii_type": "dob",
+          "value": "14/01/1993",
+          "context": "DOB for Meera Krishnan"
+        },
+        {
+          "pii_type": "address",
+          "value": "12, MG Road, Ernakulam, Kochi, Kerala 682011",
+          "context": "Address for Meera Krishnan"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "4455667788990011",
+          "context": "Bank account for Meera Krishnan"
+        },
+        {
+          "pii_type": "ifsc",
+          "value": "FDRL0006789",
+          "context": "IFSC for Meera Krishnan"
+        },
+        {
+          "pii_type": "name",
+          "value": "Arjun Nair",
+          "context": "Employee #5"
+        },
+        {
+          "pii_type": "email",
+          "value": "arjun.nair@proton.me",
+          "context": "Email for Arjun Nair"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 55443 32211",
+          "context": "Phone for Arjun Nair"
+        },
+        {
+          "pii_type": "pan",
+          "value": "MNOAN1234W",
+          "context": "PAN for Arjun Nair"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "0123 4567 8901",
+          "context": "Aadhaar for Arjun Nair"
+        },
+        {
+          "pii_type": "dob",
+          "value": "03/09/1991",
+          "context": "DOB for Arjun Nair"
+        },
+        {
+          "pii_type": "address",
+          "value": "89, Brigade Road, Mysuru, Karnataka 570001",
+          "context": "Address for Arjun Nair"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "5566778899112233",
+          "context": "Bank account for Arjun Nair"
+        },
+        {
+          "pii_type": "ifsc",
+          "value": "KARB0007890",
+          "context": "IFSC for Arjun Nair"
+        },
+        {
+          "pii_type": "name",
+          "value": "Deepa Iyer",
+          "context": "Employee #6"
+        },
+        {
+          "pii_type": "email",
+          "value": "deepa.iyer@gmail.com",
+          "context": "Email for Deepa Iyer"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 44332 21100",
+          "context": "Phone for Deepa Iyer"
+        },
+        {
+          "pii_type": "pan",
+          "value": "PQRDI3456X",
+          "context": "PAN for Deepa Iyer"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "1234 5678 9012",
+          "context": "Aadhaar for Deepa Iyer"
+        },
+        {
+          "pii_type": "dob",
+          "value": "19/06/1994",
+          "context": "DOB for Deepa Iyer"
+        },
+        {
+          "pii_type": "address",
+          "value": "34, Linking Road, Bandra, Mumbai, Maharashtra 400050",
+          "context": "Address for Deepa Iyer"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "6677889900112233",
+          "context": "Bank account for Deepa Iyer"
+        },
+        {
+          "pii_type": "ifsc",
+          "value": "KKBK0001234",
+          "context": "IFSC for Deepa Iyer"
+        },
+        {
+          "pii_type": "name",
+          "value": "Ravi Kumar",
+          "context": "Employee #7"
+        },
+        {
+          "pii_type": "email",
+          "value": "ravi.kumar@rediffmail.com",
+          "context": "Email for Ravi Kumar"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 33221 10099",
+          "context": "Phone for Ravi Kumar"
+        },
+        {
+          "pii_type": "pan",
+          "value": "STUVK7890Y",
+          "context": "PAN for Ravi Kumar"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "4567 8901 2345",
+          "context": "Aadhaar for Ravi Kumar"
+        },
+        {
+          "pii_type": "dob",
+          "value": "25/11/1987",
+          "context": "DOB for Ravi Kumar"
+        },
+        {
+          "pii_type": "address",
+          "value": "67, Ashoka Marg, Lucknow, Uttar Pradesh 226001",
+          "context": "Address for Ravi Kumar"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "7788990011223344",
+          "context": "Bank account for Ravi Kumar"
+        },
+        {
+          "pii_type": "ifsc",
+          "value": "BARB0008901",
+          "context": "IFSC for Ravi Kumar"
+        },
+        {
+          "pii_type": "name",
+          "value": "Neha Joshi",
+          "context": "Employee #8"
+        },
+        {
+          "pii_type": "email",
+          "value": "neha.joshi@outlook.com",
+          "context": "Email for Neha Joshi"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 22110 09988",
+          "context": "Phone for Neha Joshi"
+        },
+        {
+          "pii_type": "pan",
+          "value": "WXYNJ4567Z",
+          "context": "PAN for Neha Joshi"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "7890 1234 5678",
+          "context": "Aadhaar for Neha Joshi"
+        },
+        {
+          "pii_type": "dob",
+          "value": "08/04/1996",
+          "context": "DOB for Neha Joshi"
+        },
+        {
+          "pii_type": "address",
+          "value": "45, FC Road, Pune, Maharashtra 411004",
+          "context": "Address for Neha Joshi"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "8899001122334455",
+          "context": "Bank account for Neha Joshi"
+        },
+        {
+          "pii_type": "ifsc",
+          "value": "MAHB0009012",
+          "context": "IFSC for Neha Joshi"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/ProgramData/CRMApp/customer_records.sqlite",
+      "file_type": "sqlite",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Amit Patel",
+          "context": "Customer #1"
+        },
+        {
+          "pii_type": "email",
+          "value": "amit.patel@gmail.com",
+          "context": "Email for Amit Patel"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 77889 90011",
+          "context": "Phone for Amit Patel"
+        },
+        {
+          "pii_type": "address",
+          "value": "78, Park Street, Kolkata, West Bengal 700016",
+          "context": "Address for Amit Patel"
+        },
+        {
+          "pii_type": "dob",
+          "value": "10/05/1988",
+          "context": "DOB for Amit Patel"
+        },
+        {
+          "pii_type": "credit_card",
+          "value": "4532 8790 1234 5678",
+          "context": "Credit card for Amit Patel"
+        },
+        {
+          "pii_type": "name",
+          "value": "Sneha Reddy",
+          "context": "Customer #2"
+        },
+        {
+          "pii_type": "email",
+          "value": "sneha.reddy@hotmail.com",
+          "context": "Email for Sneha Reddy"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 99001 12233",
+          "context": "Phone for Sneha Reddy"
+        },
+        {
+          "pii_type": "address",
+          "value": "23, Jubilee Hills, Hyderabad, Telangana 500033",
+          "context": "Address for Sneha Reddy"
+        },
+        {
+          "pii_type": "dob",
+          "value": "05/12/1995",
+          "context": "DOB for Sneha Reddy"
+        },
+        {
+          "pii_type": "credit_card",
+          "value": "5425 6789 0123 4567",
+          "context": "Credit card for Sneha Reddy"
+        },
+        {
+          "pii_type": "name",
+          "value": "Vikram Singh",
+          "context": "Customer #3"
+        },
+        {
+          "pii_type": "email",
+          "value": "vikram.singh@yahoo.com",
+          "context": "Email for Vikram Singh"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 88776 65544",
+          "context": "Phone for Vikram Singh"
+        },
+        {
+          "pii_type": "address",
+          "value": "56, Civil Lines, Jaipur, Rajasthan 302006",
+          "context": "Address for Vikram Singh"
+        },
+        {
+          "pii_type": "dob",
+          "value": "28/07/1985",
+          "context": "DOB for Vikram Singh"
+        },
+        {
+          "pii_type": "credit_card",
+          "value": "4916 3456 7890 1234",
+          "context": "Credit card for Vikram Singh"
+        },
+        {
+          "pii_type": "name",
+          "value": "Meera Krishnan",
+          "context": "Customer #4"
+        },
+        {
+          "pii_type": "email",
+          "value": "meera.k@gmail.com",
+          "context": "Email for Meera Krishnan"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 66554 43322",
+          "context": "Phone for Meera Krishnan"
+        },
+        {
+          "pii_type": "address",
+          "value": "12, MG Road, Ernakulam, Kochi, Kerala 682011",
+          "context": "Address for Meera Krishnan"
+        },
+        {
+          "pii_type": "dob",
+          "value": "14/01/1993",
+          "context": "DOB for Meera Krishnan"
+        },
+        {
+          "pii_type": "credit_card",
+          "value": "5500 1234 5678 9012",
+          "context": "Credit card for Meera Krishnan"
+        },
+        {
+          "pii_type": "name",
+          "value": "Arjun Nair",
+          "context": "Customer #5"
+        },
+        {
+          "pii_type": "email",
+          "value": "arjun.nair@proton.me",
+          "context": "Email for Arjun Nair"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 55443 32211",
+          "context": "Phone for Arjun Nair"
+        },
+        {
+          "pii_type": "address",
+          "value": "89, Brigade Road, Mysuru, Karnataka 570001",
+          "context": "Address for Arjun Nair"
+        },
+        {
+          "pii_type": "dob",
+          "value": "03/09/1991",
+          "context": "DOB for Arjun Nair"
+        },
+        {
+          "pii_type": "credit_card",
+          "value": "4111 2345 6789 0123",
+          "context": "Credit card for Arjun Nair"
+        },
+        {
+          "pii_type": "name",
+          "value": "John Miller",
+          "context": "Customer #6"
+        },
+        {
+          "pii_type": "email",
+          "value": "john.miller@gmail.com",
+          "context": "Email for John Miller"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+1 (555) 123-4567",
+          "context": "Phone for John Miller"
+        },
+        {
+          "pii_type": "address",
+          "value": "123 Oak Street, San Francisco, CA 94102",
+          "context": "Address for John Miller"
+        },
+        {
+          "pii_type": "dob",
+          "value": "07/04/1987",
+          "context": "DOB for John Miller"
+        },
+        {
+          "pii_type": "credit_card",
+          "value": "4532 1234 5678 9012",
+          "context": "Credit card for John Miller"
+        },
+        {
+          "pii_type": "name",
+          "value": "Sarah Johnson",
+          "context": "Customer #7"
+        },
+        {
+          "pii_type": "email",
+          "value": "sarah.j@outlook.com",
+          "context": "Email for Sarah Johnson"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+1 (555) 987-6543",
+          "context": "Phone for Sarah Johnson"
+        },
+        {
+          "pii_type": "address",
+          "value": "456 Maple Ave, New York, NY 10001",
+          "context": "Address for Sarah Johnson"
+        },
+        {
+          "pii_type": "dob",
+          "value": "11/23/1990",
+          "context": "DOB for Sarah Johnson"
+        },
+        {
+          "pii_type": "credit_card",
+          "value": "5425 9876 5432 1098",
+          "context": "Credit card for Sarah Johnson"
+        }
+      ]
+    },
+    {
+      "path": "D_Drive/Projects/ClientA_Data/payment_records.db",
+      "file_type": "db",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Payment #1 customer"
+        },
+        {
+          "pii_type": "credit_card",
+          "value": "4111 1111 1111 1111",
+          "context": "Credit card for Rahul Sharma"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "50100123456789",
+          "context": "Bank account for Rahul Sharma"
+        },
+        {
+          "pii_type": "name",
+          "value": "Priya Gupta",
+          "context": "Payment #2 customer"
+        },
+        {
+          "pii_type": "credit_card",
+          "value": "4222 2222 2222 2220",
+          "context": "Credit card for Priya Gupta"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "00401234567890",
+          "context": "Bank account for Priya Gupta"
+        },
+        {
+          "pii_type": "name",
+          "value": "John Miller",
+          "context": "Payment #3 customer"
+        },
+        {
+          "pii_type": "credit_card",
+          "value": "4532 1234 5678 9012",
+          "context": "Credit card for John Miller"
+        },
+        {
+          "pii_type": "name",
+          "value": "Amit Patel",
+          "context": "Payment #4 customer"
+        },
+        {
+          "pii_type": "credit_card",
+          "value": "4532 8790 1234 5678",
+          "context": "Credit card for Amit Patel"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "5566778899001122",
+          "context": "Bank account for Amit Patel"
+        },
+        {
+          "pii_type": "name",
+          "value": "Vikram Singh",
+          "context": "Payment #5 customer"
+        },
+        {
+          "pii_type": "credit_card",
+          "value": "4916 3456 7890 1234",
+          "context": "Credit card for Vikram Singh"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "3344556677889900",
+          "context": "Bank account for Vikram Singh"
+        }
+      ]
+    },
+    {
+      "path": "D_Drive/Projects/ClientA_Data/.env",
+      "file_type": "env",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Admin name in env"
+        },
+        {
+          "pii_type": "email",
+          "value": "rahul.sharma@gmail.com",
+          "context": "Admin email in env"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "Admin phone in env"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/ProgramData/MyApp/settings.cfg",
+      "file_type": "cfg",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "email",
+          "value": "rahul.sharma@gmail.com",
+          "context": "Config default user"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Desktop/backup.reg",
+      "file_type": "reg",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "email",
+          "value": "rahul.s@techcorp.in",
+          "context": "Registry email"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Work/deploy.bat",
+      "file_type": "bat",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "ip_address",
+          "value": "192.168.1.105",
+          "context": "Ping IP"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Work/admin_script.ps1",
+      "file_type": "ps1",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "email",
+          "value": "rahul.sharma@gmail.com",
+          "context": "PS1 email"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Projects/Website/index.html",
+      "file_type": "html",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "HTML phone"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Downloads/kyc_documents.zip",
+      "file_type": "zip",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Name in both docs inside ZIP"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "2345 6789 0123",
+          "context": "Aadhaar in aadhaar_details.txt inside ZIP"
+        },
+        {
+          "pii_type": "dob",
+          "value": "15/08/1990",
+          "context": "DOB in both docs inside ZIP"
+        },
+        {
+          "pii_type": "address",
+          "value": "42, MG Road, Koramangala, Bengaluru, Karnataka 560034",
+          "context": "Address in aadhaar_details.txt inside ZIP"
+        },
+        {
+          "pii_type": "pan",
+          "value": "ABCPS1234E",
+          "context": "PAN in pan_details.txt inside ZIP"
+        },
+        {
+          "pii_type": "name",
+          "value": "Rajesh Kumar Sharma",
+          "context": "Father's name in pan_details.txt inside ZIP"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/PriyaGupta/Downloads/id_proof_bundle.zip",
+      "file_type": "zip",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Priya Gupta",
+          "context": "Name in both docs inside ZIP"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "9876 5432 1098",
+          "context": "Aadhaar inside ZIP"
+        },
+        {
+          "pii_type": "dob",
+          "value": "22/03/1992",
+          "context": "DOB inside ZIP"
+        },
+        {
+          "pii_type": "address",
+          "value": "15, Anna Salai, T. Nagar, Chennai, Tamil Nadu 600017",
+          "context": "Address inside ZIP"
+        },
+        {
+          "pii_type": "pan",
+          "value": "BXYPG5678Q",
+          "context": "PAN inside ZIP"
+        },
+        {
+          "pii_type": "name",
+          "value": "Sanjay Gupta",
+          "context": "Father's name inside ZIP"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Desktop/tax_return_2025.pdf",
+      "file_type": "pdf",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Taxpayer name"
+        },
+        {
+          "pii_type": "pan",
+          "value": "ABCPS1234E",
+          "context": "PAN"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "2345 6789 0123",
+          "context": "Aadhaar number"
+        },
+        {
+          "pii_type": "dob",
+          "value": "15/08/1990",
+          "context": "Date of birth"
+        },
+        {
+          "pii_type": "email",
+          "value": "rahul.sharma@gmail.com",
+          "context": "Email"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "Mobile number"
+        },
+        {
+          "pii_type": "address",
+          "value": "42, MG Road, Koramangala, Bengaluru, Karnataka 560034",
+          "context": "Address"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "50100123456789",
+          "context": "Bank account for refund"
+        },
+        {
+          "pii_type": "ifsc",
+          "value": "SBIN0001234",
+          "context": "IFSC code"
+        },
+        {
+          "pii_type": "name",
+          "value": "Rajesh Kumar Sharma",
+          "context": "Father's name in verification"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Financial/bank_statement_jan2025.pdf",
+      "file_type": "pdf",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Account holder name"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "50100123456789",
+          "context": "Account number"
+        },
+        {
+          "pii_type": "ifsc",
+          "value": "SBIN0001234",
+          "context": "IFSC code"
+        },
+        {
+          "pii_type": "address",
+          "value": "42, MG Road, Koramangala, Bengaluru, Karnataka 560034",
+          "context": "Address"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "Phone"
+        },
+        {
+          "pii_type": "upi",
+          "value": "rahul@okicici",
+          "context": "UPI ID in transaction description"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Financial/gst_returns.pdf",
+      "file_type": "pdf",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Taxpayer name"
+        },
+        {
+          "pii_type": "pan",
+          "value": "ABCPS1234E",
+          "context": "PAN"
+        },
+        {
+          "pii_type": "address",
+          "value": "42, MG Road, Koramangala, Bengaluru, Karnataka 560034",
+          "context": "Address"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "Phone"
+        },
+        {
+          "pii_type": "email",
+          "value": "rahul.s@techcorp.in",
+          "context": "Work email"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "50100123456789",
+          "context": "Bank account"
+        },
+        {
+          "pii_type": "ifsc",
+          "value": "SBIN0001234",
+          "context": "IFSC code"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Medical/health_insurance_claim.pdf",
+      "file_type": "pdf",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Policyholder name"
+        },
+        {
+          "pii_type": "dob",
+          "value": "15/08/1990",
+          "context": "Date of birth"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "2345 6789 0123",
+          "context": "Aadhaar"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "Phone"
+        },
+        {
+          "pii_type": "email",
+          "value": "rahul.sharma@gmail.com",
+          "context": "Email"
+        },
+        {
+          "pii_type": "address",
+          "value": "42, MG Road, Koramangala, Bengaluru, Karnataka 560034",
+          "context": "Address"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "50100123456789",
+          "context": "Claim settlement account"
+        },
+        {
+          "pii_type": "ifsc",
+          "value": "SBIN0001234",
+          "context": "IFSC"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Legal/rental_agreement.pdf",
+      "file_type": "pdf",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Vikram Singh",
+          "context": "Landlord name"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "6789 0123 4567",
+          "context": "Landlord Aadhaar"
+        },
+        {
+          "pii_type": "pan",
+          "value": "GHIVS2345U",
+          "context": "Landlord PAN"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 88776 65544",
+          "context": "Landlord phone"
+        },
+        {
+          "pii_type": "email",
+          "value": "vikram.singh@yahoo.com",
+          "context": "Landlord email"
+        },
+        {
+          "pii_type": "address",
+          "value": "56, Civil Lines, Jaipur, Rajasthan 302006",
+          "context": "Landlord address"
+        },
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Tenant name"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "2345 6789 0123",
+          "context": "Tenant Aadhaar"
+        },
+        {
+          "pii_type": "pan",
+          "value": "ABCPS1234E",
+          "context": "Tenant PAN"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "Tenant phone"
+        },
+        {
+          "pii_type": "email",
+          "value": "rahul.sharma@gmail.com",
+          "context": "Tenant email"
+        },
+        {
+          "pii_type": "address",
+          "value": "42, MG Road, Koramangala, Bengaluru, Karnataka 560034",
+          "context": "Tenant address"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "50100123456789",
+          "context": "Deposit bank account"
+        },
+        {
+          "pii_type": "ifsc",
+          "value": "SBIN0001234",
+          "context": "Deposit IFSC"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Downloads/form16_2024-25.pdf",
+      "file_type": "pdf",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Employee name"
+        },
+        {
+          "pii_type": "pan",
+          "value": "ABCPS1234E",
+          "context": "Employee PAN"
+        },
+        {
+          "pii_type": "address",
+          "value": "42, MG Road, Koramangala, Bengaluru, Karnataka 560034",
+          "context": "Employee address"
+        },
+        {
+          "pii_type": "dob",
+          "value": "15/08/1990",
+          "context": "Employee DOB"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Downloads/online_order_invoice.pdf",
+      "file_type": "pdf",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Ship to name"
+        },
+        {
+          "pii_type": "address",
+          "value": "42, MG Road, Koramangala, Bengaluru, Karnataka 560034",
+          "context": "Shipping address"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "Phone"
+        },
+        {
+          "pii_type": "email",
+          "value": "rahul.sharma@gmail.com",
+          "context": "Email"
+        },
+        {
+          "pii_type": "credit_card",
+          "value": "1111",
+          "context": "Last 4 digits of credit card"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/PriyaGupta/Desktop/client_brief.pdf",
+      "file_type": "pdf",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Anita Desai",
+          "context": "Client contact at RetailMax India"
+        },
+        {
+          "pii_type": "email",
+          "value": "anita.desai@retailmax.in",
+          "context": "Email for RetailMax India"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 96789 01234",
+          "context": "Phone for RetailMax India"
+        },
+        {
+          "pii_type": "name",
+          "value": "Dr. Siddharth Rao",
+          "context": "Client contact at HealthFirst Hospitals"
+        },
+        {
+          "pii_type": "email",
+          "value": "siddharth@healthfirst.org",
+          "context": "Email for HealthFirst Hospitals"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 85678 90123",
+          "context": "Phone for HealthFirst Hospitals"
+        },
+        {
+          "pii_type": "name",
+          "value": "Lakshmi Narayan",
+          "context": "Client contact at EduBright Academy"
+        },
+        {
+          "pii_type": "email",
+          "value": "lakshmi@edubright.edu.in",
+          "context": "Email for EduBright Academy"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 74567 89012",
+          "context": "Phone for EduBright Academy"
+        },
+        {
+          "pii_type": "name",
+          "value": "Priya Gupta",
+          "context": "Freelancer name"
+        },
+        {
+          "pii_type": "email",
+          "value": "priya.gupta@outlook.com",
+          "context": "Freelancer email"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 87654 32109",
+          "context": "Freelancer phone"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/PriyaGupta/Documents/mutual_fund_statement.pdf",
+      "file_type": "pdf",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Priya Gupta",
+          "context": "Investor name"
+        },
+        {
+          "pii_type": "pan",
+          "value": "BXYPG5678Q",
+          "context": "PAN"
+        },
+        {
+          "pii_type": "email",
+          "value": "priya.gupta@outlook.com",
+          "context": "Email"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "00401234567890",
+          "context": "Bank account"
+        },
+        {
+          "pii_type": "ifsc",
+          "value": "HDFC0002345",
+          "context": "IFSC"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/PriyaGupta/Downloads/scholarship_application.pdf",
+      "file_type": "pdf",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Priya Gupta",
+          "context": "Applicant name"
+        },
+        {
+          "pii_type": "name",
+          "value": "Sanjay Gupta",
+          "context": "Father's name"
+        },
+        {
+          "pii_type": "dob",
+          "value": "22/03/1992",
+          "context": "Date of birth"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "9876 5432 1098",
+          "context": "Aadhaar"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 87654 32109",
+          "context": "Phone"
+        },
+        {
+          "pii_type": "email",
+          "value": "priya.gupta@outlook.com",
+          "context": "Email"
+        },
+        {
+          "pii_type": "address",
+          "value": "15, Anna Salai, T. Nagar, Chennai, Tamil Nadu 600017",
+          "context": "Address"
+        }
+      ]
+    },
+    {
+      "path": "D_Drive/Backups/old_tax_records/itr_2022-23.pdf",
+      "file_type": "pdf",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Taxpayer name"
+        },
+        {
+          "pii_type": "pan",
+          "value": "ABCPS1234E",
+          "context": "PAN"
+        },
+        {
+          "pii_type": "address",
+          "value": "42, MG Road, Koramangala, Bengaluru, Karnataka 560034",
+          "context": "Address"
+        },
+        {
+          "pii_type": "dob",
+          "value": "15/08/1990",
+          "context": "DOB"
+        }
+      ]
+    },
+    {
+      "path": "D_Drive/Backups/old_tax_records/form26as_2023.pdf",
+      "file_type": "pdf",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "pan",
+          "value": "ABCPS1234E",
+          "context": "PAN"
+        },
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Name"
+        }
+      ]
+    },
+    {
+      "path": "E_Drive/pendrive_misc/salary_slips/salary_dec2024.pdf",
+      "file_type": "pdf",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Employee name"
+        },
+        {
+          "pii_type": "pan",
+          "value": "ABCPS1234E",
+          "context": "PAN"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "50100123456789",
+          "context": "Bank account"
+        },
+        {
+          "pii_type": "ifsc",
+          "value": "SBIN0001234",
+          "context": "IFSC"
+        },
+        {
+          "pii_type": "address",
+          "value": "42, MG Road, Koramangala, Bengaluru, Karnataka 560034",
+          "context": "Address"
+        }
+      ]
+    },
+    {
+      "path": "E_Drive/pendrive_misc/salary_slips/salary_jan2025.pdf",
+      "file_type": "pdf",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Employee name"
+        },
+        {
+          "pii_type": "pan",
+          "value": "ABCPS1234E",
+          "context": "PAN"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "50100123456789",
+          "context": "Bank account"
+        },
+        {
+          "pii_type": "ifsc",
+          "value": "SBIN0001234",
+          "context": "IFSC"
+        },
+        {
+          "pii_type": "address",
+          "value": "42, MG Road, Koramangala, Bengaluru, Karnataka 560034",
+          "context": "Address"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Financial/loan_application.docx",
+      "file_type": "docx",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Applicant name"
+        },
+        {
+          "pii_type": "dob",
+          "value": "15/08/1990",
+          "context": "DOB"
+        },
+        {
+          "pii_type": "pan",
+          "value": "ABCPS1234E",
+          "context": "PAN"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "2345 6789 0123",
+          "context": "Aadhaar"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "Phone"
+        },
+        {
+          "pii_type": "email",
+          "value": "rahul.sharma@gmail.com",
+          "context": "Email"
+        },
+        {
+          "pii_type": "address",
+          "value": "42, MG Road, Koramangala, Bengaluru, Karnataka 560034",
+          "context": "Address"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "50100123456789",
+          "context": "Bank account"
+        },
+        {
+          "pii_type": "ifsc",
+          "value": "SBIN0001234",
+          "context": "IFSC"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Medical/prescriptions.docx",
+      "file_type": "docx",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Patient name"
+        },
+        {
+          "pii_type": "dob",
+          "value": "15/08/1990",
+          "context": "Patient DOB"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "Patient phone"
+        },
+        {
+          "pii_type": "address",
+          "value": "42, MG Road, Koramangala, Bengaluru, Karnataka 560034",
+          "context": "Patient address"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Legal/property_deed.docx",
+      "file_type": "docx",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Vikram Singh",
+          "context": "Seller name"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "6789 0123 4567",
+          "context": "Seller Aadhaar"
+        },
+        {
+          "pii_type": "pan",
+          "value": "GHIVS2345U",
+          "context": "Seller PAN"
+        },
+        {
+          "pii_type": "address",
+          "value": "56, Civil Lines, Jaipur, Rajasthan 302006",
+          "context": "Seller address"
+        },
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Buyer name"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "2345 6789 0123",
+          "context": "Buyer Aadhaar"
+        },
+        {
+          "pii_type": "pan",
+          "value": "ABCPS1234E",
+          "context": "Buyer PAN"
+        },
+        {
+          "pii_type": "address",
+          "value": "42, MG Road, Koramangala, Bengaluru, Karnataka 560034",
+          "context": "Buyer address"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Work/hr_onboarding_form.docx",
+      "file_type": "docx",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Employee name"
+        },
+        {
+          "pii_type": "name",
+          "value": "Rajesh Kumar Sharma",
+          "context": "Father's name"
+        },
+        {
+          "pii_type": "dob",
+          "value": "15/08/1990",
+          "context": "DOB"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "2345 6789 0123",
+          "context": "Aadhaar"
+        },
+        {
+          "pii_type": "pan",
+          "value": "ABCPS1234E",
+          "context": "PAN"
+        },
+        {
+          "pii_type": "passport",
+          "value": "J1234567",
+          "context": "Passport"
+        },
+        {
+          "pii_type": "dl",
+          "value": "MH01 20240001234",
+          "context": "Driving license"
+        },
+        {
+          "pii_type": "email",
+          "value": "rahul.sharma@gmail.com",
+          "context": "Personal email"
+        },
+        {
+          "pii_type": "email",
+          "value": "rahul.s@techcorp.in",
+          "context": "Work email"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "Mobile"
+        },
+        {
+          "pii_type": "address",
+          "value": "42, MG Road, Koramangala, Bengaluru, Karnataka 560034",
+          "context": "Address"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "50100123456789",
+          "context": "Bank account"
+        },
+        {
+          "pii_type": "ifsc",
+          "value": "SBIN0001234",
+          "context": "IFSC"
+        },
+        {
+          "pii_type": "phone",
+          "value": "011-2345-6789",
+          "context": "Emergency contact phone"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Personal/resume_rahul_2025.docx",
+      "file_type": "docx",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Resume header name"
+        },
+        {
+          "pii_type": "email",
+          "value": "rahul.sharma@gmail.com",
+          "context": "Contact email"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "Contact phone"
+        },
+        {
+          "pii_type": "address",
+          "value": "42 MG Road, Bengaluru",
+          "context": "Location"
+        },
+        {
+          "pii_type": "dob",
+          "value": "15/08/1990",
+          "context": "Date of birth"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/PriyaGupta/Desktop/freelance_invoice.docx",
+      "file_type": "docx",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Priya Gupta",
+          "context": "Freelancer name"
+        },
+        {
+          "pii_type": "address",
+          "value": "15, Anna Salai, T. Nagar, Chennai, Tamil Nadu 600017",
+          "context": "Freelancer address"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 87654 32109",
+          "context": "Phone"
+        },
+        {
+          "pii_type": "email",
+          "value": "priya.gupta@outlook.com",
+          "context": "Email"
+        },
+        {
+          "pii_type": "pan",
+          "value": "BXYPG5678Q",
+          "context": "PAN"
+        },
+        {
+          "pii_type": "upi",
+          "value": "priya@upi",
+          "context": "UPI"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "00401234567890",
+          "context": "Bank account"
+        },
+        {
+          "pii_type": "ifsc",
+          "value": "HDFC0002345",
+          "context": "IFSC"
+        },
+        {
+          "pii_type": "name",
+          "value": "Anita Desai",
+          "context": "Client contact"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Program Files/OfficeTemplates/invoice_template.docx",
+      "file_type": "docx",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Template contact name"
+        },
+        {
+          "pii_type": "email",
+          "value": "rahul.s@techcorp.in",
+          "context": "Template contact email"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "Template contact phone"
+        },
+        {
+          "pii_type": "address",
+          "value": "42, MG Road, Koramangala, Bengaluru, Karnataka 560034",
+          "context": "Template address"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "50100123456789",
+          "context": "Template bank account"
+        },
+        {
+          "pii_type": "ifsc",
+          "value": "SBIN0001234",
+          "context": "Template IFSC"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Financial/credit_card_bills.xlsx",
+      "file_type": "xlsx",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "credit_card",
+          "value": "4111 1111 1111 1111",
+          "context": "Visa card number in transactions"
+        },
+        {
+          "pii_type": "credit_card",
+          "value": "5500 0000 0000 0004",
+          "context": "MasterCard number in transactions"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Work/employee_records.xlsx",
+      "file_type": "xlsx",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Amit Patel",
+          "context": "Employee name"
+        },
+        {
+          "pii_type": "email",
+          "value": "amit.patel@gmail.com",
+          "context": "Email for Amit Patel"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 77889 90011",
+          "context": "Phone for Amit Patel"
+        },
+        {
+          "pii_type": "pan",
+          "value": "BCDPA4567R",
+          "context": "PAN for Amit Patel"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "5678 1234 9012",
+          "context": "Aadhaar for Amit Patel"
+        },
+        {
+          "pii_type": "dob",
+          "value": "10/05/1988",
+          "context": "DOB for Amit Patel"
+        },
+        {
+          "pii_type": "address",
+          "value": "78, Park Street, Kolkata, West Bengal 700016",
+          "context": "Address for Amit Patel"
+        },
+        {
+          "pii_type": "name",
+          "value": "Sneha Reddy",
+          "context": "Employee name"
+        },
+        {
+          "pii_type": "email",
+          "value": "sneha.reddy@hotmail.com",
+          "context": "Email for Sneha Reddy"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 99001 12233",
+          "context": "Phone for Sneha Reddy"
+        },
+        {
+          "pii_type": "pan",
+          "value": "DEFSR7890T",
+          "context": "PAN for Sneha Reddy"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "3456 7890 1234",
+          "context": "Aadhaar for Sneha Reddy"
+        },
+        {
+          "pii_type": "dob",
+          "value": "05/12/1995",
+          "context": "DOB for Sneha Reddy"
+        },
+        {
+          "pii_type": "address",
+          "value": "23, Jubilee Hills, Hyderabad, Telangana 500033",
+          "context": "Address for Sneha Reddy"
+        },
+        {
+          "pii_type": "name",
+          "value": "Vikram Singh",
+          "context": "Employee name"
+        },
+        {
+          "pii_type": "email",
+          "value": "vikram.singh@yahoo.com",
+          "context": "Email for Vikram Singh"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 88776 65544",
+          "context": "Phone for Vikram Singh"
+        },
+        {
+          "pii_type": "pan",
+          "value": "GHIVS2345U",
+          "context": "PAN for Vikram Singh"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "6789 0123 4567",
+          "context": "Aadhaar for Vikram Singh"
+        },
+        {
+          "pii_type": "dob",
+          "value": "28/07/1985",
+          "context": "DOB for Vikram Singh"
+        },
+        {
+          "pii_type": "address",
+          "value": "56, Civil Lines, Jaipur, Rajasthan 302006",
+          "context": "Address for Vikram Singh"
+        },
+        {
+          "pii_type": "name",
+          "value": "Meera Krishnan",
+          "context": "Employee name"
+        },
+        {
+          "pii_type": "email",
+          "value": "meera.k@gmail.com",
+          "context": "Email for Meera Krishnan"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 66554 43322",
+          "context": "Phone for Meera Krishnan"
+        },
+        {
+          "pii_type": "pan",
+          "value": "JKLMK6789V",
+          "context": "PAN for Meera Krishnan"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "8901 2345 6789",
+          "context": "Aadhaar for Meera Krishnan"
+        },
+        {
+          "pii_type": "dob",
+          "value": "14/01/1993",
+          "context": "DOB for Meera Krishnan"
+        },
+        {
+          "pii_type": "address",
+          "value": "12, MG Road, Ernakulam, Kochi, Kerala 682011",
+          "context": "Address for Meera Krishnan"
+        },
+        {
+          "pii_type": "name",
+          "value": "Arjun Nair",
+          "context": "Employee name"
+        },
+        {
+          "pii_type": "email",
+          "value": "arjun.nair@proton.me",
+          "context": "Email for Arjun Nair"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 55443 32211",
+          "context": "Phone for Arjun Nair"
+        },
+        {
+          "pii_type": "pan",
+          "value": "MNOAN1234W",
+          "context": "PAN for Arjun Nair"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "0123 4567 8901",
+          "context": "Aadhaar for Arjun Nair"
+        },
+        {
+          "pii_type": "dob",
+          "value": "03/09/1991",
+          "context": "DOB for Arjun Nair"
+        },
+        {
+          "pii_type": "address",
+          "value": "89, Brigade Road, Mysuru, Karnataka 570001",
+          "context": "Address for Arjun Nair"
+        },
+        {
+          "pii_type": "name",
+          "value": "Deepa Iyer",
+          "context": "Employee name"
+        },
+        {
+          "pii_type": "email",
+          "value": "deepa.iyer@gmail.com",
+          "context": "Email for Deepa Iyer"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 44332 21100",
+          "context": "Phone for Deepa Iyer"
+        },
+        {
+          "pii_type": "pan",
+          "value": "PQRDI3456X",
+          "context": "PAN for Deepa Iyer"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "1234 5678 9012",
+          "context": "Aadhaar for Deepa Iyer"
+        },
+        {
+          "pii_type": "dob",
+          "value": "19/06/1994",
+          "context": "DOB for Deepa Iyer"
+        },
+        {
+          "pii_type": "address",
+          "value": "34, Linking Road, Bandra, Mumbai, Maharashtra 400050",
+          "context": "Address for Deepa Iyer"
+        },
+        {
+          "pii_type": "name",
+          "value": "Ravi Kumar",
+          "context": "Employee name"
+        },
+        {
+          "pii_type": "email",
+          "value": "ravi.kumar@rediffmail.com",
+          "context": "Email for Ravi Kumar"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 33221 10099",
+          "context": "Phone for Ravi Kumar"
+        },
+        {
+          "pii_type": "pan",
+          "value": "STUVK7890Y",
+          "context": "PAN for Ravi Kumar"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "4567 8901 2345",
+          "context": "Aadhaar for Ravi Kumar"
+        },
+        {
+          "pii_type": "dob",
+          "value": "25/11/1987",
+          "context": "DOB for Ravi Kumar"
+        },
+        {
+          "pii_type": "address",
+          "value": "67, Ashoka Marg, Lucknow, Uttar Pradesh 226001",
+          "context": "Address for Ravi Kumar"
+        },
+        {
+          "pii_type": "name",
+          "value": "Neha Joshi",
+          "context": "Employee name"
+        },
+        {
+          "pii_type": "email",
+          "value": "neha.joshi@outlook.com",
+          "context": "Email for Neha Joshi"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 22110 09988",
+          "context": "Phone for Neha Joshi"
+        },
+        {
+          "pii_type": "pan",
+          "value": "WXYNJ4567Z",
+          "context": "PAN for Neha Joshi"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "7890 1234 5678",
+          "context": "Aadhaar for Neha Joshi"
+        },
+        {
+          "pii_type": "dob",
+          "value": "08/04/1996",
+          "context": "DOB for Neha Joshi"
+        },
+        {
+          "pii_type": "address",
+          "value": "45, FC Road, Pune, Maharashtra 411004",
+          "context": "Address for Neha Joshi"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Personal/wedding_guest_list.xlsx",
+      "file_type": "xlsx",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Amit Patel",
+          "context": "Wedding guest"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 77889 90011",
+          "context": "Phone for Amit Patel"
+        },
+        {
+          "pii_type": "email",
+          "value": "amit.patel@gmail.com",
+          "context": "Email for Amit Patel"
+        },
+        {
+          "pii_type": "address",
+          "value": "78, Park Street, Kolkata, West Bengal 700016",
+          "context": "Address for Amit Patel"
+        },
+        {
+          "pii_type": "name",
+          "value": "Sneha Reddy",
+          "context": "Wedding guest"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 99001 12233",
+          "context": "Phone for Sneha Reddy"
+        },
+        {
+          "pii_type": "email",
+          "value": "sneha.reddy@hotmail.com",
+          "context": "Email for Sneha Reddy"
+        },
+        {
+          "pii_type": "address",
+          "value": "23, Jubilee Hills, Hyderabad, Telangana 500033",
+          "context": "Address for Sneha Reddy"
+        },
+        {
+          "pii_type": "name",
+          "value": "Vikram Singh",
+          "context": "Wedding guest"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 88776 65544",
+          "context": "Phone for Vikram Singh"
+        },
+        {
+          "pii_type": "email",
+          "value": "vikram.singh@yahoo.com",
+          "context": "Email for Vikram Singh"
+        },
+        {
+          "pii_type": "address",
+          "value": "56, Civil Lines, Jaipur, Rajasthan 302006",
+          "context": "Address for Vikram Singh"
+        },
+        {
+          "pii_type": "name",
+          "value": "Meera Krishnan",
+          "context": "Wedding guest"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 66554 43322",
+          "context": "Phone for Meera Krishnan"
+        },
+        {
+          "pii_type": "email",
+          "value": "meera.k@gmail.com",
+          "context": "Email for Meera Krishnan"
+        },
+        {
+          "pii_type": "address",
+          "value": "12, MG Road, Ernakulam, Kochi, Kerala 682011",
+          "context": "Address for Meera Krishnan"
+        },
+        {
+          "pii_type": "name",
+          "value": "John Miller",
+          "context": "Wedding guest"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+1 (555) 123-4567",
+          "context": "Phone for John Miller"
+        },
+        {
+          "pii_type": "email",
+          "value": "john.miller@gmail.com",
+          "context": "Email for John Miller"
+        },
+        {
+          "pii_type": "address",
+          "value": "123 Oak Street, San Francisco, CA 94102",
+          "context": "Address for John Miller"
+        },
+        {
+          "pii_type": "name",
+          "value": "Sarah Johnson",
+          "context": "Wedding guest"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+1 (555) 987-6543",
+          "context": "Phone for Sarah Johnson"
+        },
+        {
+          "pii_type": "email",
+          "value": "sarah.j@outlook.com",
+          "context": "Email for Sarah Johnson"
+        },
+        {
+          "pii_type": "address",
+          "value": "456 Maple Ave, New York, NY 10001",
+          "context": "Address for Sarah Johnson"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/PriyaGupta/Documents/tax_filing_2024.xlsx",
+      "file_type": "xlsx",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Priya Gupta",
+          "context": "Name"
+        },
+        {
+          "pii_type": "pan",
+          "value": "BXYPG5678Q",
+          "context": "PAN"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "9876 5432 1098",
+          "context": "Aadhaar"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "00401234567890",
+          "context": "Bank account"
+        },
+        {
+          "pii_type": "ifsc",
+          "value": "HDFC0002345",
+          "context": "IFSC"
+        }
+      ]
+    },
+    {
+      "path": "D_Drive/SharedFolder/team_directory.xlsx",
+      "file_type": "xlsx",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Amit Patel",
+          "context": "Team member"
+        },
+        {
+          "pii_type": "email",
+          "value": "amit.patel@gmail.com",
+          "context": "Email for Amit Patel"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 77889 90011",
+          "context": "Phone for Amit Patel"
+        },
+        {
+          "pii_type": "dob",
+          "value": "10/05/1988",
+          "context": "DOB for Amit Patel"
+        },
+        {
+          "pii_type": "name",
+          "value": "Sneha Reddy",
+          "context": "Team member"
+        },
+        {
+          "pii_type": "email",
+          "value": "sneha.reddy@hotmail.com",
+          "context": "Email for Sneha Reddy"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 99001 12233",
+          "context": "Phone for Sneha Reddy"
+        },
+        {
+          "pii_type": "dob",
+          "value": "05/12/1995",
+          "context": "DOB for Sneha Reddy"
+        },
+        {
+          "pii_type": "name",
+          "value": "Vikram Singh",
+          "context": "Team member"
+        },
+        {
+          "pii_type": "email",
+          "value": "vikram.singh@yahoo.com",
+          "context": "Email for Vikram Singh"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 88776 65544",
+          "context": "Phone for Vikram Singh"
+        },
+        {
+          "pii_type": "dob",
+          "value": "28/07/1985",
+          "context": "DOB for Vikram Singh"
+        },
+        {
+          "pii_type": "name",
+          "value": "Meera Krishnan",
+          "context": "Team member"
+        },
+        {
+          "pii_type": "email",
+          "value": "meera.k@gmail.com",
+          "context": "Email for Meera Krishnan"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 66554 43322",
+          "context": "Phone for Meera Krishnan"
+        },
+        {
+          "pii_type": "dob",
+          "value": "14/01/1993",
+          "context": "DOB for Meera Krishnan"
+        },
+        {
+          "pii_type": "name",
+          "value": "Arjun Nair",
+          "context": "Team member"
+        },
+        {
+          "pii_type": "email",
+          "value": "arjun.nair@proton.me",
+          "context": "Email for Arjun Nair"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 55443 32211",
+          "context": "Phone for Arjun Nair"
+        },
+        {
+          "pii_type": "dob",
+          "value": "03/09/1991",
+          "context": "DOB for Arjun Nair"
+        },
+        {
+          "pii_type": "name",
+          "value": "Deepa Iyer",
+          "context": "Team member"
+        },
+        {
+          "pii_type": "email",
+          "value": "deepa.iyer@gmail.com",
+          "context": "Email for Deepa Iyer"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 44332 21100",
+          "context": "Phone for Deepa Iyer"
+        },
+        {
+          "pii_type": "dob",
+          "value": "19/06/1994",
+          "context": "DOB for Deepa Iyer"
+        },
+        {
+          "pii_type": "name",
+          "value": "Ravi Kumar",
+          "context": "Team member"
+        },
+        {
+          "pii_type": "email",
+          "value": "ravi.kumar@rediffmail.com",
+          "context": "Email for Ravi Kumar"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 33221 10099",
+          "context": "Phone for Ravi Kumar"
+        },
+        {
+          "pii_type": "dob",
+          "value": "25/11/1987",
+          "context": "DOB for Ravi Kumar"
+        },
+        {
+          "pii_type": "name",
+          "value": "Neha Joshi",
+          "context": "Team member"
+        },
+        {
+          "pii_type": "email",
+          "value": "neha.joshi@outlook.com",
+          "context": "Email for Neha Joshi"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 22110 09988",
+          "context": "Phone for Neha Joshi"
+        },
+        {
+          "pii_type": "dob",
+          "value": "08/04/1996",
+          "context": "DOB for Neha Joshi"
+        }
+      ]
+    },
+    {
+      "path": "D_Drive/Projects/ClientA_Data/customer_list.xlsx",
+      "file_type": "xlsx",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Amit Patel",
+          "context": "Customer"
+        },
+        {
+          "pii_type": "email",
+          "value": "amit.patel@gmail.com",
+          "context": "Email for Amit Patel"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 77889 90011",
+          "context": "Phone for Amit Patel"
+        },
+        {
+          "pii_type": "address",
+          "value": "78, Park Street, Kolkata, West Bengal 700016",
+          "context": "Address for Amit Patel"
+        },
+        {
+          "pii_type": "name",
+          "value": "Sneha Reddy",
+          "context": "Customer"
+        },
+        {
+          "pii_type": "email",
+          "value": "sneha.reddy@hotmail.com",
+          "context": "Email for Sneha Reddy"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 99001 12233",
+          "context": "Phone for Sneha Reddy"
+        },
+        {
+          "pii_type": "address",
+          "value": "23, Jubilee Hills, Hyderabad, Telangana 500033",
+          "context": "Address for Sneha Reddy"
+        },
+        {
+          "pii_type": "name",
+          "value": "Vikram Singh",
+          "context": "Customer"
+        },
+        {
+          "pii_type": "email",
+          "value": "vikram.singh@yahoo.com",
+          "context": "Email for Vikram Singh"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 88776 65544",
+          "context": "Phone for Vikram Singh"
+        },
+        {
+          "pii_type": "address",
+          "value": "56, Civil Lines, Jaipur, Rajasthan 302006",
+          "context": "Address for Vikram Singh"
+        },
+        {
+          "pii_type": "name",
+          "value": "Meera Krishnan",
+          "context": "Customer"
+        },
+        {
+          "pii_type": "email",
+          "value": "meera.k@gmail.com",
+          "context": "Email for Meera Krishnan"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 66554 43322",
+          "context": "Phone for Meera Krishnan"
+        },
+        {
+          "pii_type": "address",
+          "value": "12, MG Road, Ernakulam, Kochi, Kerala 682011",
+          "context": "Address for Meera Krishnan"
+        },
+        {
+          "pii_type": "name",
+          "value": "John Miller",
+          "context": "Customer"
+        },
+        {
+          "pii_type": "email",
+          "value": "john.miller@gmail.com",
+          "context": "Email for John Miller"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+1 (555) 123-4567",
+          "context": "Phone for John Miller"
+        },
+        {
+          "pii_type": "address",
+          "value": "123 Oak Street, San Francisco, CA 94102",
+          "context": "Address for John Miller"
+        },
+        {
+          "pii_type": "name",
+          "value": "Sarah Johnson",
+          "context": "Customer"
+        },
+        {
+          "pii_type": "email",
+          "value": "sarah.j@outlook.com",
+          "context": "Email for Sarah Johnson"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+1 (555) 987-6543",
+          "context": "Phone for Sarah Johnson"
+        },
+        {
+          "pii_type": "address",
+          "value": "456 Maple Ave, New York, NY 10001",
+          "context": "Address for Sarah Johnson"
+        },
+        {
+          "pii_type": "name",
+          "value": "Michael Chen",
+          "context": "Customer"
+        },
+        {
+          "pii_type": "email",
+          "value": "m.chen@techmail.com",
+          "context": "Email for Michael Chen"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+1 (555) 456-7890",
+          "context": "Phone for Michael Chen"
+        },
+        {
+          "pii_type": "address",
+          "value": "789 Pine Road, Austin, TX 78701",
+          "context": "Address for Michael Chen"
+        }
+      ]
+    },
+    {
+      "path": "E_Drive/pendrive_misc/random_spreadsheet.xlsx",
+      "file_type": "xlsx",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Transaction name"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "Phone"
+        },
+        {
+          "pii_type": "name",
+          "value": "Amit Patel",
+          "context": "Reimbursement name"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 77889 90011",
+          "context": "Phone"
+        },
+        {
+          "pii_type": "name",
+          "value": "Priya Gupta",
+          "context": "Freelance payment name"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 87654 32109",
+          "context": "Phone"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Program Files/OfficeTemplates/employee_form_template.xlsx",
+      "file_type": "xlsx",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Deepa Iyer",
+          "context": "Sample employee"
+        },
+        {
+          "pii_type": "email",
+          "value": "deepa.iyer@gmail.com",
+          "context": "Sample email"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 44332 21100",
+          "context": "Sample phone"
+        },
+        {
+          "pii_type": "pan",
+          "value": "PQRDI3456X",
+          "context": "Sample PAN"
+        },
+        {
+          "pii_type": "aadhaar",
+          "value": "1234 5678 9012",
+          "context": "Sample Aadhaar"
+        },
+        {
+          "pii_type": "dob",
+          "value": "19/06/1994",
+          "context": "Sample DOB"
+        },
+        {
+          "pii_type": "address",
+          "value": "34, Linking Road, Bandra, Mumbai, Maharashtra 400050",
+          "context": "Sample address"
+        },
+        {
+          "pii_type": "bank_account",
+          "value": "6677889900112233",
+          "context": "Sample bank account"
+        },
+        {
+          "pii_type": "ifsc",
+          "value": "KKBK0001234",
+          "context": "Sample IFSC"
+        }
+      ]
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Work/project_proposal.pptx",
+      "file_type": "pptx",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Rahul Sharma",
+          "context": "Author on title and contact slide"
+        },
+        {
+          "pii_type": "email",
+          "value": "rahul.s@techcorp.in",
+          "context": "Work email on contact slide"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 98765 43210",
+          "context": "Phone on contact slide"
+        }
+      ]
+    },
+    {
+      "path": "D_Drive/SharedFolder/office_memo.rtf",
+      "file_type": "rtf",
+      "contains_pii": true,
+      "pii_instances": [
+        {
+          "pii_type": "name",
+          "value": "Deepa Iyer",
+          "context": "HR Manager — memo author"
+        },
+        {
+          "pii_type": "email",
+          "value": "deepa.iyer@gmail.com",
+          "context": "HR email for RSVP"
+        },
+        {
+          "pii_type": "phone",
+          "value": "+91 44332 21100",
+          "context": "HR phone"
+        },
+        {
+          "pii_type": "name",
+          "value": "Amit Patel",
+          "context": "Participant #1"
+        },
+        {
+          "pii_type": "name",
+          "value": "Sneha Reddy",
+          "context": "Participant #2"
+        },
+        {
+          "pii_type": "name",
+          "value": "Vikram Singh",
+          "context": "Participant #3"
+        },
+        {
+          "pii_type": "name",
+          "value": "Meera Krishnan",
+          "context": "Participant #4"
+        },
+        {
+          "pii_type": "name",
+          "value": "Arjun Nair",
+          "context": "Participant #5"
+        }
+      ]
+    }
+  ],
+  "clean_files": [
+    {
+      "path": "C_Drive/Windows/System32/config/system_info.txt",
+      "file_type": "txt",
+      "contains_pii": false,
+      "description": "Windows system information — hardware specs, OS version. No personal data."
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Videos/vacation_notes.txt",
+      "file_type": "txt",
+      "contains_pii": false,
+      "description": "Travel journal about Goa trip. No personal identifiers."
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/readme.txt",
+      "file_type": "txt",
+      "contains_pii": false,
+      "description": "Generic folder organization readme. No PII."
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/grocery_list.txt",
+      "file_type": "txt",
+      "contains_pii": false,
+      "description": "Shopping list with grocery items. No PII."
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Desktop/software_licenses.txt",
+      "file_type": "txt",
+      "contains_pii": false,
+      "description": "Software license keys — not PII."
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Downloads/code_snippet.py",
+      "file_type": "py",
+      "contains_pii": false,
+      "description": "Python utility script for data cleaning. No PII."
+    },
+    {
+      "path": "D_Drive/SharedFolder/song_playlist.csv",
+      "file_type": "csv",
+      "contains_pii": false,
+      "description": "Music playlist — song titles, artists, albums. No PII."
+    },
+    {
+      "path": "D_Drive/SharedFolder/book_notes.txt",
+      "file_type": "txt",
+      "contains_pii": false,
+      "description": "Book summaries and reading notes. No PII."
+    },
+    {
+      "path": "E_Drive/pendrive_misc/travel_itinerary.txt",
+      "file_type": "txt",
+      "contains_pii": false,
+      "description": "Travel itinerary for Kerala trip. Places and dates only, no PII."
+    },
+    {
+      "path": "C_Drive/Program Files/CustomApp/app_launcher.exe",
+      "file_type": "exe",
+      "contains_pii": false,
+      "description": "Dummy executable binary file. Scanner should safely ignore or parse headers without crashing."
+    },
+    {
+      "path": "C_Drive/Windows/System32/custom_module.dll",
+      "file_type": "dll",
+      "contains_pii": false,
+      "description": "Dummy DLL binary file. Scanner should safely ignore or parse headers without crashing."
+    },
+    {
+      "path": "C_Drive/Windows/System32/drivers/network_driver.sys",
+      "file_type": "sys",
+      "contains_pii": false,
+      "description": "Dummy sys binary"
+    },
+    {
+      "path": "C_Drive/Windows/system.ini",
+      "file_type": "ini",
+      "contains_pii": false,
+      "description": "Standard system config"
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Projects/Website/style.css",
+      "file_type": "css",
+      "contains_pii": false,
+      "description": "Clean CSS"
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Pictures/test_media.jpg",
+      "file_type": "jpg",
+      "contains_pii": false,
+      "description": "Dummy jpg"
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Pictures/test_media.png",
+      "file_type": "png",
+      "contains_pii": false,
+      "description": "Dummy png"
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Pictures/test_media.mp3",
+      "file_type": "mp3",
+      "contains_pii": false,
+      "description": "Dummy mp3"
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Desktop/shortcut.lnk",
+      "file_type": "lnk",
+      "contains_pii": false,
+      "description": "Dummy LNK"
+    },
+    {
+      "path": "C_Drive/Windows/Temp/cache.tmp",
+      "file_type": "tmp",
+      "contains_pii": false,
+      "description": "Clean TMP"
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/recipe_collection.docx",
+      "file_type": "docx",
+      "contains_pii": false,
+      "description": "Cooking recipes — Dal Makhani and Masala Dosa. No PII."
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Work/project_timeline.xlsx",
+      "file_type": "xlsx",
+      "contains_pii": false,
+      "description": "Project timeline with tasks and dates. No PII — no names or personal data."
+    }
+  ],
+  "bait_files": [
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Work/order_tracking.csv",
+      "file_type": "csv",
+      "contains_pii": false,
+      "is_bait": true,
+      "bait_values": [
+        "ORD-234567890123",
+        "ORD-112233445566",
+        "ORD-998877665544",
+        "ORD-443322110099",
+        "ORD-556677889900",
+        "9876543210",
+        "8800667744",
+        "9911223344",
+        "7766554433",
+        "5544332211",
+        "ABCDE12345",
+        "FGHIJ67890",
+        "KLMNO11223",
+        "PQRST44556",
+        "UVWXY77889"
+      ],
+      "note": "Order IDs (12-digit), tracking numbers (10-digit), and product codes (alphanumeric) that may resemble Aadhaar, phone, or PAN patterns."
+    },
+    {
+      "path": "C_Drive/Users/RahulSharma/Documents/Work/inventory_serial_numbers.txt",
+      "file_type": "txt",
+      "contains_pii": false,
+      "is_bait": true,
+      "bait_values": [
+        "ORDER-234567890123",
+        "SN: 876543210987",
+        "TRACKING: 112233445566",
+        "Batch #998877665544",
+        "REF: 443322110099",
+        "Part# 9876543210",
+        "Model: M8800667744",
+        "Invoice #9911223344",
+        "Timestamp: 1698765432",
+        "PRODX12345",
+        "SERIALA9876",
+        "BATCHN56789",
+        "STOCKK11223",
+        "Version 192.168.1.0",
+        "Build 10.0.0.1"
+      ],
+      "note": "Serial numbers, part numbers, model numbers, asset tags, and firmware versions that resemble PII patterns."
+    },
+    {
+      "path": "D_Drive/Projects/ClientA_Data/test_data_config.txt",
+      "file_type": "txt",
+      "contains_pii": false,
+      "is_bait": true,
+      "bait_values": [
+        "ORDER-234567890123",
+        "SN: 876543210987",
+        "TRACKING: 112233445566",
+        "Batch #998877665544",
+        "REF: 443322110099",
+        "4111-2222-3333-4444",
+        "Ref: 5500000099998888",
+        "Ticket: 4916-7777-8888-9999",
+        "Part: 123-45-6000",
+        "Code: 987-65-0000",
+        "Catalog: 555-12-3456"
+      ],
+      "note": "Test configuration with numeric sequences and formatted codes that resemble Aadhaar, credit card, and SSN patterns."
+    },
+    {
+      "path": "E_Drive/pendrive_misc/math_calculations.txt",
+      "file_type": "txt",
+      "contains_pii": false,
+      "is_bait": true,
+      "bait_values": [
+        "234567890123",
+        "876543210987",
+        "112233445566",
+        "9876543210",
+        "1234567890"
+      ],
+      "note": "Mathematical computations with large numbers that may resemble Aadhaar or phone number patterns."
+    }
+  ]
+}

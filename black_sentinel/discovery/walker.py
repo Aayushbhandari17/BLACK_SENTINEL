@@ -44,3 +44,20 @@ def walk(root_dir: str, file_queue: queue.Queue, stats: Optional[dict] = None):
                 file_queue.put(full_path)
             else:
                 _record_file_decision(stats, decision)
+                
+                
+from queue import Queue
+
+class Walker:
+
+    def __init__(self, policy=None):
+        self.policy = policy
+
+    def walk(self, root):
+        q = Queue()
+
+        walk(root, q)
+
+        while not q.empty():
+            from pathlib import Path
+            yield Path(q.get())

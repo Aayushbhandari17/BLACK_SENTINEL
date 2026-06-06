@@ -100,3 +100,17 @@ def should_publish(final_score: int) -> bool:
 
 def confidence_from_score(final_score: int) -> float:
     return min(1.0, max(0.0, final_score / 100.0))
+
+class ConfidenceEngine:
+    def score(self, findings, file_path="", content=""):
+        for finding in findings:
+            final_score = score(
+                file_path=file_path,
+                regex_match=True,
+                entropy_threshold_exceeded=True
+            )
+
+            finding["confidence_score"] = final_score
+            finding["confidence"] = confidence_from_score(final_score)
+
+        return findings

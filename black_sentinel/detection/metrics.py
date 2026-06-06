@@ -24,3 +24,13 @@ def print_summary():
     print(f"Entropy candidates checked={COUNTERS.get('entropy_candidates_checked', 0)}")
     print(f"Entropy accepted={COUNTERS.get('entropy_accepted', 0)}")
     print(f"Final findings published={COUNTERS.get('final_findings_published', 0)}")
+
+class DetectionMetrics:
+    def __init__(self):
+        pass
+
+    def record_file(self, result):
+        increment("files_scanned")
+
+    def snapshot(self):
+        return COUNTERS.copy()

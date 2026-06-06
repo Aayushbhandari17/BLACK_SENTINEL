@@ -27,3 +27,7 @@ def extract_text_from_docx(file_path):
     except Exception as e:
         print(f"[-] DOCX Parsing failed for {file_path}: {str(e)}")
         return ""
+    
+class DOCXParser:
+    def parse(self, file_path):
+        return extract_text_from_docx(file_path)

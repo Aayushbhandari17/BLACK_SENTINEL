@@ -1,0 +1,203 @@
+=========================================
+   BLACK SENTINEL - PHASE 1 STARTUP      
+=========================================
+
+[1] Initializing EventStore (SQLite)...
+[2] Subscribing to EventBus topics...
+[3] Deploying Honeycomb Protection Layer...
+[4] Starting Honeycomb Watcher daemon...
+[5] Launching Tracking Engine Scanner...
+    [!] EXPOSURE DETECTED: CRITICAL | credit_card
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\AppData\Local\AppCache\cached_form_data.json
+        Masked Value: 4111***********1111
+    [!] EXPOSURE DETECTED: HIGH | email_address
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\AppData\Local\BrowserData\browsing_history.sqlite
+        Masked Value: rahu**************.com
+    [!] EXPOSURE DETECTED: CRITICAL | credit_card
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\AppData\Local\BrowserData\autofill_data.sqlite
+        Masked Value: 4111***********1111
+    [!] EXPOSURE DETECTED: HIGH | email_address
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\AppData\Local\AppCache\cached_form_data.json
+        Masked Value: rahu**************.com
+    [!] EXPOSURE DETECTED: CRITICAL | credit_card
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\AppData\Local\BrowserData\autofill_data.sqlite
+        Masked Value: 5500***********0004
+    [!] EXPOSURE DETECTED: HIGH | pan_card
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\AppData\Local\BrowserData\browsing_history.sqlite
+        Masked Value: ABCP**234E
+    [!] EXPOSURE DETECTED: HIGH | pan_card
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\AppData\Local\AppCache\cached_form_data.json
+        Masked Value: ABCP**234E
+    [!] EXPOSURE DETECTED: CRITICAL | upi_id
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\Desktop\quick_notes.txt
+        Masked Value: rahu*****cici
+    [!] EXPOSURE DETECTED: HIGH | email_address
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\Documents\Work\meeting_notes.txt
+        Masked Value: sneh***************.com
+    [!] EXPOSURE DETECTED: CRITICAL | credit_card
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\Documents\Personal\diary_entries.txt
+        Masked Value: 5010*******789 
+    [!] EXPOSURE DETECTED: CRITICAL | password_in_config
+        Path: C:\ThisPCTest\E_Drive\old_laptop_migration\browser_passwords.txt
+        Masked Value: Pass**************i23!
+    [!] EXPOSURE DETECTED: HIGH | email_address
+        Path: C:\ThisPCTest\D_Drive\Projects\ClientB_Data\support_tickets.txt
+        Masked Value: vikr**************.com
+    [!] EXPOSURE DETECTED: CRITICAL | aadhaar_number
+        Path: C:\ThisPCTest\D_Drive\Projects\ClientA_Data\test_data_config.txt
+        Masked Value: 9999****9999
+    [!] EXPOSURE DETECTED: CRITICAL | upi_id
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\Documents\Personal\diary_entries.txt
+        Masked Value: rahu*****cici
+    [!] EXPOSURE DETECTED: HIGH | email_address
+        Path: C:\ThisPCTest\D_Drive\Projects\ClientB_Data\support_tickets.txt
+        Masked Value: ravi*****************.com
+    [!] EXPOSURE DETECTED: CRITICAL | password_in_config
+        Path: C:\ThisPCTest\E_Drive\old_laptop_migration\browser_passwords.txt
+        Masked Value: Pass****************023!
+    [!] EXPOSURE DETECTED: HIGH | email_address
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\Documents\Personal\diary_entries.txt
+        Masked Value: priy***************.com
+    [!] EXPOSURE DETECTED: HIGH | email_address
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\Desktop\quick_notes.txt
+        Masked Value: priy***************.com
+    [!] EXPOSURE DETECTED: CRITICAL | bank_account
+        Path: C:\ThisPCTest\E_Drive\old_laptop_migration\notes_app_export.json
+        Masked Value: 0210*0021
+    [!] EXPOSURE DETECTED: CRITICAL | aadhaar_number
+        Path: C:\ThisPCTest\E_Drive\pendrive_misc\math_calculations.txt
+        Masked Value: 2432****0817
+    [!] EXPOSURE DETECTED: CRITICAL | password_in_config
+        Path: C:\ThisPCTest\E_Drive\old_laptop_migration\browser_passwords.txt
+        Masked Value: Pass**************023$
+    [!] EXPOSURE DETECTED: HIGH | email_address
+        Path: C:\ThisPCTest\E_Drive\old_laptop_migration\notes_app_export.json
+        Masked Value: john*************.com
+    [!] EXPOSURE DETECTED: HIGH | email_address
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\Documents\Work\meeting_notes.txt
+        Masked Value: rahu***********p.in
+    [!] EXPOSURE DETECTED: CRITICAL | aadhaar_number
+        Path: C:\ThisPCTest\E_Drive\pendrive_misc\math_calculations.txt
+        Masked Value: 9999****9999
+    [!] EXPOSURE DETECTED: CRITICAL | bank_account
+        Path: C:\ThisPCTest\D_Drive\Projects\ClientA_Data\test_data_config.txt
+        Masked Value: 1000****0000
+    [!] EXPOSURE DETECTED: HIGH | email_address
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\Documents\Work\meeting_notes.txt
+        Masked Value: arju************n.me
+    [!] EXPOSURE DETECTED: HIGH | email_address
+        Path: C:\ThisPCTest\D_Drive\Projects\ClientB_Data\support_tickets.txt
+        Masked Value: john*************.com
+    [!] EXPOSURE DETECTED: CRITICAL | password_in_config
+        Path: C:\ThisPCTest\E_Drive\old_laptop_migration\browser_passwords.txt
+        Masked Value: Pass***************W0rk
+    [!] EXPOSURE DETECTED: HIGH | email_address
+        Path: C:\ThisPCTest\E_Drive\old_laptop_migration\notes_app_export.json
+        Masked Value: sara***********.com
+    [!] EXPOSURE DETECTED: CRITICAL | aadhaar_number
+        Path: C:\ThisPCTest\E_Drive\pendrive_misc\math_calculations.txt
+        Masked Value: 9716****3751
+    [!] EXPOSURE DETECTED: HIGH | email_address
+        Path: C:\ThisPCTest\E_Drive\old_laptop_migration\notes_app_export.json
+        Masked Value: m.ch***********.com
+    [!] EXPOSURE DETECTED: CRITICAL | password_in_config
+        Path: C:\ThisPCTest\E_Drive\old_laptop_migration\browser_passwords.txt
+        Masked Value: Pass*************2023
+    [!] EXPOSURE DETECTED: CRITICAL | password_in_config
+        Path: C:\ThisPCTest\E_Drive\old_laptop_migration\browser_passwords.txt
+        Masked Value: Pass*************023!
+    [!] EXPOSURE DETECTED: CRITICAL | password_in_config
+        Path: C:\ThisPCTest\E_Drive\old_laptop_migration\browser_passwords.txt
+        Masked Value: Pass****************2023
+    [!] EXPOSURE DETECTED: CRITICAL | password_in_config
+        Path: C:\ThisPCTest\E_Drive\old_laptop_migration\browser_passwords.txt
+        Masked Value: Pass****************2023
+    [!] EXPOSURE DETECTED: CRITICAL | credit_card
+        Path: C:\ThisPCTest\E_Drive\old_laptop_migration\browser_passwords.txt
+        Masked Value: 5010******6789
+    [!] EXPOSURE DETECTED: HIGH | email_address
+        Path: C:\ThisPCTest\E_Drive\old_laptop_migration\browser_passwords.txt
+        Masked Value: rahu**************.com
+
+=========================================
+   SYSTEM LIVE - PROTECTION ACTIVE       
+=========================================
+Tracking Engine scan complete.
+Honeycomb background daemon is monitoring for breaches.
+Press Ctrl+C to terminate the system.
+
+
+[*] Shutting down Black Sentinel...
+
+--- Regex Validation Summary ---
+CREDIT_CARD:
+checked=39
+validated=8
+published=0
+
+AADHAAR:
+checked=69
+validated=5
+published=0
+
+EMAIL:
+checked=48
+validated=48
+published=0
+
+PAN_CARD:
+checked=10
+validated=4
+published=0
+
+BANK_ACCOUNT:
+checked=53
+validated=53
+published=0
+
+PHONE_NUMBER:
+checked=39
+validated=39
+published=0
+
+IFSC_CODE:
+checked=8
+validated=8
+published=0
+
+VOTER_ID:
+checked=8
+validated=8
+published=0
+
+PASSPORT:
+checked=2
+validated=2
+published=0
+
+UPI_ID:
+checked=2
+validated=2
+published=0
+
+RECOVERY_CODE:
+checked=5
+validated=5
+published=0
+
+PASSWORD:
+checked=8
+validated=8
+published=0
+
+
+--- Black Sentinel Measurement Summary ---
+Files scanned=23
+Files skipped=69
+Files excluded=1
+Regex candidates checked=291
+Regex validated=19
+Entropy candidates checked=1357
+Entropy accepted=0
+Final findings published=0
+[*] Shutdown complete.

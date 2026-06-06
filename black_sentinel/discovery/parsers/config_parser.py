@@ -18,6 +18,30 @@ def extract_config_secrets(file_path):
         if ext == '.json':
             with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
                 data = json.load(f)
+                
+                # Check for split address fields in the JSON and reconstruct
+                def find_and_reconstruct_address(obj):
+                    if isinstance(obj, dict):
+                        has_addr = any(k in obj for k in ["address_line1", "address_line2", "city", "state", "pincode"])
+                        if has_addr:
+                            parts = []
+                            for k in ["address_line1", "address_line2", "city", "state", "pincode"]:
+                                if k in obj and obj[k]:
+                                    parts.append(str(obj[k]))
+                            if parts:
+                                if len(parts) >= 2 and parts[-1].isdigit() and len(parts[-1]) == 6:
+                                    addr_str = ", ".join(parts[:-1]) + " " + parts[-1]
+                                else:
+                                    addr_str = ", ".join(parts)
+                                text_content.append(f"reconstructed_address = {addr_str}")
+                        for v in obj.values():
+                            find_and_reconstruct_address(v)
+                    elif isinstance(obj, list):
+                        for item in obj:
+                            find_and_reconstruct_address(item)
+                            
+                find_and_reconstruct_address(data)
+
                 # Flatten nested JSON dictionaries into readable key=value strings
                 def flatten(obj, prefix=""):
                     if isinstance(obj, dict):
@@ -51,3 +75,7 @@ def extract_config_secrets(file_path):
     except Exception as e:
         print(f"[-] Config Parsing failed for {file_path}: {str(e)}")
         return ""
+    
+class ConfigParser:
+    def parse(self, file_path):
+        return extract_config_secrets(file_path)

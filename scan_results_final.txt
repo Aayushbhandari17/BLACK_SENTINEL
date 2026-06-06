@@ -1,0 +1,175 @@
+=========================================
+   BLACK SENTINEL - PHASE 1 STARTUP      
+=========================================
+
+[1] Initializing EventStore (SQLite)...
+[2] Subscribing to EventBus topics...
+[3] Deploying Honeycomb Protection Layer...
+[4] Starting Honeycomb Watcher daemon...
+[5] Launching Tracking Engine Scanner...
+[*] Tracking Engine: Initializing...
+[*] Tracking Engine: Walking 1 root directories...
+[*] Tracking Engine: Enqueued 23 files for processing.
+[*] Parsing structured configuration secrets: C:\ThisPCTest\C_Drive\Users\RahulSharma\AppData\Local\AppCache\cached_form_data.json
+    [!] EXPOSURE DETECTED: HIGH | PAN_CARD
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\AppData\Local\AppCache\cached_form_data.json
+        Masked Value: ABCP****4E
+    [!] EXPOSURE DETECTED: HIGH | EMAIL
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\AppData\Local\AppCache\cached_form_data.json
+        Masked Value: rahu****************om
+    [!] EXPOSURE DETECTED: HIGH | EMAIL
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\AppData\Local\AppCache\cached_form_data.json
+        Masked Value: rahu****************om
+    [!] EXPOSURE DETECTED: HIGH | EMAIL
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\AppData\Local\AppCache\cached_form_data.json
+        Masked Value: rahu****************om
+    [!] EXPOSURE DETECTED: CRITICAL | UPI_ID
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\Desktop\quick_notes.txt
+        Masked Value: rahu*******ci
+    [!] EXPOSURE DETECTED: HIGH | EMAIL
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\Desktop\quick_notes.txt
+        Masked Value: priy*****************om
+    [!] EXPOSURE DETECTED: CRITICAL | HIGH_ENTROPY_SECRET
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\Desktop\software_licenses.txt
+        Masked Value: LIC-**************************OP
+    [!] EXPOSURE DETECTED: CRITICAL | UPI_ID
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\Documents\Personal\diary_entries.txt
+        Masked Value: rahu*******ci
+    [!] EXPOSURE DETECTED: HIGH | EMAIL
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\Documents\Personal\diary_entries.txt
+        Masked Value: priy*****************om
+    [!] EXPOSURE DETECTED: HIGH | EMAIL
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\Documents\Work\meeting_notes.txt
+        Masked Value: sneh*****************om
+    [!] EXPOSURE DETECTED: HIGH | EMAIL
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\Documents\Work\meeting_notes.txt
+        Masked Value: arju**************me
+    [!] EXPOSURE DETECTED: HIGH | EMAIL
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\Documents\Work\meeting_notes.txt
+        Masked Value: arju**************me
+    [!] EXPOSURE DETECTED: HIGH | EMAIL
+        Path: C:\ThisPCTest\C_Drive\Users\RahulSharma\Documents\Work\meeting_notes.txt
+        Masked Value: rahu*************in
+[*] Parsing structured configuration secrets: C:\ThisPCTest\D_Drive\Projects\ClientA_Data\.env
+    [!] EXPOSURE DETECTED: CRITICAL | AWS_ACCESS_KEY
+        Path: C:\ThisPCTest\D_Drive\Projects\ClientA_Data\.env
+        Masked Value: AKIA**************LE
+    [!] EXPOSURE DETECTED: HIGH | EMAIL
+        Path: C:\ThisPCTest\D_Drive\Projects\ClientA_Data\.env
+        Masked Value: rahu****************om
+    [!] EXPOSURE DETECTED: CRITICAL | AADHAAR
+        Path: C:\ThisPCTest\D_Drive\Projects\ClientA_Data\test_data_config.txt
+        Masked Value: 9999******99
+    [!] EXPOSURE DETECTED: HIGH | EMAIL
+        Path: C:\ThisPCTest\D_Drive\Projects\ClientB_Data\support_tickets.txt
+        Masked Value: ravi*******************om
+    [!] EXPOSURE DETECTED: HIGH | EMAIL
+        Path: C:\ThisPCTest\D_Drive\Projects\ClientB_Data\support_tickets.txt
+        Masked Value: vikr****************om
+    [!] EXPOSURE DETECTED: HIGH | EMAIL
+        Path: C:\ThisPCTest\D_Drive\Projects\ClientB_Data\support_tickets.txt
+        Masked Value: john***************om
+[*] Parsing structured configuration secrets: C:\ThisPCTest\E_Drive\old_laptop_migration\notes_app_export.json
+    [!] EXPOSURE DETECTED: HIGH | EMAIL
+        Path: C:\ThisPCTest\E_Drive\old_laptop_migration\notes_app_export.json
+        Masked Value: john***************om
+    [!] EXPOSURE DETECTED: HIGH | EMAIL
+        Path: C:\ThisPCTest\E_Drive\old_laptop_migration\notes_app_export.json
+        Masked Value: sara*************om
+    [!] EXPOSURE DETECTED: HIGH | EMAIL
+        Path: C:\ThisPCTest\E_Drive\old_laptop_migration\notes_app_export.json
+        Masked Value: m.ch*************om
+    [!] EXPOSURE DETECTED: CRITICAL | AADHAAR
+        Path: C:\ThisPCTest\E_Drive\pendrive_misc\math_calculations.txt
+        Masked Value: 9999******99
+    [!] EXPOSURE DETECTED: CRITICAL | AADHAAR
+        Path: C:\ThisPCTest\E_Drive\pendrive_misc\math_calculations.txt
+        Masked Value: 2432******17
+    [!] EXPOSURE DETECTED: CRITICAL | AADHAAR
+        Path: C:\ThisPCTest\E_Drive\pendrive_misc\math_calculations.txt
+        Masked Value: 9716******51
+[*] Tracking Engine: Scan completed.
+[*] Tracking Engine: Startup statistics: files discovered=93, files skipped by extension=69, files skipped by exclusion policy=1, files scanned=23, findings generated=25
+
+=========================================
+   SYSTEM LIVE - PROTECTION ACTIVE       
+=========================================
+Tracking Engine scan complete.
+Honeycomb background daemon is monitoring for breaches.
+Press Ctrl+C to terminate the system.
+
+
+[*] Shutting down Black Sentinel...
+
+--- Regex Validation Summary ---
+BANK_ACCOUNT:
+checked=52
+validated=52
+published=0
+
+CREDIT_CARD:
+checked=36
+validated=5
+published=0
+
+AADHAAR:
+checked=66
+validated=5
+published=4
+
+EMAIL:
+checked=40
+validated=40
+published=16
+
+PHONE_NUMBER:
+checked=39
+validated=39
+published=0
+
+PAN_CARD:
+checked=9
+validated=3
+published=1
+
+IFSC_CODE:
+checked=8
+validated=8
+published=0
+
+VOTER_ID:
+checked=8
+validated=8
+published=0
+
+UPI_ID:
+checked=2
+validated=2
+published=2
+
+RECOVERY_CODE:
+checked=5
+validated=5
+published=0
+
+PASSPORT:
+checked=2
+validated=2
+published=0
+
+AWS_ACCESS_KEY:
+checked=1
+validated=1
+published=1
+
+
+--- Black Sentinel Measurement Summary ---
+Files scanned=23
+Files skipped=69
+Files excluded=1
+Regex candidates checked=268
+Regex validated=16
+Entropy candidates checked=2679
+Entropy accepted=1
+Final findings published=25
+[*] Shutdown complete.
